@@ -1,0 +1,26 @@
+.statCard {
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    padding: 12px 0px;
+    box-shadow: inset 1px 1px 8px rgba(0, 0, 0, 0.15);
+}
+
+.statCard:hover {
+    background-color: #e5e7eb;
+    box-shadow: inset 1px 1px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.statName {
+    font-size: 0.7rem;
+    color: #4b5563;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+.statValue {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 0;
+}

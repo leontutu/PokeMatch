@@ -1,0 +1,97 @@
+@import "../../../styles/animations.css";
+
+.victoryContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    color: #e2e8f0;
+    font-family: "Jura", sans-serif;
+    padding: 2rem 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.winnerMessage {
+    max-width: 95%;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-shadow: 0 0 15px #fbbf24, 0 0 5px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.scoresContainer {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.score {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menuButton {
+    width: 80%;
+    max-width: 340px;
+    padding: 20px 0;
+    font-size: 2rem;
+    font-family: "Jura", sans-serif;
+    font-weight: 700;
+    color: white;
+    background-color: #38a169;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 5px 0 #2f855a;
+    letter-spacing: 1.5px;
+}
+
+.menuButton:hover {
+    filter: brightness(1.1);
+}
+
+.menuButton:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #2f855a;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

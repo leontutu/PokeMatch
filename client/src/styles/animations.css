@@ -1,0 +1,47 @@
+/* 
+  This file contains shared keyframe animations 
+  used across the application. Import this file
+  into any .module.css file that needs to use them.
+*/
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(-2px, -4px) rotate(-1deg);
+    }
+    50% {
+        transform: translate(0, -5px) rotate(0deg);
+    }
+    75% {
+        transform: translate(2px, -4px) rotate(1deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+@keyframes horizontalFloat {
+    from {
+        transform: translateX(-10px) rotate(-3deg);
+    }
+    to {
+        transform: translateX(10px) rotate(3deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.15);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 15px 15px 12px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.15);
+    }
+}

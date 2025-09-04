@@ -1,0 +1,201 @@
+@import "../../../styles/animations.css";
+
+.outerContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0px;
+    font-family: "Jura", Arial, sans-serif;
+    background-color: #4a5568;
+}
+
+.yourPokemonSection {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.statSelectSection {
+    flex: 1;
+    width: 100%;
+    background-color: #2d3748;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.lockInSection {
+    height: 6rem;
+    width: 100%;
+    background-color: #1a202c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #4a5568;
+}
+
+.pokemonTitle {
+    display: inline-block;
+    line-height: 1;
+    padding-top: 1rem;
+
+    font-family: "Martel Sans", Arial, sans-serif;
+    font-weight: 800;
+    font-size: 4rem;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color: #e2e8f0;
+    z-index: 2;
+}
+
+.typeList {
+    position: absolute;
+    left: -0.75rem;
+    bottom: 2rem;
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+}
+
+.shadow {
+    position: absolute;
+    overflow: hidden;
+    left: 35%;
+    top: 10%;
+    width: 20rem;
+    height: 40rem;
+    background-color: #2d374880;
+    border-radius: 999px;
+    rotate: -40deg;
+    z-index: 2;
+}
+
+.yourPokemonSection img {
+    max-width: 100%;
+    flex: 1;
+    min-height: 0;
+    object-fit: contain;
+    z-index: 2;
+    animation: horizontalFloat 6s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 1rem rgba(237, 242, 247, 0.2));
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes counter-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+.cardsContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin 70s linear infinite;
+}
+
+.circleCard {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardAnimationWrapper {
+    animation: counter-spin 70s linear infinite;
+}
+
+.opponentPokemonWrapper {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    background-color: #2d3748;
+    border-radius: 50%;
+    border: 2px solid #718096;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.vsTag {
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #a0aec0;
+}
+
+.opponentPokemon {
+    width: 100%;
+    height: 100%;
+    padding: 0.2rem;
+}
+
+.lockInBtn {
+    width: 70%;
+    height: 75%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "Jura", Arial, sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    border-radius: 5px;
+    background-color: #718096;
+    color: #e2e8f0;
+    border: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 0 #4a5568;
+}
+
+.lockInBtn.active {
+    background-color: #38a169;
+    color: white;
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #2f855a;
+}
+
+.lockInBtn.disabled {
+    color: #808080;
+    cursor: not-allowed;
+}
+
+.lockInBtn.locked {
+    background: linear-gradient(135deg, rgb(185, 13, 13), rgb(155, 10, 10));
+    box-shadow: inset 10px 10px 10px rgba(252, 252, 252, 0.1);
+    filter: brightness(0.8);
+    border: 5px dashed #000000;
+    pointer-events: none;
+    cursor: default;
+    animation: none;
+}
