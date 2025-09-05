@@ -21,5 +21,4 @@ export const GAME_COMMANDS = {
     BATTLE_END: "battleEnd",
 };
 
-// export const ROOM_SHUTDOWN_TIMEOUT_MS = 3600000 * 10; // 10 hours
-export const ROOM_SHUTDOWN_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 hours
+export const ROOM_SHUTDOWN_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
