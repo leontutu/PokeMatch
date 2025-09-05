@@ -61,9 +61,9 @@ function App() {
             case PAGES.MATCH_LAYOUT:
                 return <MatchLayout />;
             case PAGES.SELECT_STAT:
-                return <SelectStatPage />;
+                return <SelectStatPage onNavigate={handleNavigate} />;
             case PAGES.BATTLE:
-                return <BattlePage />;
+                return <BattlePage onNavigate={handleNavigate} />;
             case PAGES.VICTORY:
                 return <VictoryPage onNavigate={handleNavigate} />;
             default:
@@ -112,7 +112,7 @@ function App() {
         <>
             <div className="page-wrapper">
                 {/* The current page is always rendered */}
-                {renderPage(currentPage)}
+                {renderPage()}
                 {/* The wipe element, visible only during a transition */}
                 {(isWipingOut || isWipingIn) && (
                     <div

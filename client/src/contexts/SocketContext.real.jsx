@@ -77,7 +77,7 @@ export const SocketProvider = ({ children }) => {
     const sendLeaveRoom = () => {
         if (socket) {
             socket.emit(EVENTS.LEAVE_ROOM);
-            setRoomState(null);
+            // setRoomState(null);
         }
     };
 

@@ -21,7 +21,7 @@ import { DISPLAY_TO_STAT } from "../../../constants";
  * Renders the stat selection interface for the match phase.
  * @returns {JSX.Element} The SelectStatPage component.
  */
-export default function SelectStatPage() {
+export default function SelectStatPage({ onNavigate }) {
     const { roomState, sendSelectStat } = useSocket();
     const { selectStatError, setSelectStatError } = useSocket();
     const [selectedCardIndex, setSelectedCardIndex] = useState(null);
@@ -78,7 +78,7 @@ export default function SelectStatPage() {
     const opponentPokemonImgUrl = opponentPokemon.sprites.officialArtwork;
 
     return (
-        <MatchLayout>
+        <MatchLayout onNavigate={onNavigate}>
             <div className={styles.outerContainer}>
                 <div className={styles.yourPokemonSection}>
                     <div className={styles.shadow}></div>

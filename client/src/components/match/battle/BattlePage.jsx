@@ -17,7 +17,7 @@ import Countdown from "./Countdown";
  *
  * @returns {JSX.Element} The BattlePage component.
  */
-export default function BattlePage() {
+export default function BattlePage({ onNavigate }) {
     const { roomState } = useSocket();
     const [displayState, setDisplayState] = useState(roomState);
     const [isRevealed, setIsRevealed] = useState(false);
@@ -54,7 +54,7 @@ export default function BattlePage() {
     }
 
     return (
-        <MatchLayout>
+        <MatchLayout onNavigate={onNavigate}>
             <div className={styles.outerContainer}>
                 <PokemonDisplay
                     pokemon={battleStats.opponentPokemon}
