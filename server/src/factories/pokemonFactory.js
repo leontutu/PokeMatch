@@ -1,19 +1,19 @@
-import { Pokemon } from "../../../shared/models/Pokemon.js";
+import Pokemon from "../../../shared/models/Pokemon.js";
 /**
  * Factory function that creates a Pokemon instance from a raw PokeAPI response.
- * @param {Object} apiPokemon - The raw Pokémon data from the API.
+ * @param {Object} apiPokemonData - The raw Pokémon data from the API.
  * @returns {Pokemon} An instance of the Pokemon class.
  */
 export function createPokemonFromApiData(pokemonApiData) {
-    const id = apiPokemon.id;
-    const name = apiPokemon.name;
-    const types = apiPokemon.types.map((type) => type.type.name);
+    const id = pokemonApiData.id;
+    const name = pokemonApiData.name;
+    const types = pokemonApiData.types.map((type) => type.type.name);
     const sprites = {
         officialArtwork:
-            apiPokemon.sprites.other["official-artwork"].front_default,
-        back_default: apiPokemon.sprites.back_default,
+            pokemonApiData.sprites.other["official-artwork"].front_default,
+        back_default: pokemonApiData.sprites.back_default,
     };
-    const stats = apiPokemon.stats.reduce(
+    const stats = pokemonApiData.stats.reduce(
         (acc, stat) => {
             if (stat.stat.name === "special-defense") {
                 acc["specialDefense"] = stat.base_stat;
@@ -24,7 +24,7 @@ export function createPokemonFromApiData(pokemonApiData) {
             }
             return acc;
         },
-        { weight: apiPokemon.weight, height: apiPokemon.height }
+        { weight: pokemonApiData.weight, height: pokemonApiData.height }
     );
 
     return new Pokemon(id, name, types, sprites, stats);
