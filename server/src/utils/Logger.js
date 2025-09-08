@@ -23,8 +23,8 @@ class Logger {
         console.warn(`[WARN] ${this.time()} - ${message}`);
     }
 
-    error(message, error) {
-        console.error(`[ERROR] ${this.time()} - ${message}`, error.message);
+    error(error) {
+        console.error(`[ERROR] ${this.time()} - ${error.message}`);
     }
 
     time() {

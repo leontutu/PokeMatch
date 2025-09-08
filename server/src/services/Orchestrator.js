@@ -54,7 +54,12 @@ export default class Orchestrator {
             logger.log(`[Orchestrator] Client reconnected: ${client.uuid}`);
             // If the client was in a room, send them the latest state.
             if (client.roomId) {
-                this.#updateRoomClients(client.roomId);
+                if (this.roomManager.hasRoom(client.roomId)) {
+                    this.roomManager.clearTimeoutForRoom(client.roomId);
+                    this.#updateRoomClients(client.roomId);
+                } else {
+                    this.clientManager.resetClients([client]);
+                }
             }
         } else {
             client = this.clientManager.addClient(socket, uuid);
@@ -72,6 +77,12 @@ export default class Orchestrator {
 
         this.clientManager.removeClientOnDisconnect(client);
         const name = client.name || "Anon";
+
+        if (client.roomId) {
+            this.#handleRoomErrors(() => {
+                this.roomManager.scheduleShutdownIfInactive(client.roomId);
+            }, socket);
+        }
         logger.log(`[Orchestrator] ${name} disconnected.`);
     }
 
@@ -270,6 +281,7 @@ export default class Orchestrator {
      */
     #updateRoomClients(roomId) {
         this.#forEachRoomClient(roomId, (client) => {
+            if (!client.socket) return;
             const room = this.roomManager.getRoom(roomId);
             const clientGameState = room.toClientState(client.uuid);
             this.socketService.emitUpdate(client.socket, clientGameState);
@@ -309,8 +321,6 @@ export default class Orchestrator {
                     this.socketService.emitRoomCrash(socket, error);
                 }
             } else {
-                logger.error("An unexpected error occurred:", error);
-                //TODO: shut down room
                 throw error;
             }
         }

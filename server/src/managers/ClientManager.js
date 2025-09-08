@@ -50,6 +50,7 @@ export default class ClientManager {
     removeClientOnDisconnect(client) {
         if (!client) return;
         this.clientsBySocket.delete(client.socket);
+        client.setSocket(null);
     }
 
     /**

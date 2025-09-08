@@ -20,3 +20,5 @@ export const GAME_COMMANDS = {
     ASSIGN_NEW_POKEMON: "assignNewPokemon",
     BATTLE_END: "battleEnd",
 };
+
+export const ROOM_SHUTDOWN_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours

@@ -2,6 +2,7 @@ import Room from "../models/Room.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import { EventEmitter } from "events";
+import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants.js";
 
 /**
  * Manages the lifecycle and storage of all game rooms.
@@ -15,6 +16,7 @@ export default class RoomManager extends EventEmitter {
     constructor() {
         super();
         this.rooms = new Map();
+        this.roomTimeouts = new Map();
         this.id = 1;
     }
 
@@ -64,7 +66,9 @@ export default class RoomManager extends EventEmitter {
     removeClientFromRoom(roomId, client) {
         const room = this.getRoom(roomId);
         room.removeClient(client);
-        this.#deleteRoomIfEmpty(room);
+        if (!this.#deleteRoomIfEmpty(room)) {
+            this.scheduleShutdownIfInactive(roomId);
+        }
     }
 
     /**
@@ -129,6 +133,10 @@ export default class RoomManager extends EventEmitter {
         return this.rooms.get(roomId);
     }
 
+    hasRoom(roomId) {
+        return this.#hasRoom(roomId);
+    }
+
     /**
      * Retrieves all clients from a specific room.
      * @param {string} roomId The ID of the room.
@@ -169,6 +177,43 @@ export default class RoomManager extends EventEmitter {
         return this.getRoom(roomId).isReady();
     }
 
+    /**
+     * Schedules a room for shutdown if all clients are inactive.
+     * @param {string} roomId The ID of the room.
+     */
+    scheduleShutdownIfInactive(roomId) {
+        const room = this.rooms.get(roomId);
+        // checks if any clients are active
+        if (!room.clientRecords.some((cr) => cr.client.socket)) {
+            logger.log(
+                `[RoomManager] Scheduling shutdown for inactive room ${roomId} in ${
+                    ROOM_SHUTDOWN_TIMEOUT_MS / 1000
+                } seconds.`
+            );
+            this.roomTimeouts.set(
+                roomId,
+                setTimeout(() => {
+                    this.deleteRoom(roomId);
+                    this.roomTimeouts.delete(roomId);
+                }, ROOM_SHUTDOWN_TIMEOUT_MS)
+            );
+        }
+    }
+
+    /**
+     * Clears any scheduled shutdown for a room, typically called when a client reconnects.
+     * @param {string} roomId The ID of the room.
+     */
+    clearTimeoutForRoom(roomId) {
+        if (this.roomTimeouts.has(roomId)) {
+            logger.log(
+                `[RoomManager] Clearing scheduled shutdown for room ${roomId} due to client activity.`
+            );
+            clearTimeout(this.roomTimeouts.get(roomId));
+            this.roomTimeouts.delete(roomId);
+        }
+    }
+
     //================================================================
     // Private Helper Methods
     //================================================================
@@ -184,7 +229,7 @@ export default class RoomManager extends EventEmitter {
 
     #getRoomWithEmptySlot() {
         for (const room of this.rooms.values()) {
-            if (!room.isFull()) {
+            if (!room.isFull() && !room.game) {
                 return room;
             }
         }
@@ -194,7 +239,9 @@ export default class RoomManager extends EventEmitter {
     #deleteRoomIfEmpty(room) {
         if (room && room.isEmpty()) {
             this.deleteRoom(room.id);
+            return true;
         }
+        return false;
     }
 
     #hasRoom(roomId) {
