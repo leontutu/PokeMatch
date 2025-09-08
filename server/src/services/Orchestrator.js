@@ -2,7 +2,7 @@ import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import GameCommand from "../commands/OrchestratorToGameCommand.js";
-import { parsePokemon } from "../utils/pokemonParser.js";
+import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
 import { delay } from "../utils/utils.js";
 import { isValidName } from "../../../shared/utils/validation.js";
 import { TIMINGS } from "../../../shared/constants/constants.js";
@@ -251,8 +251,8 @@ export default class Orchestrator {
         const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
 
         const gameCommand = new GameCommand(GAME_COMMANDS.ASSIGN_NEW_POKEMON, [
-            parsePokemon(pokemon1),
-            parsePokemon(pokemon2),
+            createPokemonFromApiData(pokemon1),
+            createPokemonFromApiData(pokemon2),
         ]);
 
         this.#sendGameCommand(roomId, gameCommand);
