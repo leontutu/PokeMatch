@@ -37,6 +37,7 @@ export default function BattlePage({ onNavigate }) {
 
     // Ensures the display state doesn't change when stats are reset
     useEffect(() => {
+        if (!roomState) return;
         if (
             roomState.game.you.challengeStat &&
             roomState.game.you.challengedStat.name

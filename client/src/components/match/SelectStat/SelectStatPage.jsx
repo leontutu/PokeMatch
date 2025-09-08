@@ -28,9 +28,6 @@ export default function SelectStatPage({ onNavigate }) {
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
 
-    const yourPokemon = roomState.game.you.pokemon;
-    const opponentPokemon = roomState.game.opponent.pokemon;
-
     useEffect(() => {
         setButtonState(!lockedIn && selectedCardIndex !== null);
     }, [selectedCardIndex, lockedIn]);
@@ -45,6 +42,10 @@ export default function SelectStatPage({ onNavigate }) {
         }
     }, [selectStatError, setSelectStatError]);
 
+    if (!roomState) return null;
+
+    const yourPokemon = roomState.game.you.pokemon;
+    const opponentPokemon = roomState.game.opponent.pokemon;
     const cards = cardScaffold(yourPokemon);
 
     const handleCardClick = (index) => {

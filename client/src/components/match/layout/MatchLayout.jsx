@@ -24,6 +24,8 @@ export default function MatchLayout({ children, onNavigate }) {
     const { roomState, sendLeaveRoom } = useSocket();
     const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 
+    if (!roomState) return null;
+
     const handleLeaveConfirm = () => {
         sendLeaveRoom();
         onNavigate(PAGES.HOME, true);
