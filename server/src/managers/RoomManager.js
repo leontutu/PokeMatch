@@ -229,7 +229,7 @@ export default class RoomManager extends EventEmitter {
 
     #getRoomWithEmptySlot() {
         for (const room of this.rooms.values()) {
-            if (!room.isFull()) {
+            if (!room.isFull() && !room.game) {
                 return room;
             }
         }
