@@ -321,7 +321,6 @@ export default class Orchestrator {
                     this.socketService.emitRoomCrash(socket, error);
                 }
             } else {
-                this.#shutDownRoom;
                 throw error;
             }
         }
