@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import io from "socket.io-client";
-import { EVENTS, GAME_COMMANDS } from "../../../shared/constants.js";
-import { DISPLAY_TO_STAT } from "../constants";
+import { EVENTS, GAME_COMMANDS } from "../../../shared/constants/constants.js";
+import { DISPLAY_TO_STAT } from "../constants/constants";
 
 const SocketContext = createContext(null);
 

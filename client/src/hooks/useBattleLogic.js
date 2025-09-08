@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { STAT_TO_DISPLAY } from "../constants";
+import { STAT_TO_DISPLAY } from "../constants/constants";
 
 /**
  * @typedef {object} BattleStats

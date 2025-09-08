@@ -13,7 +13,7 @@
  *
  */
 
-import { PAGES } from "../../../constants";
+import { PAGES } from "../../../constants/constants";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./HomePage.module.css";
 

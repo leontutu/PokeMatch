@@ -14,7 +14,7 @@ import MatchLayout from "../layout/MatchLayout";
 import TypeCard from "./TypeCard";
 import cardScaffold from "../../../scaffolds/cardScaffold";
 import CardWrapper from "./CardWrapper";
-import { DISPLAY_TO_STAT } from "../../../constants";
+import { DISPLAY_TO_STAT } from "../../../constants/constants";
 
 /**
  * SelectStatPage functional component.

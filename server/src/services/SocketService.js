@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { EVENTS } from "../../../shared/constants.js";
+import { EVENTS } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 
 /**

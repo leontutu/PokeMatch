@@ -2,7 +2,7 @@ import Room from "../models/Room.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import { EventEmitter } from "events";
-import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants.js";
+import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
 
 /**
  * Manages the lifecycle and storage of all game rooms.

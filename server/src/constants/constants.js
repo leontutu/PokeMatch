@@ -1,7 +1,7 @@
 /**
  * Server-only game constants.
  */
-import { GAME_COMMANDS as SHARED_GAME_COMMANDS } from "../../shared/constants.js";
+import { GAME_COMMANDS as SHARED_GAME_COMMANDS } from "../../../shared/constants/constants.js";
 
 /*
  * - GAME_EVENTS: Events emitted by the Game to the Orchestrator.

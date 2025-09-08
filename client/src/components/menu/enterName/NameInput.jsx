@@ -9,7 +9,7 @@
 
 import { useRef } from "react";
 import styles from "./NameInput.module.css";
-import { isValidName } from "../../../../../shared/validation";
+import { isValidName } from "../../../../../shared/utils/validation";
 
 /**
  * NameInput functional component.

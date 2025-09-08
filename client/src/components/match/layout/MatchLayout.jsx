@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants";
+import { PAGES } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
 import styles from "./MatchLayout.module.css";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";

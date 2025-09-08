@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { PAGES } from "./constants.js";
-import { TIMINGS, GAME_PHASES } from "../../shared/constants.js";
+import { PAGES } from "./constants/constants.js";
+import { TIMINGS, GAME_PHASES } from "../../shared/constants/constants.js";
 import { useSocket } from "./contexts/SocketContext";
 import HomePage from "./components/menu/home/HomePage";
 import EnterNamePage from "./components/menu/enterName/EnterNamePage";

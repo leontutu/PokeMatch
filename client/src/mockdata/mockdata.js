@@ -1,4 +1,4 @@
-import { GAME_PHASES } from "../../../shared/constants";
+import { GAME_PHASES } from "../../../shared/constants/constants";
 
 export const mockRoomState = {
     id: "0",

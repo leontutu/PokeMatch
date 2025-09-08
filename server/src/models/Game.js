@@ -1,7 +1,7 @@
 import logger from "../utils/Logger.js";
 import Player from "./Player.js";
-import { GAME_PHASES } from "../../../shared/constants.js";
-import { GAME_EVENTS, GAME_COMMANDS } from "../constants.js";
+import { GAME_PHASES } from "../../../shared/constants/constants.js";
+import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 

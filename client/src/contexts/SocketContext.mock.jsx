@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { EVENTS, GAME_COMMANDS } from "../../../shared/constants.js";
+import { EVENTS, GAME_COMMANDS } from "../../../shared/constants/constants.js";
 import { mockRoomState } from "../mockdata/mockdata.js";
 
 /**

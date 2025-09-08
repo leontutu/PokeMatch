@@ -17,8 +17,8 @@
 
 import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants";
-import { isValidName } from "../../../../../shared/validation";
+import { PAGES } from "../../../constants/constants";
+import { isValidName } from "../../../../../shared/utils/validation";
 import HomeLayout from "../layout/HomeLayout";
 import NameInput from "./NameInput";
 import SubmitButton from "./SubmitButton";

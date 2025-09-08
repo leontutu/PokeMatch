@@ -1,11 +1,11 @@
-import { GAME_EVENTS, GAME_COMMANDS } from "../constants.js";
+import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import GameCommand from "../commands/OrchestratorToGameCommand.js";
 import { parsePokemon } from "../utils/pokemonParser.js";
 import { delay } from "../utils/utils.js";
-import { isValidName } from "../../../shared/validation.js";
-import { TIMINGS } from "../../../shared/constants.js";
+import { isValidName } from "../../../shared/utils/validation.js";
+import { TIMINGS } from "../../../shared/constants/constants.js";
 
 /**
  * The central controller of the application.

@@ -1,4 +1,4 @@
-import { GAME_PHASES } from "../../../shared/constants.js";
+import { GAME_PHASES } from "../../../shared/constants/constants.js";
 
 export function serverGameStateToClientGameState(room, targetClient) {
     const roomState = room.toJSON();

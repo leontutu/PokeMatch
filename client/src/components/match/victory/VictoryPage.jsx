@@ -8,7 +8,7 @@
 
 import styles from "./VictoryPage.module.css";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants";
+import { PAGES } from "../../../constants/constants";
 
 /**
  * VictoryPage functional component.
