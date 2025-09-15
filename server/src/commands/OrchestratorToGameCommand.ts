@@ -9,11 +9,11 @@ export default class OrchestratorToGameCommand {
      * @param {*} payload The data required for the command.
      * @param {string|null} clientId The UUID of the client who initiated the action.
      */
-    constructor(actionType, payload, clientId) {
-        this.actionType = actionType;
-        this.payload = payload;
-        this.clientId = clientId;
-    }
+    constructor(
+        public actionType: string, //TODO: enums
+        public payload: object, //TODO: ponder object payload types
+        public clientId: string | null
+    ) {}
 
     /**
      * Creates a command that originates from a specific client.
@@ -21,7 +21,7 @@ export default class OrchestratorToGameCommand {
      * @param {*} payload
      * @param {string} clientId
      */
-    static fromClient(actionType, payload, clientId) {
+    static fromClient(actionType: string, payload: object, clientId: string) {
         return new OrchestratorToGameCommand(actionType, payload, clientId);
     }
 
@@ -30,7 +30,7 @@ export default class OrchestratorToGameCommand {
      * @param {string} actionType
      * @param {*} payload
      */
-    static fromSystem(actionType, payload) {
+    static fromSystem(actionType: string, payload: object) {
         return new OrchestratorToGameCommand(actionType, payload, null);
     }
 }
