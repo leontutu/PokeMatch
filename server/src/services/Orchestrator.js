@@ -1,7 +1,7 @@
 import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
-import GameCommand from "../commands/OrchestratorToGameCommand.js";
+import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
 import { delay } from "../utils/utils.js";
 import { isValidName } from "../../../shared/utils/validation.js";
@@ -160,7 +160,7 @@ export default class Orchestrator {
             `[Orchestrator] Game action from ${client.name}: ${data.actionType}`
         );
 
-        const gameCommand = new GameCommand(
+        const gameCommand = OrchestratorToGameCommand.fromClient(
             data.actionType,
             data.payload,
             client.uuid
@@ -235,7 +235,9 @@ export default class Orchestrator {
             this.#handleRoomErrors(() => {
                 this.#sendGameCommand(
                     roomId,
-                    new GameCommand(GAME_COMMANDS.BATTLE_END)
+                    OrchestratorToGameCommand.fromSystem(
+                        GAME_COMMANDS.BATTLE_END
+                    )
                 );
                 this.#updateRoomClients(roomId);
             });
@@ -250,10 +252,13 @@ export default class Orchestrator {
         const pokemon1 = await this.pokeAPIClient.getRandomPokemon();
         const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
 
-        const gameCommand = new GameCommand(GAME_COMMANDS.ASSIGN_NEW_POKEMON, [
-            createPokemonFromApiData(pokemon1),
-            createPokemonFromApiData(pokemon2),
-        ]);
+        const gameCommand = OrchestratorToGameCommand.fromSystem(
+            GAME_COMMANDS.ASSIGN_NEW_POKEMON,
+            [
+                createPokemonFromApiData(pokemon1),
+                createPokemonFromApiData(pokemon2),
+            ]
+        );
 
         this.#sendGameCommand(roomId, gameCommand);
     }

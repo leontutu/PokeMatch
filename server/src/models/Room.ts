@@ -161,14 +161,21 @@ export default class Room extends EventEmitter {
 
     /**
      * Creates a client-safe representation of the room state.
+     * NOTE: This used to be clean and use toJSON(), which is termporarily not possible
+     * due to ts migration
      * @param {Client} client The client for whom the state is being prepared.
      * @returns {object} The room state object for the client.
      */
     toClientState(clientUuid: string) {
-        const roomState = this.toJSON();
-        if (roomState.game && this.game) {
-            roomState.game = this.game.toClientState(clientUuid);
-        }
-        return roomState;
+        return {
+            id: this.id,
+            clientRecords: this.clientRecords.map((clientRecord) => {
+                return {
+                    isReady: clientRecord.isReady,
+                    client: clientRecord.client.toJSON(),
+                };
+            }),
+            game: this.game ? this.game.toClientState(clientUuid) : null,
+        };
     }
 }
