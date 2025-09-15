@@ -1,15 +1,18 @@
+import Pokemon from "../../../shared/models/Pokemon.js";
+
 /**
  * Represents a player in a game session.
  * Holds the player's state, including their name, points, and current Pokémon.
  */
 export default class Player {
+    points: number;
+    pokemon: Pokemon | null;
+    selectedStat: { name: string | null; value: number | null }; // TODO: Refac to type alias
     /**
      * @param {string} name The player's chosen name.
      * @param {string} uuid The player's persistent unique identifier.
      */
-    constructor(name, uuid) {
-        this.name = name;
-        this.uuid = uuid;
+    constructor(public name: string, public uuid: string) {
         this.points = 0;
         this.pokemon = null;
         this.selectedStat = { name: null, value: null };
@@ -26,7 +29,7 @@ export default class Player {
      * Assigns a Pokémon to the player.
      * @param {object} pokemon The Pokémon object.
      */
-    setPokemon(pokemon) {
+    setPokemon(pokemon: Pokemon) {
         this.pokemon = pokemon;
     }
 
@@ -35,15 +38,15 @@ export default class Player {
      * @param {string} statName The name of the selected stat.
      * @param {number} statValue The value of the selected stat.
      */
-    setSelectedStat(statName, statValue) {
-        this.selectedStat = { name: statName, value: statValue };
+    setSelectedStat(statName: string, statValue: number) {
+        this.selectedStat = { name: statName, value: statValue }; //TODO use type alias?
     }
 
     /**
      * Resets the player's selected stat to its initial state.
      */
     resetSelectedStat() {
-        this.selectedStat = { name: null, value: null };
+        this.selectedStat = { name: null, value: null }; // TODO use type alias?
     }
 
     /**
