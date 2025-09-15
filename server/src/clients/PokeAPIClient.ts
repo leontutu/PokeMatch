@@ -10,13 +10,13 @@ export default class PokeApiClient {
      * @returns {Promise<object>} A promise that resolves to the Pokémon's JSON data.
      * @throws {NoAPIResponseException} If the API request fails.
      */
-    async getRandomPokemon() {
-        const randomPokeId = Math.floor(Math.random() * 600) + 1;
-        const url = "https://pokeapi.co/api/v2/pokemon/" + randomPokeId;
+    async getRandomPokemon(): Promise<object> {
+        const randomPokeId: number = Math.floor(Math.random() * 600) + 1;
+        const url: string = `https://pokeapi.co/api/v2/pokemon/${randomPokeId}`;
         try {
-            const response = await fetch(url);
+            const response: Response = await fetch(url);
             return await response.json();
-        } catch (e) {
+        } catch (e: unknown) {
             throw new NoAPIResponseException(url);
         }
     }
