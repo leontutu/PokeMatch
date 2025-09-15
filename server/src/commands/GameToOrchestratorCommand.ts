@@ -12,9 +12,9 @@ export default class GameToOrchestratorCommand {
      * @param {*} payload The data associated with the event.
      * @param {string|null} clientId The UUID of a specific client related to the event.
      */
-    constructor(eventType, payload, clientId = null) {
-        this.eventType = eventType;
-        this.payload = payload;
-        this.clientId = clientId;
-    }
+    constructor(
+        public eventType: string, // TODO: enums
+        public payload: object, // TODO: ponder object payload types
+        public clientId: string | null = null
+    ) {}
 }
