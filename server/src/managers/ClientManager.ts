@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import Client from "../models/Client.js";
 
 /**
@@ -6,10 +7,8 @@ import Client from "../models/Client.js";
  * using both their transient socket and persistent UUID for lookups.
  */
 export default class ClientManager {
-    constructor() {
-        this.clientsBySocket = new Map();
-        this.clientsByUuid = new Map();
-    }
+    clientsBySocket: Map<Socket, Client> = new Map();
+    clientsByUuid: Map<string, Client> = new Map();
 
     //================================================================
     // Public API - Client Management
@@ -17,23 +16,22 @@ export default class ClientManager {
 
     /**
      * Creates a new Client instance and adds it to the manager's collections.
-     * @param {Socket} socket The client's socket instance.
-     * @param {string} uuid The client's persistent unique identifier.
-     * @returns {Client} The newly created client instance.
+     * @param socket The client's socket instance.
+     * @param uuid The client's persistent unique identifier.
      */
-    addClient(socket, uuid) {
+    addClient(socket: Socket, uuid: string): Client {
         const client = new Client(socket, uuid);
-        this.clientsBySocket.set(client.socket, client);
+        this.clientsBySocket.set(client.socket!, client);
         this.clientsByUuid.set(client.uuid, client);
         return client;
     }
 
     /**
      * Updates the socket for a reconnecting client.
-     * @param {Client} client The existing client instance.
-     * @param {Socket} newSocket The new socket instance for the client.
+     * @param client The existing client instance.
+     * @param newSocket The new socket instance for the client.
      */
-    updateClientSocket(client, newSocket) {
+    updateClientSocket(client: Client, newSocket: Socket) {
         const oldSocket = client.socket;
         if (oldSocket) {
             this.clientsBySocket.delete(oldSocket);
@@ -45,29 +43,29 @@ export default class ClientManager {
     /**
      * Removes a client from the manager when their socket disconnects.
      * The client's data is kept in `clientsByUuid` for potential reconnection.
-     * @param {Client} client The client to remove.
+     * @param client The client to remove.
      */
-    removeClientOnDisconnect(client) {
+    removeClientOnDisconnect(client: Client) {
         if (!client) return;
-        this.clientsBySocket.delete(client.socket);
+        this.clientsBySocket.delete(client.socket!);
         client.setSocket(null);
     }
 
     /**
      * Completely removes a client from the manager.
-     * @param {Client} client The client to remove.
+     * @param client The client to remove.
      */
-    removeClient(client) {
-        this.clientsBySocket.delete(client.socket);
+    removeClient(client: Client) {
+        this.clientsBySocket.delete(client.socket!);
         this.clientsByUuid.delete(client.uuid);
     }
 
     /**
      * Resets the session state for an array of clients.
-     * @param {Client[]} clients The clients to reset.
+     * @param clients The clients to reset.
      */
-    resetClients(clients) {
-        clients.forEach((client) => {
+    resetClients(clients: Client[]) {
+        clients.forEach((client: Client) => {
             client.reset();
         });
     }
@@ -78,19 +76,17 @@ export default class ClientManager {
 
     /**
      * Retrieves a client instance by their current socket.
-     * @param {Socket} socket The client's socket.
-     * @returns {Client|undefined}
+     * @param socket The client's socket.
      */
-    getClient(socket) {
+    getClient(socket: Socket): Client | undefined {
         return this.clientsBySocket.get(socket);
     }
 
     /**
      * Retrieves a client instance by their persistent UUID.
-     * @param {string} uuid The client's UUID.
-     * @returns {Client|null}
+     * @param uuid The client's UUID.
      */
-    getClientByUuid(uuid) {
+    getClientByUuid(uuid: string): Client | null {
         return this.clientsByUuid.get(uuid) || null;
     }
 }

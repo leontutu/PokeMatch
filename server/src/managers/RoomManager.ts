@@ -1,8 +1,10 @@
 import Room from "../models/Room.js";
+import Client from "../models/Client.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import { EventEmitter } from "events";
 import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
+import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 
 /**
  * Manages the lifecycle and storage of all game rooms.
@@ -13,11 +15,12 @@ import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
  * the direct management of the room collection.
  */
 export default class RoomManager extends EventEmitter {
+    rooms: Map<number, Room> = new Map();
+    roomTimeouts: Map<number, NodeJS.Timeout> = new Map();
+    idIterator: number = 1;
+
     constructor() {
         super();
-        this.rooms = new Map();
-        this.roomTimeouts = new Map();
-        this.id = 1;
     }
 
     //================================================================
@@ -26,11 +29,11 @@ export default class RoomManager extends EventEmitter {
 
     /**
      * Finds an available room or creates a new one for the client.
-     * @param {Client} client The client to assign to a room.
-     * @returns {string} The ID of the room the client was assigned to.
+     * @param client The client to assign to a room.
+     * @returns The ID of the room the client was assigned to.
      * @throws {RoomNotFoundException} If the newly created room is not found, which indicates an internal error.
      */
-    assignClientToRoom(client) {
+    assignClientToRoom(client: Client): number {
         let roomId;
         if (this.rooms.size === 0) {
             roomId = this.#createNewRoom();
@@ -48,22 +51,22 @@ export default class RoomManager extends EventEmitter {
 
     /**
      * Adds a client to a specific room.
-     * @param {string} roomId The ID of the room.
-     * @param {Client} client The client to add.
+     * @param roomId The ID of the room.
+     * @param client The client to add.
      * @throws {RoomNotFoundException}
      */
-    addClientToRoom(roomId, client) {
+    addClientToRoom(roomId: number, client: Client) {
         const room = this.getRoom(roomId);
         room.addClient(client);
     }
 
     /**
      * Removes a client from a specific room and deletes the room if it becomes empty.
-     * @param {string} roomId The ID of the room.
-     * @param {Client} client The client to remove.
+     * @param roomId The ID of the room.
+     * @param client The client to remove.
      * @throws {RoomNotFoundException}
      */
-    removeClientFromRoom(roomId, client) {
+    removeClientFromRoom(roomId: number, client: Client) {
         const room = this.getRoom(roomId);
         room.removeClient(client);
         if (!this.#deleteRoomIfEmpty(room)) {
@@ -73,42 +76,40 @@ export default class RoomManager extends EventEmitter {
 
     /**
      * Forwards a game command to the appropriate room's game instance.
-     * @param {string} roomId The ID of the room.
-     * @param {GameCommand} gameCommand The command to forward.
+     * @param roomId The ID of the room.
+     * @param gameCommand The command to forward.
      * @throws {RoomNotFoundException}
      */
-    forwardGameCommand(roomId, gameCommand) {
+    forwardGameCommand(roomId: number, gameCommand: OrchestratorToGameCommand) {
         const room = this.getRoom(roomId);
         room.forwardGameCommand(gameCommand);
     }
 
     /**
      * Sets a client's status to ready within a room.
-     * @param {string} roomId The ID of the room.
-     * @param {string} clientId The ID of the client.
+     * @param roomId The ID of the room.
+     * @param clientId The ID of the client.
      * @throws {RoomNotFoundException}
      */
-    setClientOfRoomReady(roomId, clientId) {
+    setClientOfRoomReady(roomId: number, clientId: string) {
         this.getRoom(roomId).setClientReady(clientId);
     }
 
     /**
      * Starts the game in a specific room with the given Pokémon.
-     * @param {string} roomId The ID of the room.
-     * @param {object} pokemon1 The first Pokémon.
-     * @param {object} pokemon2 The second Pokémon.
+     * @param roomId The ID of the room.
      * @throws {RoomNotFoundException}
      */
-    startGame(roomId, pokemon1, pokemon2) {
-        this.getRoom(roomId).startGame(pokemon1, pokemon2);
+    startGame(roomId: number) {
+        this.getRoom(roomId).startGame();
     }
 
     /**
      * Deletes a room explicitly by its ID.
-     * @param {string} roomId The ID of the room to delete.
+     * @param roomId The ID of the room to delete.
      * @throws {RoomNotFoundException}
      */
-    deleteRoom(roomId) {
+    deleteRoom(roomId: number) {
         if (!this.#hasRoom(roomId)) {
             throw new RoomNotFoundException(roomId);
         }
@@ -122,67 +123,68 @@ export default class RoomManager extends EventEmitter {
 
     /**
      * Retrieves the room instance associated with the given room ID.
-     * @param {string} roomId - The unique identifier of the room to retrieve.
-     * @returns {Room} The room instance corresponding to the provided roomId.
+     * @param roomId - The unique identifier of the room to retrieve.
+     * @returns The room instance corresponding to the provided roomId.
      * @throws {RoomNotFoundException} If the room with the specified ID does not exist.
      */
-    getRoom(roomId) {
+    getRoom(roomId: number): Room {
         if (!this.#hasRoom(roomId)) {
             throw new RoomNotFoundException(roomId);
         }
-        return this.rooms.get(roomId);
+        return this.rooms.get(roomId)!;
     }
 
-    hasRoom(roomId) {
+    hasRoom(roomId: number): boolean {
         return this.#hasRoom(roomId);
     }
 
     /**
      * Retrieves all clients from a specific room.
-     * @param {string} roomId The ID of the room.
-     * @returns {Client[]} An array of clients in the room.
+     * @param roomId The ID of the room.
+     * @returns An array of clients in the room.
      * @throws {RoomNotFoundException}
      */
-    getClientsOfRoom(roomId) {
+    getClientsOfRoom(roomId: number): Client[] {
         return this.getRoom(roomId).getClients();
     }
 
     /**
      * Gets the current game phase of a room.
-     * @param {string} roomId The ID of the room.
-     * @returns {string} The current game phase.
+     * @param roomId The ID of the room.
+     * @returns The current game phase.
      * @throws {RoomNotFoundException}
      */
-    getPhase(roomId) {
+    getPhase(roomId: number): string | null {
+        // TODO: enum
         return this.getRoom(roomId).getPhase();
     }
 
     /**
      * Checks if a room is full.
-     * @param {string} roomId The ID of the room.
-     * @returns {boolean}
+     * @param roomId The ID of the room.
+     * @returns boolean
      * @throws {RoomNotFoundException}
      */
-    isRoomFull(roomId) {
+    isRoomFull(roomId: number): boolean {
         return this.getRoom(roomId).isFull();
     }
 
     /**
      * Checks if all clients in a room are ready.
-     * @param {string} roomId The ID of the room.
-     * @returns {boolean}
+     * @param roomId The ID of the room.
+     * @returns boolean
      * @throws {RoomNotFoundException}
      */
-    isRoomReady(roomId) {
+    isRoomReady(roomId: number): boolean {
         return this.getRoom(roomId).isReady();
     }
 
     /**
      * Schedules a room for shutdown if all clients are inactive.
-     * @param {string} roomId The ID of the room.
+     * @param roomId The ID of the room.
      */
-    scheduleShutdownIfInactive(roomId) {
-        const room = this.rooms.get(roomId);
+    scheduleShutdownIfInactive(roomId: number) {
+        const room = this.getRoom(roomId);
         // checks if any clients are active
         if (!room.clientRecords.some((cr) => cr.client.socket)) {
             logger.log(
@@ -202,9 +204,9 @@ export default class RoomManager extends EventEmitter {
 
     /**
      * Clears any scheduled shutdown for a room, typically called when a client reconnects.
-     * @param {string} roomId The ID of the room.
+     * @param roomId The ID of the room.
      */
-    clearTimeoutForRoom(roomId) {
+    clearTimeoutForRoom(roomId: number) {
         if (this.roomTimeouts.has(roomId)) {
             logger.log(
                 `[RoomManager] Clearing scheduled shutdown for room ${roomId} due to client activity.`
@@ -236,7 +238,7 @@ export default class RoomManager extends EventEmitter {
         return null;
     }
 
-    #deleteRoomIfEmpty(room) {
+    #deleteRoomIfEmpty(room: Room) {
         if (room && room.isEmpty()) {
             this.deleteRoom(room.id);
             return true;
@@ -244,13 +246,13 @@ export default class RoomManager extends EventEmitter {
         return false;
     }
 
-    #hasRoom(roomId) {
+    #hasRoom(roomId: number) {
         return this.rooms.has(roomId);
     }
 
     #getNewId() {
-        const roomId = this.id;
-        this.id++;
+        const roomId = this.idIterator;
+        this.idIterator++;
         return roomId;
     }
 }
