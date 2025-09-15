@@ -3,11 +3,11 @@
  * Thrown when an attempt is made to access a room that cannot be found.
  */
 export default class RoomNotFoundException extends Error {
+    public name: string = "RoomNotFoundException";
     /**
      * @param {string} roomId The ID of the room that was not found.
      */
-    constructor(roomId) {
+    constructor(roomId: number) {
         super(`Room with ID '${roomId}' does not exist.`);
-        this.name = "RoomNotFoundException";
     }
 }
