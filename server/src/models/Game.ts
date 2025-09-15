@@ -82,6 +82,7 @@ export default class Game extends EventEmitter {
         const player = this.#findPlayer(clientId);
         // @ts-ignore
         const statValue = player.pokemon.stats[payload]; //TODO: typings
+        player.setSelectedStat(payload, statValue);
 
         if (this.#isAllSelected()) {
             this.phase = GAME_PHASES.BATTLE;
