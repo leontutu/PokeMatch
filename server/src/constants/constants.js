@@ -10,6 +10,7 @@ export const GAME_EVENTS = {
     NEW_BATTLE: "newBattle",
     GAME_FINISHED: "gameFinished",
     INVALID_STAT_SELECT: "invalidStatSelect",
+    ALL_SELECTED: "allSelected",
 };
 
 /*
