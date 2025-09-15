@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "node --inspect src/index.js",
-    "start": "node src/index.js"
+    "debug": "tsx --inspect src/index.ts",
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/server/src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   }
 }
