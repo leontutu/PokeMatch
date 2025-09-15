@@ -6,7 +6,7 @@ import { Socket } from "socket.io";
  */
 export default class Client {
     name: string | null;
-    roomId: string | null;
+    roomId: number | null;
     /**
      * @param {Socket} socket The client's initial Socket.IO socket instance.
      * @param {string} uuid The client's persistent unique identifier.
@@ -26,9 +26,9 @@ export default class Client {
 
     /**
      * Assigns a room ID to the client.
-     * @param {string|null} roomId The room ID to set.
+     * @param {number|null} roomId The room ID to set.
      */
-    setRoomId(roomId: string | null) {
+    setRoomId(roomId: number | null) {
         this.roomId = roomId;
     }
 
