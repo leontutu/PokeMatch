@@ -5,20 +5,22 @@
  */
 
 export default class Pokemon {
+    // TODO: Refac to type alias for sprites and stats
     /**
      * @param {number} id
      * @param {string} name
      * @param {string[]} types
+     * @param {object} stats
      * @param {object} sprites
      * @param {string} sprites.officialArtwork
      * @param {string} sprites.back_default
      * @param {object} stats
      */
-    constructor(id, name, types, sprites, stats) {
-        this.id = id;
-        this.name = name;
-        this.types = types;
-        this.sprites = sprites;
-        this.stats = stats;
-    }
+    constructor(
+        public id: number,
+        public name: string,
+        public types: string[],
+        public sprites: object,
+        public stats: object
+    ) {}
 }
