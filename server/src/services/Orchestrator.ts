@@ -1,11 +1,19 @@
 import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
+import { TIMINGS } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
+import PokeAPIClient from "../clients/PokeAPIClient.js";
+import RoomManager from "../managers/RoomManager.js";
+import ClientManager from "../managers/ClientManager.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
-import { delay } from "../utils/utils.js";
+import { assertIsDefined, delay } from "../utils/utils.js";
 import { isValidName } from "../../../shared/utils/validation.js";
-import { TIMINGS } from "../../../shared/constants/constants.js";
+import SocketService from "./SocketService.js";
+import { Socket } from "socket.io";
+import Game from "../models/Game.js";
+import Client from "../models/Client.js";
+import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 
 /**
  * The central controller of the application.
@@ -13,15 +21,17 @@ import { TIMINGS } from "../../../shared/constants/constants.js";
  * and orchestrates the overall application flow, from client connection to game completion.
  */
 export default class Orchestrator {
-    constructor(roomManager, clientManager, pokeAPIClient) {
-        this.roomManager = roomManager;
-        this.clientManager = clientManager;
-        this.pokeAPIClient = pokeAPIClient;
+    private _socketService: SocketService | null = null;
 
+    constructor(
+        public roomManager: RoomManager,
+        public clientManager: ClientManager,
+        public pokeAPIClient: PokeAPIClient
+    ) {
         // Listen for events emitted by the RoomManager. This allows the Orchestrator
         // to attach a game event listener to each newly created room.
         roomManager.on("newRoom", (room) => {
-            room.on("gameEvent", (event) => {
+            room.on("gameEvent", (event: GameToOrchestratorCommand) => {
                 this.handleGameEvent(event);
             });
         });
@@ -32,8 +42,17 @@ export default class Orchestrator {
      * This is used to break a circular dependency between Orchestrator and SocketService.
      * @param {SocketService} socketService The socket service instance.
      */
-    setSocketService(socketService) {
-        this.socketService = socketService;
+    setSocketService(socketService: SocketService) {
+        this._socketService = socketService;
+    }
+
+    public get socketService(): SocketService {
+        if (!this._socketService) {
+            throw new Error(
+                "SocketService has not been set on Orchestrator. Call setSocketService first."
+            );
+        }
+        return this._socketService;
     }
 
     //================================================================
@@ -43,9 +62,9 @@ export default class Orchestrator {
     /**
      * Handles a new client connection.
      * Identifies if the client is new or returning via their UUID and updates their state.
-     * @param {Socket} socket The client's socket instance.
+     * @param socket The client's socket instance.
      */
-    onConnection(socket) {
+    onConnection(socket: Socket) {
         const uuid = socket.handshake.auth.uuid;
         let client = this.clientManager.getClientByUuid(uuid);
 
@@ -71,7 +90,7 @@ export default class Orchestrator {
      * Handles a client disconnection.
      * @param {Socket} socket The client's socket instance.
      */
-    onDisconnect(socket) {
+    onDisconnect(socket: Socket) {
         const client = this.clientManager.getClient(socket);
         if (!client) return;
 
@@ -80,7 +99,7 @@ export default class Orchestrator {
 
         if (client.roomId) {
             this.#handleRoomErrors(() => {
-                this.roomManager.scheduleShutdownIfInactive(client.roomId);
+                this.roomManager.scheduleShutdownIfInactive(client.roomId!);
             }, socket);
         }
         logger.log(`[Orchestrator] ${name} disconnected.`);
@@ -92,7 +111,7 @@ export default class Orchestrator {
      * @param {Socket} socket The client's socket instance.
      * @param {object} payload The event payload containing the client's name.
      */
-    onNameEnter(socket, payload) {
+    onNameEnter(socket: Socket, payload: string) {
         const name = payload;
         const client = this.clientManager.getClient(socket);
 
@@ -114,11 +133,16 @@ export default class Orchestrator {
     /**
      * Handles a client signaling they are ready to start the game.
      * If all clients in the room are ready, the game begins.
-     * @param {Socket} socket The client's socket instance.
+     * @param socket The client's socket instance.
      */
-    onReady(socket) {
+    onReady(socket: Socket) {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
+
+        assertIsDefined(
+            roomId,
+            `[Orchestrator] onReady called for client ${client.uuid} who is not in a room.`
+        );
 
         this.#handleRoomErrors(() => {
             this.roomManager.setClientOfRoomReady(roomId, client.uuid);
@@ -137,9 +161,13 @@ export default class Orchestrator {
      * Handles a client choosing to leave their current room.
      * @param {Socket} socket The client's socket instance.
      */
-    onLeaveRoom(socket) {
+    onLeaveRoom(socket: Socket) {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
+        assertIsDefined(
+            roomId,
+            `[Orchestrator] onLeaveRoom called for client ${client.uuid} who is not in a room.`
+        );
 
         this.#handleRoomErrors(() => {
             this.roomManager.removeClientFromRoom(roomId, client);
@@ -152,9 +180,15 @@ export default class Orchestrator {
      * @param {Socket} socket The client's socket instance.
      * @param {object} data The command data from the client.
      */
-    onGameCommand(socket, data) {
+    onGameCommand(socket: Socket, data: any) {
+        // TODO: data type
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
+
+        assertIsDefined(
+            roomId,
+            `[Orchestrator] onGameCommand called for client ${client.uuid} who is not in a room.`
+        );
 
         logger.log(
             `[Orchestrator] Game action from ${client.name}: ${data.actionType}`
@@ -181,30 +215,36 @@ export default class Orchestrator {
      * This acts as the bridge between the pure Game model and the application layer.
      * @param {GameToOrchestratorCommand} event The event emitted by the game.
      */
-    async handleGameEvent(event) {
+    async handleGameEvent(event: GameToOrchestratorCommand) {
+        assertIsDefined(
+            event.roomId,
+            "[Orchestrator] Received game event without roomId."
+        );
+        const roomId = event.roomId;
+
         logger.log(
             `[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`
         );
         this.#handleRoomErrors(async () => {
             switch (event.eventType) {
                 case GAME_EVENTS.ALL_SELECTED:
-                    this.#updateRoomClients(event.roomId);
-                    this.#startBattle(event.roomId);
+                    this.#updateRoomClients(roomId);
+                    this.#startBattle(roomId);
                     break;
                 case GAME_EVENTS.INVALID_STAT_SELECT:
                     const client = this.clientManager.getClientByUuid(
-                        event.clientId
+                        event.clientId!
                     );
                     if (client) {
                         this.socketService.emitActionError(
-                            client.socket,
+                            client.socket!,
                             event.payload
                         );
                     }
                     break;
                 case GAME_EVENTS.NEW_BATTLE:
-                    await this.#assignNewPokemon(event.roomId);
-                    this.#updateRoomClients(event.roomId);
+                    await this.#assignNewPokemon(roomId);
+                    this.#updateRoomClients(roomId);
                     break;
                 default:
                     logger.warn(
@@ -216,9 +256,9 @@ export default class Orchestrator {
 
     /**
      * Initiates a new game in a room and assigns the first Pokémon.
-     * @param {string} roomId The ID of the room where the game will start.
+     * @param roomId The ID of the room where the game will start.
      */
-    async #startGame(roomId) {
+    async #startGame(roomId: number) {
         logger.log(`[Orchestrator] Game starting for room: ${roomId}`);
         this.roomManager.startGame(roomId);
         await this.#assignNewPokemon(roomId);
@@ -227,9 +267,9 @@ export default class Orchestrator {
 
     /**
      * Starts the battle phase after a delay, then sends the BATTLE_END command.
-     * @param {string} roomId The ID of the room in battle.
+     * @param roomId The ID of the room in battle.
      */
-    #startBattle(roomId) {
+    #startBattle(roomId: number) {
         logger.log(`[Orchestrator] Starting battle for room: ${roomId}`);
         delay(TIMINGS.BATTLE_DURATION).then(() => {
             this.#handleRoomErrors(() => {
@@ -246,9 +286,9 @@ export default class Orchestrator {
 
     /**
      * Fetches two random Pokémon and sends a command to assign them to the players.
-     * @param {string} roomId The ID of the room.
+     * @param roomId The ID of the room.
      */
-    async #assignNewPokemon(roomId) {
+    async #assignNewPokemon(roomId: number) {
         const pokemon1 = await this.pokeAPIClient.getRandomPokemon();
         const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
 
@@ -265,16 +305,16 @@ export default class Orchestrator {
 
     /**
      * Forcefully shuts down a room, notifies clients, and cleans up resources.
-     * @param {string} roomId The ID of the room to shut down.
+     * @param roomId The ID of the room to shut down.
      * @param {Error} exception The error that caused the shutdown.
      */
-    #shutDownRoom(roomId, exception) {
-        logger.error(
+    #shutDownRoom(roomId: number, exception: Error) {
+        logger.warn(
             `[Orchestrator] Shutting down room ${roomId} due to error: ${exception.message}`
         );
         const clients = this.roomManager.getClientsOfRoom(roomId);
         clients.forEach((client) => {
-            this.socketService.emitRoomCrash(client.socket, exception);
+            this.socketService.emitRoomCrash(client.socket!);
         });
         this.clientManager.resetClients(clients);
         this.roomManager.deleteRoom(roomId);
@@ -282,10 +322,10 @@ export default class Orchestrator {
 
     /**
      * Sends the latest game state to every client in a specific room.
-     * @param {string} roomId The ID of the room to update.
+     * @param roomId The ID of the room to update.
      */
-    #updateRoomClients(roomId) {
-        this.#forEachRoomClient(roomId, (client) => {
+    #updateRoomClients(roomId: number) {
+        this.#forEachRoomClient(roomId, (client: Client) => {
             if (!client.socket) return;
             const room = this.roomManager.getRoom(roomId);
             const clientGameState = room.toClientState(client.uuid);
@@ -297,33 +337,33 @@ export default class Orchestrator {
     // Private Helpers
     //================================================================
 
-    #assignClientToRoom(client) {
+    #assignClientToRoom(client: Client): number {
         const roomId = this.roomManager.assignClientToRoom(client);
         client.setRoomId(roomId);
         return roomId;
     }
 
-    #sendGameCommand(roomId, gameCommand) {
+    #sendGameCommand(roomId: number, gameCommand: OrchestratorToGameCommand) {
         this.roomManager.forwardGameCommand(roomId, gameCommand);
     }
 
-    #forEachRoomClient(roomId, callback) {
+    #forEachRoomClient(roomId: number, callback: (client: Client) => void) {
         this.roomManager.getClientsOfRoom(roomId).forEach(callback);
     }
 
     /**
      * A centralized error handler for operations that might fail due to a missing room.
-     * @param {Function} fn The function to execute within the try...catch block.
-     * @param {Socket|null} socket The client socket to notify if an error occurs.
+     * @param fn The function to execute within the try...catch block.
+     * @param socket The client socket to notify if an error occurs.
      */
-    #handleRoomErrors(fn, socket = null) {
+    #handleRoomErrors(fn: Function, socket: Socket | null = null) {
         try {
             return fn();
         } catch (error) {
             if (error instanceof RoomNotFoundException) {
-                logger.error(`Handled expected error: ${error.message}`);
+                logger.warn(`Handled expected error: ${error.message}`);
                 if (socket) {
-                    this.socketService.emitRoomCrash(socket, error);
+                    this.socketService.emitRoomCrash(socket);
                 }
             } else {
                 throw error;

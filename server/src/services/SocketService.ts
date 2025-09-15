@@ -1,7 +1,8 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { EVENTS } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
-
+import Orchestrator from "./Orchestrator.js";
+import { Server as HttpServer } from "node:http";
 /**
  * SocketService
  * -------------
@@ -26,8 +27,9 @@ import logger from "../utils/Logger.js";
  * - emitActionError(socket, reason): Notifies a client of an invalid game action.
  */
 export default class SocketService {
-    constructor(server, orchestrator) {
-        this.orchestrator = orchestrator;
+    io: Server;
+
+    constructor(public server: HttpServer, public orchestrator: Orchestrator) {
         this.io = new Server(server, {
             cors: {
                 origin: "*",
@@ -80,27 +82,27 @@ export default class SocketService {
     }
 
     // Emits the latest room/game state to a client.
-    emitUpdate(socket, data) {
+    emitUpdate(socket: Socket, data: any) {
         socket.emit(EVENTS.UPDATE, data);
     }
 
     // Notifies a client that a room is full.
-    emitRoomFull(socket) {
+    emitRoomFull(socket: Socket) {
         socket.emit(EVENTS.ROOM_FULL);
     }
 
     // Notifies a client that their room has crashed.
-    emitRoomCrash(socket) {
+    emitRoomCrash(socket: Socket) {
         socket.emit(EVENTS.ROOM_CRASH);
     }
 
     // Notifies a client of a name validation error.
-    emitNameError(socket) {
+    emitNameError(socket: Socket) {
         socket.emit(EVENTS.NAME_ERROR);
     }
 
     // Notifies a client of an invalid select stat action.
-    emitActionError(socket, reason = null) {
+    emitActionError(socket: Socket, reason = null) {
         socket.emit(EVENTS.SELECT_STAT_ERROR, { reason });
     }
 }

@@ -78,8 +78,9 @@ export default class ClientManager {
      * Retrieves a client instance by their current socket.
      * @param socket The client's socket.
      */
-    getClient(socket: Socket): Client | undefined {
-        return this.clientsBySocket.get(socket);
+    getClient(socket: Socket): Client {
+        // NOTE: While this should be safe, a ClientNotFoundException should be implemented
+        return this.clientsBySocket.get(socket)!;
     }
 
     /**

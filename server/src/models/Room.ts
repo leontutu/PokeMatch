@@ -76,7 +76,8 @@ export default class Room extends EventEmitter {
         this.game = new Game(participants);
 
         this.game.on("gameEvent", (event) => {
-            this.emit("gameEvent", { roomId: this.id, ...event });
+            event.roomId = this.id; // Enrich event with roomId
+            this.emit("gameEvent", event);
         });
     }
 

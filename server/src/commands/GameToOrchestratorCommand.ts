@@ -7,6 +7,7 @@
  * Orchestrator for handling
  */
 export default class GameToOrchestratorCommand {
+    roomId: number | null = null; // Will be set by Room when propagating
     /**
      * @param {string} eventType The type of event that occurred (from GAME_EVENTS).
      * @param {*} payload The data associated with the event.

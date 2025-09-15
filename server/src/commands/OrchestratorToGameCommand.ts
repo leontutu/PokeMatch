@@ -30,7 +30,7 @@ export default class OrchestratorToGameCommand {
      * @param {string} actionType
      * @param {*} payload
      */
-    static fromSystem(actionType: string, payload: object) {
+    static fromSystem(actionType: string, payload: object | null = null) {
         return new OrchestratorToGameCommand(actionType, payload, null);
     }
 }
