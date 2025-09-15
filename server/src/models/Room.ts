@@ -1,3 +1,5 @@
+import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
+import Client from "./Client.js";
 import Game from "./Game.js";
 import { EventEmitter } from "events";
 
@@ -7,9 +9,14 @@ import { EventEmitter } from "events";
  * Emits "gameEvent" when its Game instance emits an event.
  */
 export default class Room extends EventEmitter {
-    constructor(id) {
+    clientRecords: { client: any; isReady: boolean }[]; //TODO: Refac to type alias for clientRecords
+    game: Game | null;
+
+    /**
+     * @param id The unique identifier for the room.
+     */
+    constructor(public id: number) {
         super();
-        this.id = id;
         this.clientRecords = [];
         this.game = null;
     }
@@ -23,7 +30,7 @@ export default class Room extends EventEmitter {
      * @param {Client} client The client to add.
      * @returns {boolean} True if the client was added, false otherwise.
      */
-    addClient(client) {
+    addClient(client: Client) {
         const isAlreadyInRoom = this.clientRecords.some(
             (record) => record.client.uuid === client.uuid
         );
@@ -38,7 +45,7 @@ export default class Room extends EventEmitter {
      * Removes a client from the room by their unique ID.
      * @param {Client} client The client to remove.
      */
-    removeClient(client) {
+    removeClient(client: Client) {
         this.clientRecords = this.clientRecords.filter(
             (c) => c.client.uuid !== client.uuid
         );
@@ -48,7 +55,7 @@ export default class Room extends EventEmitter {
      * Sets a client's status to ready.
      * @param {string} clientUuid The UUID of the client.
      */
-    setClientReady(clientUuid) {
+    setClientReady(clientUuid: string) {
         const clientRecord = this.clientRecords.find(
             (c) => c.client.uuid === clientUuid
         );
@@ -77,7 +84,7 @@ export default class Room extends EventEmitter {
      * Forwards a command to the current game instance.
      * @param {OrchestratorToGameCommand} gameCommand The command to execute.
      */
-    forwardGameCommand(gameCommand) {
+    forwardGameCommand(gameCommand: OrchestratorToGameCommand) {
         if (this.game) {
             this.game.executeGameCommand(gameCommand);
         }
@@ -157,9 +164,9 @@ export default class Room extends EventEmitter {
      * @param {Client} client The client for whom the state is being prepared.
      * @returns {object} The room state object for the client.
      */
-    toClientState(clientUuid) {
+    toClientState(clientUuid: string) {
         const roomState = this.toJSON();
-        if (roomState.game) {
+        if (roomState.game && this.game) {
             roomState.game = this.game.toClientState(clientUuid);
         }
         return roomState;
