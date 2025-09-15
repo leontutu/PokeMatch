@@ -1,33 +1,27 @@
 /**
  * Logger utility for development.
  * Logs messages with time in seconds since process uptime for easier debugging.
- * Implements a singleton pattern.
  */
 class Logger {
-    constructor() {
-        if (Logger.instance) {
-            return Logger.instance;
-        }
-        Logger.instance = this;
-    }
-
-    log(message) {
+    log(message: string) {
         console.log(`[LOG] ${this.time()} - ${message}`);
     }
 
-    info(message) {
+    info(message: string) {
         console.info(`[INFO] ${this.time()} - ${message}`);
     }
 
-    warn(message) {
+    warn(message: string) {
         console.warn(`[WARN] ${this.time()} - ${message}`);
     }
 
-    error(error) {
-        console.error(`[ERROR] ${this.time()} - ${error.message}`);
+    error(error: Error) {
+        console.error(
+            `[ERROR] ${this.time()} - ${error.stack || error.message}`
+        );
     }
 
-    time() {
+    time(): string {
         const totalSeconds = Math.floor(process.uptime());
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
