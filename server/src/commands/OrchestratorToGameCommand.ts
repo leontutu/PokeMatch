@@ -11,7 +11,7 @@ export default class OrchestratorToGameCommand {
      */
     constructor(
         public actionType: string, //TODO: enums
-        public payload: object, //TODO: ponder object payload types
+        public payload: any, //TODO: ponder object payload types
         public clientId: string | null
     ) {}
 
