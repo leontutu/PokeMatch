@@ -6,12 +6,12 @@ import { GAME_COMMANDS as SHARED_GAME_COMMANDS } from "../../../shared/constants
 /*
  * - GAME_EVENTS: Events emitted by the Game to the Orchestrator.
  */
-export const GAME_EVENTS = {
-    NEW_BATTLE: "newBattle",
-    GAME_FINISHED: "gameFinished",
-    INVALID_STAT_SELECT: "invalidStatSelect",
-    ALL_SELECTED: "allSelected",
-};
+export enum GAME_EVENTS {
+    NEW_BATTLE = "newBattle",
+    GAME_FINISHED = "gameFinished",
+    INVALID_STAT_SELECT = "invalidStatSelect",
+    ALL_SELECTED = "allSelected",
+}
 
 /*
  * GAME_COMMANDS: All commands the Game can execute (shared + server-only).
