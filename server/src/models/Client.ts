@@ -1,15 +1,17 @@
+import { Socket } from "socket.io";
+
 /**
  * Represents a connected client.
  * Holds the client's socket, persistent UUID, and session-specific data like name and room ID.
  */
 export default class Client {
+    name: string | null;
+    roomId: string | null;
     /**
      * @param {Socket} socket The client's initial Socket.IO socket instance.
      * @param {string} uuid The client's persistent unique identifier.
      */
-    constructor(socket, uuid) {
-        this.socket = socket;
-        this.uuid = uuid; // Persistent ID across connections
+    constructor(public socket: Socket | null, public uuid: string) {
         this.name = null;
         this.roomId = null;
     }
@@ -18,7 +20,7 @@ export default class Client {
      * Assigns a name to the client.
      * @param {string} name The name to set.
      */
-    setName(name) {
+    setName(name: string) {
         this.name = name;
     }
 
@@ -26,7 +28,7 @@ export default class Client {
      * Assigns a room ID to the client.
      * @param {string|null} roomId The room ID to set.
      */
-    setRoomId(roomId) {
+    setRoomId(roomId: string | null) {
         this.roomId = roomId;
     }
 
@@ -34,7 +36,7 @@ export default class Client {
      * Updates the client's socket instance on reconnection.
      * @param {Socket} socket The new socket instance.
      */
-    setSocket(socket) {
+    setSocket(socket: Socket | null) {
         this.socket = socket;
     }
 
