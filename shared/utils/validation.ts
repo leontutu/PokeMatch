@@ -7,7 +7,7 @@
  * @param {string} name The name to validate.
  * @returns {boolean} True if the name is valid, false otherwise.
  */
-export function isValidName(name) {
+export function isValidName(name: string): boolean {
     return (
         typeof name === "string" &&
         name.trim().length >= 3 &&
