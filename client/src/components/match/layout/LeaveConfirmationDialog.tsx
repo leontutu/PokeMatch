@@ -1,19 +1,29 @@
 import styles from "./LeaveConfirmDialog.module.css";
 
+type LeaveConfirmationDialogProps = {
+    isOpen: boolean;
+    onConfirm: () => void;
+    onCancel: () => void;
+};
+
 /**
- * A modal dialog to confirm if the user wants to leave the match.
+ * Renders a modal dialog to confirm if the user wants to leave the current match.
  *
- * @param {object} props
- * @param {boolean} props.isOpen - If true, the dialog is shown.
- * @param {function} props.onConfirm - Callback for when the "Yes" button is clicked.
- * @param {function} props.onCancel - Callback for when the "No" button is clicked.
- * @returns {JSX.Element|null}
+ * When open, it overlays the screen and presents "Yes" and "No" options.
+ * The `onConfirm` and `onCancel` callbacks are triggered accordingly.
+ *
+ * @example
+ * <LeaveConfirmationDialog
+ *   isOpen={isDialogOpen}
+ *   onConfirm={handleLeave}
+ *   onCancel={handleCloseDialog}
+ * />
  */
 export default function LeaveConfirmationDialog({
     isOpen,
     onConfirm,
     onCancel,
-}) {
+}: LeaveConfirmationDialogProps) {
     if (!isOpen) {
         return null;
     }

@@ -1,21 +1,22 @@
-/**
- * ScoreBoard Component
- *
- * Displays the current score and names for both players in a match.
- * Sits at the bottom of the viewport as a footer.
- * Uses styling from ScoreBoard.module.css for layout and appearance.
- */
-
 import styles from "./ScoreBoard.module.css";
+import { GameState } from "../../../types";
+
+type ScoreBoardProps = {
+    game: GameState;
+    onHomeClick: () => void;
+};
 
 /**
- * ScoreBoard functional component.
- * @param {Object} props
- * @param {Object} props.game - The current game state.
- * @param {Function} props.onHomeClick - Callback for when the home button is clicked.
- * @returns {JSX.Element} The ScoreBoard component.
+ * Renders a scoreboard footer displaying player names and scores for the current match.
+ *
+ * This component shows the current player's (`you`) score on the left and the
+ * opponent's score on the right. It also includes a central "home" button
+ * to allow the user to leave the match.
+ *
+ * @example
+ * <ScoreBoard game={gameState} onHomeClick={handleGoHome} />
  */
-export default function ScoreBoard({ game, onHomeClick }) {
+export default function ScoreBoard({ game, onHomeClick }: ScoreBoardProps) {
     const you = game.you;
     const opponent = game.opponent;
 

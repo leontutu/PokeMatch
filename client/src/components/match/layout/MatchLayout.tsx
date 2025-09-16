@@ -1,26 +1,31 @@
-/**
- * MatchLayout Component
- *
- * Provides a consistent layout for match pages, including a content area and a scoreboard.
- * Uses styling from MatchLayout.module.css for alignment and spacing.
- * Integrates with the socket context to access room and game state.
- */
-
 import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { PAGES } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
 import styles from "./MatchLayout.module.css";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
+import { NavigationHandler } from "../../../types";
+import React from "react";
+
+type MatchLayoutProps = {
+    children: React.ReactNode;
+    onNavigate: NavigationHandler;
+};
 
 /**
- * MatchLayout functional component.
- * @param {Object} props
- * @param {ReactNode} props.children - The content to render inside the layout.
- * @param {Function} props.onNavigate - Function to handle navigation.
- * @returns {JSX.Element} The MatchLayout component.
+ * Provides a consistent layout for all match-related screens.
+ *
+ * This component wraps the main content of a match, adding a persistent
+ * `ScoreBoard` at the bottom. It also manages the "leave room" functionality,
+ * handling the confirmation dialog and communicating with the server via the
+ * socket context when a user decides to leave.
+ *
+ * @example
+ * <MatchLayout onNavigate={handleNavigation}>
+ *   <StatSelectionScreen />
+ * </MatchLayout>
  */
-export default function MatchLayout({ children, onNavigate }) {
+export default function MatchLayout({ children, onNavigate }: MatchLayoutProps) {
     const { roomState, sendLeaveRoom } = useSocket();
     const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 
@@ -39,6 +44,10 @@ export default function MatchLayout({ children, onNavigate }) {
     const handleOpenDialog = () => {
         setIsLeaveDialogOpen(true);
     };
+
+    if (!roomState.game) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className={styles.matchLayout}>
