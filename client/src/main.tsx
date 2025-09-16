@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { SocketProvider } from "./contexts/SocketContext.jsx";
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <SocketProvider>
             <App />
