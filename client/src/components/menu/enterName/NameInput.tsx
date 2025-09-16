@@ -1,37 +1,33 @@
-/**
- * NameInput Component
- *
- * Renders a labeled input field for entering a player's name.
- * Handles local validation and provides feedback to the user.
- * Scrolls the input into view on focus (useful for mobile keyboards).
- *
- */
-
 import { useRef } from "react";
 import styles from "./NameInput.module.css";
 import { isValidName } from "../../../../../shared/utils/validation";
 
+type NameInputProps = {
+    name: string;
+    setName: (name: string) => void;
+    isNameValid: boolean;
+    setIsNameValid: (isValid: boolean) => void;
+};
+
 /**
- * NameInput functional component.
- * @param {Object} props
- * @param {string} props.name - The current value of the name input.
- * @param {Function} props.setName - Function to update the name value.
- * @param {boolean} props.isNameValid - Whether the name is valid.
- * @param {Function} props.setIsNameValid - Function to update validity state.
+ * Renders a labeled input field for entering a player's name.
+ * Handles local validation and provides visual feedback to the user.
+ * Automatically scrolls the input into view on focus to improve user experience
+ * on mobile devices where a virtual keyboard may cover the input.
  */
 export default function NameInput({
     name,
     setName,
     isNameValid,
     setIsNameValid,
-}) {
-    const inputRef = useRef(null); // Create a ref for the input element
+}: NameInputProps) {
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    // This function will be called when the user taps the input
-    // The purpose is to scroll both the input and the submit button into view
-    // when the keyboard is open
+    // Function to scroll the input into view when the keyboard is open
     const handleFocus = () => {
         // Timeout to wait for the keyboard opening animation to complete
+        // hack: Many devices will open the keyboard and subsequently open an autofill
+        // widget above it that can cover the input field. 400ms seems to be a good compromise.
         setTimeout(() => {
             inputRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -40,7 +36,7 @@ export default function NameInput({
         }, 400);
     };
 
-    function handleNameChange(event) {
+    function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         setName(event.target.value);
         setIsNameValid(isValidName(event.target.value));
     }
@@ -59,15 +55,15 @@ export default function NameInput({
             </label>
             <div className={`${styles.inputWrapper} `}>
                 <input
-                    ref={inputRef} // ref for scrolling into view
-                    onFocus={handleFocus} // add the onFocus handler
+                    ref={inputRef}
+                    onFocus={handleFocus}
                     id="name-input"
                     className={styles.nameInput}
                     type="text"
                     value={name}
                     onChange={handleNameChange}
                     placeholder="Your name here"
-                    maxLength="9"
+                    maxLength={9}
                 />
                 <span
                     className={`${styles.validationText} ${

@@ -1,46 +1,37 @@
-/**
- * EnterNamePage Component
- *
- * Renders the UI for entering a player's name before joining a room.
- * Handles local state for the name input and its validation, and interacts
- * with the socket context to submit the name and navigate based on server responses.
- *
- * Behavior:
- * - Validates the entered name using shared validation logic.
- * - Submits the name to the server via socket when valid.
- * - Navigates to the home page and shows an alert if the server signals a name error.
- * - Navigates to the room page when the server signals a successful room join.
- *
- * Usage:
- * <EnterNamePage onNavigate={yourNavigateFunction} />
- */
-
 import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { PAGES } from "../../../constants/constants";
 import { isValidName } from "../../../../../shared/utils/validation";
+import { NavigationHandler } from "../../../types";
 import HomeLayout from "../layout/HomeLayout";
 import NameInput from "./NameInput";
 import SubmitButton from "./SubmitButton";
 import styles from "./EnterNamePage.module.css";
 
+type EnterNamePageProps = {
+    onNavigate: NavigationHandler;
+};
+
 /**
- * EnterNamePage functional component.
- * @param {Object} props
- * @param {Function} props.onNavigate - Function to handle navigation between pages.
+ * Renders the UI for entering a player's name before joining a room.
+ *
+ * This component manages the state for the name input and its validation.
+ * It interacts with the socket context to submit the name to the server.
+ * Based on the server's response, it will either navigate the user to the
+ * game room or display an error and return them to the home page.
+ *
+ * @example
+ * <EnterNamePage onNavigate={handleNavigation} />
  */
-export default function EnterNamePage({ onNavigate }) {
-    // --- Socket and State ---
+export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
     const { sendName, roomState, nameErrorSignal, setNameErrorSignal } =
         useSocket();
 
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
 
-    // --- Effects ---
     useEffect(() => {
-        // This should rarely happen, as name validation is performed client-side.
-        // If it does, it means the server rejected the name for some reason.
+        // Note: This should rarely happen, as name validation is performed client-side.
         if (nameErrorSignal) {
             onNavigate(PAGES.HOME);
             setNameErrorSignal(false);
@@ -56,11 +47,6 @@ export default function EnterNamePage({ onNavigate }) {
         }
     }, [roomState, onNavigate]);
 
-    // --- Handlers ---
-    /**
-     * Handles the submission of the name input.
-     * Validates the name and sends it to the server if valid.
-     */
     function handleSubmit() {
         if (!isValidName(name)) {
             return;
@@ -68,7 +54,6 @@ export default function EnterNamePage({ onNavigate }) {
         sendName(name);
     }
 
-    // --- Render ---
     return (
         <HomeLayout>
             <div className={styles.inputSection}>
