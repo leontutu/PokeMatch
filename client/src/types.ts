@@ -8,12 +8,12 @@ export type RoomState = {
     game: GameState | null;
 };
 
-type ClientRecord = {
+export type ClientRecord = {
     client: { name: string };
     isReady: boolean;
 };
 
-type GameState = {
+export type GameState = {
     phase: GAME_PHASES;
     lockedStats: STAT_NAMES[];
     winner: string | null;
@@ -21,7 +21,7 @@ type GameState = {
     opponent: PlayerState;
 };
 
-type PlayerState = {
+export type PlayerState = {
     name: string;
     points: number;
     challengeStat: Stat;
