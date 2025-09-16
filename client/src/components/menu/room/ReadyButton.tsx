@@ -1,13 +1,15 @@
 import styles from "./ReadyButton.module.css";
 
+type ReadyButtonProps = {
+    amIReady: boolean;
+    handleReadyClick: () => void;
+};
+
 /**
  * A button for players to signal they are ready to start the game.
- * @param {object} props - The component props.
- * @param {boolean} props.amIReady - Whether the current player is ready.
- * @param {function} props.handleReadyClick - The function to call when the button is clicked.
- * @returns {JSX.Element} The ReadyButton component.
+ * The button is disabled and styled differently when the player is already marked as ready.
  */
-export default function ReadyButton({ amIReady, handleReadyClick }) {
+export default function ReadyButton({ amIReady, handleReadyClick } : ReadyButtonProps) {
     return (
         <button
             onClick={handleReadyClick}

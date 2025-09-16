@@ -1,12 +1,14 @@
 import styles from "./ParticipantList.module.css";
+import { ClientRecord } from "../../../types"
+
+type ParticipantListProps = {
+    participants: ClientRecord[]
+};
 
 /**
  * Displays a list of participants in the room and their ready status.
- * @param {object} props - The component props.
- * @param {Array<object>} props.participants - The list of participants.
- * @returns {JSX.Element} The ParticipantList component.
  */
-export default function ParticipantList({ participants }) {
+export default function ParticipantList({ participants } : ParticipantListProps) {
     return (
         <ul className={styles.participantsList}>
             {participants.map((clientRecord, index) => (

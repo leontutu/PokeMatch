@@ -15,36 +15,54 @@
  * <RoomPage onNavigate={yourNavigateFunction} />
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./RoomPage.module.css";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
+import { PAGES } from "../../../constants/constants";
+import { NavigationHandler } from "../../../types";
+
+type RoomPageProps = {
+    onNavigate: NavigationHandler;
+};
 
 /**
- * Renders the room page where players can see each other and ready up for a game.
- * @param {object} props - The component props.
- * @param {function} props.onNavigate - Function to navigate to other pages.
- * @returns {JSX.Element} The RoomPage component.
+ * Renders the UI for a game room where players wait before a match starts.
+ *
+ * This component displays the Room ID and a list of participants, showing their
+ * ready status. It uses the `useSocket` hook to get the current room state and
+ * to send a "ready" signal to the server. When the server starts the game,
+ * it automatically navigates the user to the next page.
  */
-export default function RoomPage() {
+export default function RoomPage({ onNavigate }: RoomPageProps) {
     const { roomState, sendReady } = useSocket();
 
-    //FIXME reconsider this when refactoring gameUtils.js
+    //NOTE reconsider this
     // Determine if the current client has already pressed the ready button.
     // const amIReady = roomState.clients.find(
     //     (c) => c.uuid === clientUuid
     // )?.isReady;
     const [amIReady, setAmIReady] = useState(false);
 
+    useEffect(() => {
+        if (roomState?.game) {
+            onNavigate(PAGES.POKEVIEWER);
+        }
+    }, [roomState, onNavigate]);
+
     const handleReadyClick = () => {
         if (!amIReady) {
-            setAmIReady(true); //FIXME reconsider this when refactoring gameUtils.js
+            setAmIReady(true);
             sendReady();
         }
     };
+
+    if (!roomState) {
+        return <p>Loading room...</p>;
+    }
 
     return (
         <HomeLayout>

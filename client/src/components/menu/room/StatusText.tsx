@@ -1,13 +1,14 @@
 import styles from "./StatusText.module.css";
 
+type StatusTextProps = {
+    amIReady: boolean;
+    isGameStarted: boolean;
+}
+
 /**
  * Displays a status message based on the player's readiness and game state.
- * @param {object} props - The component props.
- * @param {boolean} props.amIReady - Whether the current player is ready.
- * @param {boolean} props.isGameStarted - Whether the game has started.
- * @returns {JSX.Element} The StatusText component.
  */
-export default function StatusText({ amIReady, isGameStarted }) {
+export default function StatusText({ amIReady, isGameStarted }: StatusTextProps) {
     return (
         <p
             className={`${styles.statusText} ${
