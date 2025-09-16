@@ -10,6 +10,7 @@ type SocketContextType = {
     roomCrashSignal: boolean;
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
+    setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
     sendReady: () => void;
@@ -132,7 +133,7 @@ export const SocketProvider = ({ children }:SocketContextProps) => {
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
-        // setSelectStatErrorSignal,
+        setSelectStatErrorSignal,
         setNameErrorSignal,
         sendName,
         sendReady,

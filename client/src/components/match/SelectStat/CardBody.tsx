@@ -8,14 +8,14 @@ export default function CardBody({
     index,
     onCardClick,
     isLocked,
-}) {
+}: any) {
     return (
         <div
             className={`${styles.statDiv} 
                 ${isLocked ? styles.lockedCard : ""}
                 ${isSelected ? styles.highlight : ""}
                 `}
-            style={{ "--animation-delay": animationDelay }}
+            style={{ "--animation-delay": animationDelay } as React.CSSProperties}
             onClick={() => {
                 onCardClick(index);
             }}

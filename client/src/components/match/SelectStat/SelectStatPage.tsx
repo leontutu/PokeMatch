@@ -1,12 +1,3 @@
-/**
- * SelectStatPage Component
- *
- * Displays the stat selection screen during a match, allowing the player to choose a stat to challenge.
- * Handles stat selection, locking, error feedback, and UI rendering for both player's Pokémon.
- * Uses styling from SelectStatPage.module.css for layout and appearance.
- * NOTE: This component's implementation is very hacky and will be rewritten from scratch soon™
- */
-
 import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import styles from "./SelectStatPage.module.css";
@@ -15,16 +6,28 @@ import TypeCard from "./TypeCard";
 import cardScaffold from "../../../scaffolds/cardScaffold";
 import CardWrapper from "./CardWrapper";
 import { DISPLAY_TO_STAT } from "../../../constants/constants";
+import { STAT_NAMES } from "../../../../../shared/constants/constants";
+import { NavigationHandler } from "../../../types";
+
+type SelectStatPageProps = {
+    onNavigate: NavigationHandler;
+};
 
 /**
- * SelectStatPage functional component.
- * Renders the stat selection interface for the match phase.
- * @returns {JSX.Element} The SelectStatPage component.
- */
-export default function SelectStatPage({ onNavigate }) {
+ * Renders the stat selection screen for the match.
+ *
+ * This component displays a radial layout of stat cards for the player's Pokémon.
+ * It allows the player to select a stat to challenge, lock in their choice, and
+ * provides visual feedback for previously used stats and the current selection.
+ * NOTE: This component's implementation is very hacky and will be rewritten from scratch soon™
+ *
+ * @example
+ * <SelectStatPage onNavigate={handleNavigation} />
+*/
+export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
     const { roomState, sendSelectStat } = useSocket();
-    const { selectStatError, setSelectStatError } = useSocket();
-    const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+    const { selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
+    const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
 
@@ -33,23 +36,25 @@ export default function SelectStatPage({ onNavigate }) {
     }, [selectedCardIndex, lockedIn]);
 
     useEffect(() => {
-        if (selectStatError) {
+        if (selectStatErrorSignal) {
             alert("[Server]: You selected an already locked stat.");
             setButtonState(false);
             setLockedIn(false);
             setSelectedCardIndex(null);
-            setSelectStatError(false);
+            setSelectStatErrorSignal(false);
         }
-    }, [selectStatError, setSelectStatError]);
+    }, [selectStatErrorSignal, setSelectStatErrorSignal]);
 
-    if (!roomState) return null;
+    if (!roomState || !roomState.game) return null;
 
     const yourPokemon = roomState.game.you.pokemon;
     const opponentPokemon = roomState.game.opponent.pokemon;
     const cards = cardScaffold(yourPokemon);
 
-    const handleCardClick = (index) => {
-        const selectedStat = DISPLAY_TO_STAT.get(cards[index].statName);
+    const handleCardClick = (index: number) => {
+        if (!roomState || !roomState.game) return null;
+
+        const selectedStat = DISPLAY_TO_STAT.get(cards[index].statName) as STAT_NAMES;
         if (roomState.game.lockedStats.includes(selectedStat) || lockedIn) {
             return;
         }
@@ -68,7 +73,7 @@ export default function SelectStatPage({ onNavigate }) {
         }
         setLockedIn(true);
         setButtonState(false);
-        const selectedStat = cards[selectedCardIndex].statName;
+        const selectedStat: STAT_NAMES = cards[selectedCardIndex!].statName as STAT_NAMES;
         sendSelectStat(selectedStat);
     };
 
@@ -108,8 +113,8 @@ export default function SelectStatPage({ onNavigate }) {
                                 card.statName
                             );
                             const isLocked =
-                                roomState.game.lockedStats.includes(
-                                    rawStatName
+                                roomState.game!.lockedStats.includes(
+                                    rawStatName as STAT_NAMES
                                 );
 
                             return (

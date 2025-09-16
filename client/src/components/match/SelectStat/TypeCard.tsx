@@ -1,6 +1,10 @@
 import styles from "./TypeCard.module.css";
 
-export default function TypeCard({ typeName }) {
+type TypeCardProps = {
+    typeName: string;
+};
+
+export default function TypeCard({ typeName }: TypeCardProps) {
     const typeClass = typeName.toLowerCase();
 
     const cardClasses = `${styles.typeCard} ${styles[typeClass]}`;

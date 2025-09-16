@@ -6,7 +6,7 @@ import HomePage from "./components/menu/home/HomePage";
 import EnterNamePage from "./components/menu/enterName/EnterNamePage";
 import RoomPage from "./components/menu/room/RoomPage";
 import MatchLayout from "./components/match/layout/MatchLayout";
-import SelectStatPage from "./components/match/SelectStat/SelectStatPage";
+import SelectStatPage from "./components/match/SelectStat/SelectStatPage.js";
 import BattlePage from "./components/match/battle/BattlePage";
 import VictoryPage from "./components/match/victory/VictoryPage";
 

@@ -11,7 +11,7 @@ const CardWrapper = memo(
         isSelected,
         onCardClick,
         isLocked,
-    }) => {
+    }: any) => {
         return (
             <div
                 className={styles.circleCard}
