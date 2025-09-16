@@ -5,7 +5,7 @@ import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import Pokemon from "../../../shared/models/Pokemon.js";
+import Pokemon from "../../../shared/types/types.js";
 
 /**
  * Represents the core game logic for a single match.

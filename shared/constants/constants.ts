@@ -1,12 +1,10 @@
 /**
  * Shared constants for client-server communication and game logic.
- *
- *
- * EVENTS: Socket.IO event names for communication between client and server.
- * GAME_COMMANDS: Command types that can be sent to the game engine.
- * GAME_PHASES: Enumerates the different phases of the game.
  */
 
+/**
+ * Socket.IO event names for communication between client and server.
+ */
 export enum EVENTS {
     // Client to Server events
     NAME_ENTER = "nameEnter", // Client submits their name
@@ -23,7 +21,7 @@ export enum EVENTS {
 }
 
 /**
- * Commands that get forwarded to the clients game
+ * Commands from the client to the game on the server
  */
 export enum GAME_COMMANDS {
     SELECT_STAT = "selectStat", // Client selects a stat, payload being the stat name as string
@@ -36,6 +34,39 @@ export enum GAME_PHASES {
     SELECT_STAT = "selectStat",
     BATTLE = "battle",
     GAME_FINISHED = "gameFinished",
+}
+
+export enum STAT_NAMES {
+    HP = "hp",
+    ATTACK = "attack",
+    DEFENSE = "defense",
+    SPECIAL_ATTACK = "specialAttack",
+    SPECIAL_DEFENSE = "specialDefense",
+    SPEED = "speed",
+    WEIGHT = "weight",
+    HEIGHT = "height",
+}
+
+export enum TYPES {
+    NORMAL = "normal",
+    FIRE = "fire",
+    FIGHTING = "fighting",
+    WATER = "water",
+    FLYING = "flying",
+    GRASS = "grass",
+    POISON = "poison",
+    ELECTRIC = "electric",
+    GROUND = "ground",
+    PSYCHIC = "psychic",
+    ROCK = "rock",
+    ICE = "ice",
+    BUG = "bug",
+    DRAGON = "dragon",
+    GHOST = "ghost",
+    DARK = "dark",
+    STEEL = "steel",
+    FAIRY = "fairy",
+    STELLAR = "stellar",
 }
 
 /**

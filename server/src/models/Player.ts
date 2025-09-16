@@ -1,4 +1,4 @@
-import Pokemon from "../../../shared/models/Pokemon.js";
+import Pokemon from "../../../shared/types/types.js";
 
 /**
  * Represents a player in a game session.

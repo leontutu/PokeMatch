@@ -1,4 +1,5 @@
-import Pokemon from "../../../shared/models/Pokemon.js";
+import { STAT_NAMES } from "../../../shared/constants/constants.js";
+import { Pokemon, PokemonStats, Sprites } from "../../../shared/types/types.js";
 /**
  * Factory function that creates a Pokemon instance from a raw PokeAPI response.
  * @param {Object} apiPokemonData - The raw Pokémon data from the API.
@@ -10,25 +11,33 @@ export function createPokemonFromApiData(pokemonApiData: any): Pokemon {
     const types = pokemonApiData.types.map(
         (type: { type: { name: string } }) => type.type.name
     );
-    const sprites = {
+    const sprites: Sprites = {
         officialArtwork:
             pokemonApiData.sprites.other["official-artwork"].front_default,
         back_default: pokemonApiData.sprites.back_default,
     };
-    const stats = pokemonApiData.stats.reduce(
+
+    const stats: PokemonStats = pokemonApiData.stats.reduce(
         (acc: any, stat: { stat: { name: string }; base_stat: number }) => {
-            // TODO: type
             if (stat.stat.name === "special-defense") {
-                acc["specialDefense"] = stat.base_stat;
+                acc[STAT_NAMES.SPECIAL_DEFENSE] = stat.base_stat;
             } else if (stat.stat.name === "special-attack") {
-                acc["specialAttack"] = stat.base_stat;
+                acc[STAT_NAMES.SPECIAL_ATTACK] = stat.base_stat;
             } else {
-                acc[stat.stat.name] = stat.base_stat;
+                acc[stat.stat.name as STAT_NAMES] = stat.base_stat;
             }
             return acc;
         },
         { weight: pokemonApiData.weight, height: pokemonApiData.height }
     );
 
-    return new Pokemon(id, name, types, sprites, stats);
+    const pokemon: Pokemon = {
+        id: id,
+        name: name,
+        types: types,
+        sprites: sprites,
+        stats: stats,
+    };
+
+    return pokemon;
 }
