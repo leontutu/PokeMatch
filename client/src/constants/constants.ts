@@ -1,13 +1,13 @@
-export const PAGES = {
-    HOME: "homePage",
-    POKEVIEWER: "pokeViewerPage",
-    ENTER_NAME: "enterNamePage",
-    ROOM: "roomPage",
-    MATCH_LAYOUT: "matchLayout",
-    SELECT_STAT: "selectStatPage",
-    BATTLE: "battlePage",
-    VICTORY: "victoryPage",
-};
+export enum PAGES {
+    HOME = "homePage",
+    POKEVIEWER = "pokeViewerPage",
+    ENTER_NAME = "enterNamePage",
+    ROOM = "roomPage",
+    MATCH_LAYOUT = "matchLayout",
+    SELECT_STAT = "selectStatPage",
+    BATTLE = "battlePage",
+    VICTORY = "victoryPage",
+}
 
 export const DISPLAY_TO_STAT = new Map([
     ["💖 HP", "hp"],
