@@ -29,6 +29,13 @@ export type PlayerState = {
     pokemon: Pokemon;
 };
 
+export type BattleStats = {
+    yourPokemon: Pokemon;
+    opponentPokemon: Pokemon;
+    yourPokemonImgUrl: string;
+    opponentPokemonImgUrl: string;
+};
+
 export type NavigationHandler = (page: PAGES, param?: boolean) => void;
 
 // export const mockRoomState = {

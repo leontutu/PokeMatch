@@ -2,18 +2,26 @@ import styles from "./BattleGrid.module.css";
 import StatCard from "../shared/StatCard";
 import OutcomeSymbol from "./OutcomeSymbol";
 
+
+type BattleGridProps = {
+    isRevealed: boolean;
+    stats: any; // note: any is fine, the parent component is scheduled for refactor already
+};
+
 /**
- * BattleGrid Component
+ * Renders the central grid for the battle screen.
  *
- * Renders the central grid of the battle screen, showing the stat cards for both
- * players and the outcome symbols (win, loss, tie) for each challenge.
+ * This grid shows the stat cards for both players and the outcome symbols
+ * (win, loss, tie) for each stat challenge. The actual values are hidden
+ * until `isRevealed` becomes true.
  *
- * @param {object} props - The component props.
- * @param {boolean} props.isRevealed - Whether to show the actual stat values and outcomes.
- * @param {object} props.stats - An object containing all computed stat and outcome data from `useBattleLogic`.
- * @returns {JSX.Element} The BattleGrid component.
+ * @example
+ * <BattleGrid
+ *   isRevealed={isRevealed}
+ *   stats={battleStats}
+ * />
  */
-export default function BattleGrid({ isRevealed, stats }) {
+export default function BattleGrid({ isRevealed, stats }: BattleGridProps) {
     const {
         opponentChallengedStat,
         opponentChallengeStat,

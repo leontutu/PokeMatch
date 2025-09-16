@@ -1,24 +1,32 @@
 import styles from "./OutcomeSymbol.module.css";
 
+
+type OutcomeSymbolProps = {
+    isRevealed: boolean;
+    isTie: boolean;
+    isWin: boolean;
+    isPlayerTwo?: boolean;
+};
 /**
- * OutcomeSymbol Component
- *
  * Displays a symbol indicating the result of a stat challenge (Win, Loss, or Tie).
- * The symbol and its color change based on the outcome.
  *
- * @param {object} props - The component props.
- * @param {boolean} props.isRevealed - If true, the symbol is visible and animated.
- * @param {boolean} props.isTie - If true, displays the tie symbol.
- * @param {boolean} props.isWin - If true, displays the win symbol; otherwise, the loss symbol.
- * @param {boolean} [props.isPlayerTwo=false] - If true, inverts the win/loss logic for the opponent's perspective.
- * @returns {JSX.Element} The OutcomeSymbol component.
+ * When revealed, it shows a symbol ("∧" for win, "∨" for loss, "=" for tie)
+ * with a corresponding color. The `isPlayerTwo` prop inverts the win/loss
+ * logic for the opponent's perspective.
+ *
+ * @example
+ * <OutcomeSymbol
+ *   isRevealed={true}
+ *   isTie={false}
+ *   isWin={true}
+ * />
  */
 export default function OutcomeSymbol({
     isRevealed,
     isTie,
     isWin,
     isPlayerTwo = false,
-}) {
+}: OutcomeSymbolProps) {
     const getOutcomeClass = () => {
         if (isTie) return styles.tie;
         const didWin = isPlayerTwo ? !isWin : isWin;

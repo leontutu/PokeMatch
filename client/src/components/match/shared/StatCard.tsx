@@ -3,9 +3,9 @@ import styles from "./StatCard.module.css";
 type StatCardProps = {
     statName: string;
     statValue: number | string;
-    isSelected: boolean;
-    isLocked: boolean;
-    onClick: () => void;
+    isSelected?: boolean;
+    isLocked?: boolean;
+    onClick?: () => void;
 };
 
 /**
@@ -28,8 +28,8 @@ type StatCardProps = {
 export default function StatCard({
     statName,
     statValue,
-    isSelected,
-    isLocked,
+    isSelected = false,
+    isLocked = false,
     onClick,
 }: StatCardProps) {
     return (

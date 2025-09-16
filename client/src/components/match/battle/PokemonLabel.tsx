@@ -1,25 +1,25 @@
-/**
- * PokemonLabel Component
- *
- * This component renders a label for a Pokémon's name. The font size of the label
- * dynamically adjusts based on the length of the Pokémon's name to ensure it fits
- * within the designated space.
- */
-
 import styles from "./PokemonLabel.module.css";
 import { useRef, useEffect } from "react";
 
+type PokemonLabelProps = {
+    pokemonName: string;
+};
+
 /**
  * Renders a Pokémon name label with dynamic font size adjustment.
- * @param {Object} props - Component props.
- * @param {string} props.pokemonName - The name of the Pokémon to display.
+ *
+ * The font size of the label dynamically adjusts based on the length of the
+ * Pokémon's name to ensure it fits within the designated space.
+ *
+ * @example
+ * <PokemonLabel pokemonName="Pikachu" />
  */
-export default function PokemonLabel({ pokemonName }) {
-    const pokemonLabel = useRef(null);
+export default function PokemonLabel({ pokemonName }: PokemonLabelProps) {
+    const pokemonLabel = useRef<HTMLSpanElement | null>(null);
 
     useEffect(() => {
         if (pokemonLabel.current) {
-            if (!pokemonName.length > 7) {
+            if (!(pokemonName.length > 7)) {
                 return;
             }
             const resize = 11 / pokemonName.length;

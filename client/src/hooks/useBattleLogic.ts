@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { STAT_TO_DISPLAY } from "../constants/constants";
+import { GameState, BattleStats } from "../types.js";
 
 /**
  * @typedef {object} BattleStats
@@ -25,28 +26,22 @@ import { STAT_TO_DISPLAY } from "../constants/constants";
  * Custom hook to encapsulate the business logic for the battle phase.
  * It computes derived state for Pokémon, stats, and battle outcomes from the raw `game`.
  *
- * @param {object} game - The current game state from the `roomState`.
+ * @param {object} gameState - The current game state from the `roomState`.
  * @returns {BattleStats} An object containing all necessary computed values for rendering the battle page.
  */
-export const useBattleLogic = (game) => {
+export const useBattleLogic = (gameState: GameState): BattleStats | null => {
     return useMemo(() => {
-        if (!game || !game.you.challengeStat) {
-            // Return a default or empty structure if game is not ready
-            return {
-                yourPokemon: {},
-                opponentPokemon: {},
-                yourPokemonImgUrl: "",
-                opponentPokemonImgUrl: "",
-            };
+        if (!gameState || !gameState.you.challengeStat) {
+            return null;
         }
 
-        const yourPokemon = game.you.pokemon;
-        const opponentPokemon = game.opponent.pokemon;
+        const yourPokemon = gameState.you.pokemon;
+        const opponentPokemon = gameState.opponent.pokemon;
 
-        const yourChallengeStat = game.you.challengeStat;
-        const yourChallengedStat = game.you.challengedStat;
-        const opponentChallengeStat = game.opponent.challengeStat;
-        const opponentChallengedStat = game.opponent.challengedStat;
+        const yourChallengeStat = gameState.you.challengeStat;
+        const yourChallengedStat = gameState.you.challengedStat;
+        const opponentChallengeStat = gameState.opponent.challengeStat;
+        const opponentChallengedStat = gameState.opponent.challengedStat;
 
         // Determine outcomes
         const isYourChallengeTie =
@@ -85,5 +80,5 @@ export const useBattleLogic = (game) => {
             opponentChallengeOutcome,
             isOpponentChallengeTie,
         };
-    }, [game]);
+    }, [gameState]);
 };
