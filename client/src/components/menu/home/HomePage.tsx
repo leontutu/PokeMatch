@@ -1,28 +1,23 @@
-/**
- * HomePage Component
- *
- * This component renders the application's main menu screen. It provides two primary actions:
- * - "Match": Navigates the user to the name entry page to start a new match.
- * - "PokéViewer": Intended to navigate to a Pokémon viewer feature (currently disabled).
- *
- * Props:
- * - onNavigate (function): Callback to handle navigation between pages. Receives a page constant and an optional parameter.
- *
- * Usage:
- * <HomePage onNavigate={handleNavigate} />
- *
- */
-
 import { PAGES } from "../../../constants/constants";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./HomePage.module.css";
+import { NavigationHandler } from "../../../types";
+
+type HomePageProps = {
+    onNavigate: NavigationHandler;
+};
 
 /**
- * HomePage functional component.
- * @param {Object} props
- * @param {Function} props.onNavigate - Function to handle navigation between pages.
+ * Renders the application's main menu screen, providing navigation options.
+ *
+ * This component displays two primary buttons:
+ * - "Match": Navigates the user to the name entry page to begin a game.
+ * - "PokéViewer": A placeholder for a future feature, currently disabled.
+ *
+ * @example
+ * <HomePage onNavigate={handleNavigation} />
  */
-export default function HomePage({ onNavigate }) {
+export default function HomePage({ onNavigate }: HomePageProps) {
     const handleMatchClick = () => {
         onNavigate(PAGES.ENTER_NAME, false);
     };
