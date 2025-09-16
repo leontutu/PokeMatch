@@ -1,17 +1,52 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import io from "socket.io-client";
-import { EVENTS, GAME_COMMANDS } from "../../../shared/constants/constants.js";
-import { DISPLAY_TO_STAT } from "../constants/constants";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client";
+import { EVENTS, GAME_COMMANDS, STAT_NAMES } from "../../../shared/constants/constants.js";
+import { DISPLAY_TO_STAT } from "../constants/constants.js";
+import { RoomState } from "../types.js";
 
-const SocketContext = createContext(null);
-
-export const useSocket = () => {
-    return useContext(SocketContext);
+type SocketContextType = {
+    socket: Socket | null;
+    roomState: RoomState | null;
+    roomCrashSignal: boolean;
+    nameErrorSignal: boolean;
+    selectStatErrorSignal: boolean;
+    setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
+    sendName: (name: string) => void;
+    sendReady: () => void;
+    sendSelectStat: (stat: STAT_NAMES) => void;
+    sendLeaveRoom: () => void;
 };
 
-export const SocketProvider = ({ children }) => {
-    const [socket, setSocket] = useState(null);
-    const [roomState, setRoomState] = useState(null);
+    // const value = {
+    //     socket,
+    //     roomState: roomState,
+    //     roomCrashSignal,
+    //     nameErrorSignal,
+    //     selectStatErrorSignal,
+    //     setNameErrorSignal,
+    //     sendName,
+    //     sendReady,
+    //     sendSelectStat,
+    //     sendLeaveRoom,
+    // };
+
+const SocketContext = createContext<SocketContextType | null>(null);
+
+export const useSocket = () => {
+    const context = useContext(SocketContext);
+    if (context === null) {
+        throw new Error("useSocket must be used within a SocketProvider");
+    }
+    return context;
+};
+
+type SocketContextProps = {
+    children: ReactNode;
+}
+
+export const SocketProvider = ({ children }:SocketContextProps) => {
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const [roomState, setRoomState] = useState<RoomState | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
@@ -62,7 +97,7 @@ export const SocketProvider = ({ children }) => {
         };
     }, [roomCrashSignal, nameErrorSignal, selectStatErrorSignal]);
 
-    const sendName = (name) => {
+    const sendName = (name: string) => {
         if (socket) {
             socket.emit(EVENTS.NAME_ENTER, name);
         }
@@ -81,7 +116,7 @@ export const SocketProvider = ({ children }) => {
         }
     };
 
-    const sendSelectStat = (stat) => {
+    const sendSelectStat = (stat: STAT_NAMES) => {
         if (socket) {
             const statAsInJson = DISPLAY_TO_STAT.get(stat);
             socket.emit(EVENTS.GAME_COMMAND, {
@@ -97,7 +132,7 @@ export const SocketProvider = ({ children }) => {
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
-        setSelectStatErrorSignal,
+        // setSelectStatErrorSignal,
         setNameErrorSignal,
         sendName,
         sendReady,
