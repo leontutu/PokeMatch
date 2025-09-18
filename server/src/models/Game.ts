@@ -1,11 +1,15 @@
 import logger from "../utils/Logger.js";
 import Player from "./Player.js";
-import { GAME_PHASES } from "../../../shared/constants/constants.js";
-import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
+import { GAME_EVENTS } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 import { Pokemon, Stat } from "../../../shared/types/types.js";
+import { GAME_COMMANDS } from "../../../shared/constants/constants.js";
+import {
+    GAME_PHASES,
+    STAT_NAMES,
+} from "../../../shared/constants/constants.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -15,7 +19,7 @@ import { Pokemon, Stat } from "../../../shared/types/types.js";
 export default class Game extends EventEmitter {
     players: Player[];
     phase: GAME_PHASES;
-    lockedStats: string[]; //TODO: i should also enum these
+    lockedStats: STAT_NAMES[];
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
         //TODO: ponder if inline type is okay here
@@ -65,10 +69,7 @@ export default class Game extends EventEmitter {
         this.phase = GAME_PHASES.SELECT_STAT;
     }
 
-    #handleSelectStat(
-        payload: string, // TODO: enum?
-        clientId: string
-    ) {
+    #handleSelectStat(payload: STAT_NAMES, clientId: string) {
         if (this.lockedStats.includes(payload)) {
             logger.warn(`[Game] Stat ${payload} is locked`);
             this.#emitGameEvent(
@@ -80,8 +81,7 @@ export default class Game extends EventEmitter {
         }
 
         const player = this.#findPlayer(clientId);
-        // @ts-ignore
-        const statValue = player.pokemon.stats[payload]; //TODO: typings
+        const statValue = player.pokemon!.stats[payload];
         const stat: Stat = { name: payload, value: statValue };
         player.setSelectedStat(stat);
 
@@ -185,7 +185,7 @@ export default class Game extends EventEmitter {
     //================================================================
 
     #emitGameEvent(
-        eventType: string, // TODO: enum?
+        eventType: GAME_EVENTS,
         payload: any = null, // TODO: ponder payload types
         clientId: string | null = null
     ) {

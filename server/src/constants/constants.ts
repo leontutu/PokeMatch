@@ -1,8 +1,3 @@
-/**
- * Server-only game constants.
- */
-import { GAME_COMMANDS as SHARED_GAME_COMMANDS } from "../../../shared/constants/constants.js";
-
 /*
  * - GAME_EVENTS: Events emitted by the Game to the Orchestrator.
  */
@@ -12,14 +7,5 @@ export enum GAME_EVENTS {
     INVALID_STAT_SELECT = "invalidStatSelect",
     ALL_SELECTED = "allSelected",
 }
-
-/*
- * GAME_COMMANDS: All commands the Game can execute (shared + server-only).
- */
-export const GAME_COMMANDS = {
-    ...SHARED_GAME_COMMANDS,
-    ASSIGN_NEW_POKEMON: "assignNewPokemon",
-    BATTLE_END: "battleEnd",
-};
 
 export const ROOM_SHUTDOWN_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours

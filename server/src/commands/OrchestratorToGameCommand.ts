@@ -1,3 +1,5 @@
+import { GAME_COMMANDS } from "../../../shared/constants/constants.js";
+
 /**
  * Represents a command sent from the Orchestrator to a Game instance.
  * This class standardizes the data structure for all actions that modify the game state.
@@ -5,12 +7,12 @@
  */
 export default class OrchestratorToGameCommand {
     /**
-     * @param {string} actionType The type of command to execute (from GAME_COMMANDS).
-     * @param {*} payload The data required for the command.
-     * @param {string|null} clientId The UUID of the client who initiated the action.
+     * @param actionType The type of command to execute (from GAME_COMMANDS).
+     * @param payload The data required for the command.
+     * @param clientId The UUID of the client who initiated the action.
      */
     constructor(
-        public actionType: string, //TODO: enums
+        public actionType: GAME_COMMANDS,
         public payload: any, //TODO: ponder object payload types
         public clientId: string | null
     ) {}
@@ -21,7 +23,11 @@ export default class OrchestratorToGameCommand {
      * @param {*} payload
      * @param {string} clientId
      */
-    static fromClient(actionType: string, payload: object, clientId: string) {
+    static fromClient(
+        actionType: GAME_COMMANDS,
+        payload: object,
+        clientId: string
+    ) {
         return new OrchestratorToGameCommand(actionType, payload, clientId);
     }
 
@@ -30,7 +36,10 @@ export default class OrchestratorToGameCommand {
      * @param {string} actionType
      * @param {*} payload
      */
-    static fromSystem(actionType: string, payload: object | null = null) {
+    static fromSystem(
+        actionType: GAME_COMMANDS,
+        payload: object | null = null
+    ) {
         return new OrchestratorToGameCommand(actionType, payload, null);
     }
 }

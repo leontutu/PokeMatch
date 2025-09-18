@@ -21,10 +21,16 @@ export enum EVENTS {
 }
 
 /**
- * Commands from the client to the game on the server
+ * Commands to the game on the server
+ * OPTIMIZE: Refactor server commands to server and use a union type
  */
 export enum GAME_COMMANDS {
+    // from client
     SELECT_STAT = "selectStat", // Client selects a stat, payload being the stat name as string
+
+    // from server/system
+    ASSIGN_NEW_POKEMON = "assignNewPokemon",
+    BATTLE_END = "battleEnd",
 }
 
 /**

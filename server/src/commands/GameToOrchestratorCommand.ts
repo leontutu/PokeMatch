@@ -1,3 +1,5 @@
+import { GAME_EVENTS } from "../constants/constants.js";
+
 /**
  * Represents an event emitted from a Game instance to the Orchestrator.
  * This class standardizes the data structure for all game state changes that the
@@ -14,7 +16,7 @@ export default class GameToOrchestratorCommand {
      * @param {string|null} clientId The UUID of a specific client related to the event.
      */
     constructor(
-        public eventType: string, // TODO: enums
+        public eventType: GAME_EVENTS,
         public payload: any, // TODO: ponder object payload types
         public clientId: string | null = null
     ) {}
