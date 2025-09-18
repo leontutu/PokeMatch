@@ -12,6 +12,6 @@ export function assertIsDefined<T>(
     message: string
 ): asserts value is T {
     if (value === null || value === undefined) {
-        throw new Error(message); //TODO: Implement custom error/exception
+        throw new Error(message); //OPTIMIZE: Implement custom error/exception
     }
 }
