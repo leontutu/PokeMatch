@@ -5,7 +5,7 @@ import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import Pokemon from "../../../shared/types/types.js";
+import { Pokemon } from "../../../shared/types/types.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -14,7 +14,7 @@ import Pokemon from "../../../shared/types/types.js";
  */
 export default class Game extends EventEmitter {
     players: Player[];
-    phase: string; // TODO: it's actually the enum?
+    phase: GAME_PHASES;
     lockedStats: string[]; //TODO: i should also enum these
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
@@ -303,7 +303,7 @@ interface ClientPlayer {
 }
 
 interface ClientGameState {
-    phase: string;
+    phase: GAME_PHASES;
     lockedStats: string[];
     winner: string | null;
     you: ClientPlayer;
