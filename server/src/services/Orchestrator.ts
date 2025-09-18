@@ -39,7 +39,7 @@ export default class Orchestrator {
     /**
      * Sets the SocketService instance for the Orchestrator.
      * This is used to break a circular dependency between Orchestrator and SocketService.
-     * @param {SocketService} socketService The socket service instance.
+     * @param socketService The socket service instance.
      */
     setSocketService(socketService: SocketService) {
         this._socketService = socketService;
@@ -87,7 +87,7 @@ export default class Orchestrator {
 
     /**
      * Handles a client disconnection.
-     * @param {Socket} socket The client's socket instance.
+     * @param socket The client's socket instance.
      */
     onDisconnect(socket: Socket) {
         const client = this.clientManager.getClient(socket);
@@ -107,8 +107,8 @@ export default class Orchestrator {
     /**
      * Handles a client submitting their name.
      * Validates the name and assigns the client to an available room.
-     * @param {Socket} socket The client's socket instance.
-     * @param {object} payload The event payload containing the client's name.
+     * @param socket The client's socket instance.
+     * @param payload The event payload containing the client's name.
      */
     onNameEnter(socket: Socket, payload: string) {
         const name = payload;
@@ -158,7 +158,7 @@ export default class Orchestrator {
 
     /**
      * Handles a client choosing to leave their current room.
-     * @param {Socket} socket The client's socket instance.
+     * @param socket The client's socket instance.
      */
     onLeaveRoom(socket: Socket) {
         const client = this.clientManager.getClient(socket);
@@ -176,8 +176,8 @@ export default class Orchestrator {
 
     /**
      * Handles an in-game action sent from a client.
-     * @param {Socket} socket The client's socket instance.
-     * @param {object} data The command data from the client.
+     * @param socket The client's socket instance.
+     * @param data The command data from the client.
      */
     onGameCommand(socket: Socket, data: any) {
         const client = this.clientManager.getClient(socket);
@@ -211,7 +211,7 @@ export default class Orchestrator {
     /**
      * Handles events emitted from a Game instance.
      * This acts as the bridge between the pure Game model and the application layer.
-     * @param {GameToOrchestratorCommand} event The event emitted by the game.
+     * @param event The event emitted by the game.
      */
     async handleGameEvent(event: GameToOrchestratorCommand) {
         assertIsDefined(
@@ -304,7 +304,7 @@ export default class Orchestrator {
     /**
      * Forcefully shuts down a room, notifies clients, and cleans up resources.
      * @param roomId The ID of the room to shut down.
-     * @param {Error} exception The error that caused the shutdown.
+     * @param exception The error that caused the shutdown.
      */
     #shutDownRoom(roomId: number, exception: Error) {
         logger.warn(
