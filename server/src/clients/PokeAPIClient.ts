@@ -7,8 +7,8 @@ import NoAPIResponseException from "../exceptions/NoAPIResponseException.js";
 export default class PokeApiClient {
     /**
      * Fetches data for a single random Pokémon.
-     * @returns {Promise<object>} A promise that resolves to the Pokémon's JSON data.
-     * @throws {NoAPIResponseException} If the API request fails.
+     * @returns A promise that resolves to the Pokémon's JSON data.
+     * @throws If the API request fails.
      */
     async getRandomPokemon(): Promise<object> {
         const randomPokeId: number = Math.floor(Math.random() * 600) + 1;

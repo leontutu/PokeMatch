@@ -27,8 +27,8 @@ export default class Room extends EventEmitter {
 
     /**
      * Adds a client to the room if it's not full and the client isn't already present.
-     * @param {Client} client The client to add.
-     * @returns {boolean} True if the client was added, false otherwise.
+     * @param client The client to add.
+     * @returns True if the client was added, false otherwise.
      */
     addClient(client: Client) {
         const isAlreadyInRoom = this.clientRecords.some(
@@ -43,7 +43,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Removes a client from the room by their unique ID.
-     * @param {Client} client The client to remove.
+     * @param client The client to remove.
      */
     removeClient(client: Client) {
         this.clientRecords = this.clientRecords.filter(
@@ -53,7 +53,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Sets a client's status to ready.
-     * @param {string} clientUuid The UUID of the client.
+     * @param clientUuid The UUID of the client.
      */
     setClientReady(clientUuid: string) {
         const clientRecord = this.clientRecords.find(
@@ -83,7 +83,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Forwards a command to the current game instance.
-     * @param {OrchestratorToGameCommand} gameCommand The command to execute.
+     * @param gameCommand The command to execute.
      */
     forwardGameCommand(gameCommand: OrchestratorToGameCommand) {
         if (this.game) {
@@ -97,7 +97,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Retrieves all clients in the room.
-     * @returns {Client[]} An array of client instances.
+     * @returns An array of client instances.
      */
     getClients() {
         return this.clientRecords.map((c) => c.client);
@@ -105,7 +105,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Retrieves the names of all clients in the room.
-     * @returns {string[]} An array of client names.
+     * @returns An array of client names.
      */
     getClientNames() {
         return this.clientRecords.map((c) => c.client.name);
@@ -113,7 +113,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Gets the current phase of the game.
-     * @returns {string|null} The game phase, or null if the game hasn't started.
+     * @returns The game phase, or null if the game hasn't started.
      */
     getPhase() {
         return this.game ? this.game.phase : null;
@@ -121,7 +121,6 @@ export default class Room extends EventEmitter {
 
     /**
      * Checks if the room has the maximum number of clients.
-     * @returns {boolean}
      */
     isFull() {
         return this.clientRecords.length >= 2;
@@ -129,7 +128,6 @@ export default class Room extends EventEmitter {
 
     /**
      * Checks if the room has no clients.
-     * @returns {boolean}
      */
     isEmpty() {
         return this.clientRecords.length === 0;
@@ -137,7 +135,6 @@ export default class Room extends EventEmitter {
 
     /**
      * Checks if the room is full and all clients are ready.
-     * @returns {boolean}
      */
     isReady() {
         return this.isFull() && this.clientRecords.every((c) => c.isReady);
@@ -145,7 +142,7 @@ export default class Room extends EventEmitter {
 
     /**
      * Returns a JSON representation of the room
-     * @returns{object} The Room data
+     * @returns The Room data
      */
     toJSON() {
         return {
@@ -164,8 +161,8 @@ export default class Room extends EventEmitter {
      * Creates a client-safe representation of the room state.
      * NOTE: This used to be clean and use toJSON(), which is termporarily not possible
      * due to ts migration
-     * @param {Client} client The client for whom the state is being prepared.
-     * @returns {object} The room state object for the client.
+     * @param client The client for whom the state is being prepared.
+     * @returns The room state object for the client.
      */
     toClientState(clientUuid: string) {
         return {

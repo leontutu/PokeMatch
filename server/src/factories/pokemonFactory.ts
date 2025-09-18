@@ -2,7 +2,7 @@ import { STAT_NAMES } from "../../../shared/constants/constants.js";
 import { Pokemon, PokemonStats, Sprites } from "../../../shared/types/types.js";
 /**
  * Factory function that creates a Pokemon instance from a raw PokeAPI response.
- * @param {Object} apiPokemonData - The raw Pokémon data from the API.
+ * @param apiPokemonData - The raw Pokémon data from the API.
  * @returns {Pokemon} An instance of the Pokemon class.
  */
 export function createPokemonFromApiData(pokemonApiData: any): Pokemon {

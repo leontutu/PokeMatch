@@ -5,7 +5,7 @@
 export default class NoAPIResponseException extends Error {
     public name: string = "NoAPIResponseException";
     /**
-     * @param {string} url The URL of the API request that failed.
+     * @param url The URL of the API request that failed.
      */
     constructor(url: string) {
         super(`API Request with URL '${url}' failed.`);

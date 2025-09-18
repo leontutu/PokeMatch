@@ -35,7 +35,7 @@ export default class Game extends EventEmitter {
 
     /**
      * Executes a command sent from the Orchestrator.
-     * @param {OrchestratorToGameCommand} gameCommand The command to execute.
+     * @param gameCommand The command to execute.
      */
     executeGameCommand(gameCommand: OrchestratorToGameCommand) {
         switch (gameCommand.actionType) {
@@ -220,7 +220,7 @@ export default class Game extends EventEmitter {
 
     /**
      * Returns a JSON representation of the Game
-     * @returns {object} The game data
+     * @returns The game data
      */
     toJSON() {
         return {
@@ -233,8 +233,8 @@ export default class Game extends EventEmitter {
 
     /**
      * Creates a client-safe representation of the game for a specific client.
-     * @param {string} clientUuid The UUID of the client for whom the game is being prepared.
-     * @returns {object} The game object for the client.
+     * @param clientUuid The UUID of the client for whom the game is being prepared.
+     * @returns The game object for the client.
      */
     toClientState(clientUuid: string): ClientGameState {
         const player1 = this.players[0].toJSON();

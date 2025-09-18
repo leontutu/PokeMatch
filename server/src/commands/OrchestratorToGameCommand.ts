@@ -19,9 +19,9 @@ export default class OrchestratorToGameCommand {
 
     /**
      * Creates a command that originates from a specific client.
-     * @param {string} actionType
-     * @param {*} payload
-     * @param {string} clientId
+     * @param actionType
+     * @param payload
+     * @param clientId
      */
     static fromClient(
         actionType: GAME_COMMANDS,
@@ -33,8 +33,8 @@ export default class OrchestratorToGameCommand {
 
     /**
      * Creates a command that is initiated by the system/server.
-     * @param {string} actionType
-     * @param {*} payload
+     * @param actionType
+     * @param payload
      */
     static fromSystem(
         actionType: GAME_COMMANDS,

@@ -8,8 +8,8 @@ export default class Client {
     name: string | null;
     roomId: number | null;
     /**
-     * @param {Socket} socket The client's initial Socket.IO socket instance.
-     * @param {string} uuid The client's persistent unique identifier.
+     * @param socket The client's initial Socket.IO socket instance.
+     * @param uuid The client's persistent unique identifier.
      */
     constructor(public socket: Socket | null, public uuid: string) {
         this.name = null;
@@ -18,7 +18,7 @@ export default class Client {
 
     /**
      * Assigns a name to the client.
-     * @param {string} name The name to set.
+     * @param name The name to set.
      */
     setName(name: string) {
         this.name = name;
@@ -26,7 +26,7 @@ export default class Client {
 
     /**
      * Assigns a room ID to the client.
-     * @param {number|null} roomId The room ID to set.
+     * @param roomId The room ID to set.
      */
     setRoomId(roomId: number | null) {
         this.roomId = roomId;
@@ -34,7 +34,7 @@ export default class Client {
 
     /**
      * Updates the client's socket instance on reconnection.
-     * @param {Socket} socket The new socket instance.
+     * @param socket The new socket instance.
      */
     setSocket(socket: Socket | null) {
         this.socket = socket;
@@ -51,7 +51,7 @@ export default class Client {
 
     /**
      * Returns a JSON representation of the client without socket
-     * @returns {object} The client Data
+     * @returns The client Data
      */
     toJSON() {
         return {

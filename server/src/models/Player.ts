@@ -9,8 +9,8 @@ export default class Player {
     pokemon: Pokemon | null;
     selectedStat: Stat | null;
     /**
-     * @param {string} name The player's chosen name.
-     * @param {string} uuid The player's persistent unique identifier.
+     * @param name The player's chosen name.
+     * @param uuid The player's persistent unique identifier.
      */
     constructor(public name: string, public uuid: string) {
         this.points = 0;
@@ -27,7 +27,7 @@ export default class Player {
 
     /**
      * Assigns a Pokémon to the player.
-     * @param {object} pokemon The Pokémon object.
+     * @param pokemon The Pokémon object.
      */
     setPokemon(pokemon: Pokemon) {
         this.pokemon = pokemon;
@@ -35,8 +35,7 @@ export default class Player {
 
     /**
      * Sets the player's selected stat for the current round.
-     * @param {string} statName The name of the selected stat.
-     * @param {number} statValue The value of the selected stat.
+     * @param stat The selected stat
      */
     setSelectedStat(stat: Stat) {
         this.selectedStat = stat;
@@ -51,7 +50,7 @@ export default class Player {
 
     /**
      * Returns a JSON representation of the player.
-     * @returns {object} The player data.
+     * @returns The player data.
      */
     toJSON() {
         return {

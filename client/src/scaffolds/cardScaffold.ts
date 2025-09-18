@@ -3,8 +3,8 @@ import { Pokemon } from "../../../shared/types/types";
 /**
  * Generates an array of stat objects for a given Pokémon.
  * Used as a helper in SelectStatPage
- * @param {Object} pokemon - The Pokémon object containing stats.
- * @returns {Array<Object>} Array of stat objects with statName and baseStat.
+ * @param pokemon - The Pokémon object containing stats.
+ * @returns Array of stat objects with statName and baseStat.
  */
 export default function cardScaffold(
     pokemon: Pokemon

@@ -11,9 +11,9 @@ import { GAME_EVENTS } from "../constants/constants.js";
 export default class GameToOrchestratorCommand {
     roomId: number | null = null; // Will be set by Room when propagating
     /**
-     * @param {string} eventType The type of event that occurred (from GAME_EVENTS).
-     * @param {*} payload The data associated with the event.
-     * @param {string|null} clientId The UUID of a specific client related to the event.
+     * @param eventType The type of event that occurred (from GAME_EVENTS).
+     * @param payload The data associated with the event.
+     * @param clientId The UUID of a specific client related to the event.
      */
     constructor(
         public eventType: GAME_EVENTS,

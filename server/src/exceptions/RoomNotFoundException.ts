@@ -5,7 +5,7 @@
 export default class RoomNotFoundException extends Error {
     public name: string = "RoomNotFoundException";
     /**
-     * @param {string} roomId The ID of the room that was not found.
+     * @param roomId The ID of the room that was not found.
      */
     constructor(roomId: number) {
         super(`Room with ID '${roomId}' does not exist.`);

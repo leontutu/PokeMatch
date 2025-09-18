@@ -26,8 +26,8 @@ import { GameState, BattleStats } from "../types.js";
  * Custom hook to encapsulate the business logic for the battle phase.
  * It computes derived state for Pokémon, stats, and battle outcomes from the raw `game`.
  *
- * @param {object} gameState - The current game state from the `roomState`.
- * @returns {BattleStats} An object containing all necessary computed values for rendering the battle page.
+ * @param  gameState - The current game state from the `roomState`.
+ * @returns An object containing all necessary computed values for rendering the battle page.
  */
 export const useBattleLogic = (gameState: GameState): BattleStats | null => {
     return useMemo(() => {

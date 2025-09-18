@@ -4,8 +4,8 @@
  * - Must be between 3 and 10 characters long (after trimming whitespace).
  * - Must only contain alphanumeric characters and underscores.
  *
- * @param {string} name The name to validate.
- * @returns {boolean} True if the name is valid, false otherwise.
+ * @param name The name to validate.
+ * @returns True if the name is valid, false otherwise.
  */
 export function isValidName(name: string): boolean {
     return (
