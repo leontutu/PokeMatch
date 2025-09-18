@@ -5,7 +5,7 @@ import { GAME_EVENTS, GAME_COMMANDS } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import { Pokemon } from "../../../shared/types/types.js";
+import { Pokemon, Stat } from "../../../shared/types/types.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -82,7 +82,8 @@ export default class Game extends EventEmitter {
         const player = this.#findPlayer(clientId);
         // @ts-ignore
         const statValue = player.pokemon.stats[payload]; //TODO: typings
-        player.setSelectedStat(payload, statValue);
+        const stat: Stat = { name: payload, value: statValue };
+        player.setSelectedStat(stat);
 
         if (this.#isAllSelected()) {
             this.phase = GAME_PHASES.BATTLE;
@@ -110,17 +111,13 @@ export default class Game extends EventEmitter {
     #evaluateBattleOutcome() {
         const [p1, p2] = this.players;
 
-        //TODO: find a better solution to this
+        //OPTIMIZE: find a better solution to this
         if (
             !p1.pokemon ||
             !p2.pokemon ||
-            p1.selectedStat.value === null ||
-            p1.selectedStat.name === null ||
-            p2.selectedStat.value === null ||
-            p2.selectedStat.name === null ||
-            // @ts-ignore
+            p1.selectedStat === null ||
+            p2.selectedStat === null ||
             typeof p2.pokemon.stats[p1.selectedStat.name] !== "number" ||
-            // @ts-ignore
             typeof p1.pokemon.stats[p2.selectedStat.name] !== "number"
         ) {
             logger.warn("[Game] Cannot evaluate battle outcome: missing data");
@@ -130,11 +127,9 @@ export default class Game extends EventEmitter {
         let p1RoundScore = 0;
 
         // P1's challenge: P1's selected stat vs P2's value for that same stat
-        // @ts-ignore
         if (p1.selectedStat.value > p2.pokemon.stats[p1.selectedStat.name]) {
             p1RoundScore++;
         } else if (
-            // @ts-ignore
             p1.selectedStat.value < p2.pokemon.stats[p1.selectedStat.name]
         ) {
             p1RoundScore--;
@@ -217,7 +212,7 @@ export default class Game extends EventEmitter {
     }
 
     #isAllSelected() {
-        return this.players.every((p) => p.selectedStat.name !== null);
+        return this.players.every((p) => p.selectedStat !== null);
     }
 
     //================================================================

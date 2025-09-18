@@ -1,4 +1,4 @@
-import Pokemon from "../../../shared/types/types.js";
+import { Pokemon, Stat } from "../../../shared/types/types.js";
 
 /**
  * Represents a player in a game session.
@@ -7,7 +7,7 @@ import Pokemon from "../../../shared/types/types.js";
 export default class Player {
     points: number;
     pokemon: Pokemon | null;
-    selectedStat: { name: string | null; value: number | null }; // TODO: Refac to type alias
+    selectedStat: Stat | null;
     /**
      * @param {string} name The player's chosen name.
      * @param {string} uuid The player's persistent unique identifier.
@@ -15,7 +15,7 @@ export default class Player {
     constructor(public name: string, public uuid: string) {
         this.points = 0;
         this.pokemon = null;
-        this.selectedStat = { name: null, value: null };
+        this.selectedStat = null;
     }
 
     /**
@@ -38,15 +38,15 @@ export default class Player {
      * @param {string} statName The name of the selected stat.
      * @param {number} statValue The value of the selected stat.
      */
-    setSelectedStat(statName: string, statValue: number) {
-        this.selectedStat = { name: statName, value: statValue }; //TODO use type alias?
+    setSelectedStat(stat: Stat) {
+        this.selectedStat = stat;
     }
 
     /**
      * Resets the player's selected stat to its initial state.
      */
     resetSelectedStat() {
-        this.selectedStat = { name: null, value: null }; // TODO use type alias?
+        this.selectedStat = null;
     }
 
     /**
