@@ -22,7 +22,6 @@ export default class Game extends EventEmitter {
     lockedStats: STAT_NAMES[];
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
-        //TODO: ponder if inline type is okay here
         super();
         this.players = participants.map((p) => new Player(p.name, p.uuid));
         this.phase = GAME_PHASES.SELECT_STAT;
@@ -186,7 +185,7 @@ export default class Game extends EventEmitter {
 
     #emitGameEvent(
         eventType: GAME_EVENTS,
-        payload: any = null, // TODO: ponder payload types
+        payload: any = null,
         clientId: string | null = null
     ) {
         const command = new GameToOrchestratorCommand(

@@ -180,7 +180,6 @@ export default class Orchestrator {
      * @param {object} data The command data from the client.
      */
     onGameCommand(socket: Socket, data: any) {
-        // TODO: data type
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
 

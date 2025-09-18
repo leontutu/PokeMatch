@@ -17,7 +17,7 @@ export default class GameToOrchestratorCommand {
      */
     constructor(
         public eventType: GAME_EVENTS,
-        public payload: any, // TODO: ponder object payload types
+        public payload: any,
         public clientId: string | null = null
     ) {}
 }
