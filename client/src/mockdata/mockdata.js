@@ -1,5 +1,7 @@
 import { GAME_PHASES } from "../../../shared/constants/constants";
 
+// NOTE: Deprecated. Still usable for quick testing but needs to be updated sooner or later
+
 export const mockRoomState = {
     id: "0",
     clientRecords: [

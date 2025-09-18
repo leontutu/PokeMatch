@@ -1,13 +1,6 @@
 /server/node_modules
+/server/dist
 /client/node_modules
 /client/dist
-/client/src/assets/card_v1.png
-/client/src/assets/logo_adobe.png
-/client/src/assets/logo_erase_bg.png
-/client/src/assets/logo_original.png
-/todo.txt
-/project_baggage.txt
-/todo.md
-/deprecated.js
 /.vscode
-/PokeMatch/.vscode
+/todo.md

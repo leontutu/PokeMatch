@@ -71,7 +71,7 @@ You will need to run both the client and the server in separate terminal windows
 1.  **Start the server:**
     ````bash
     # From the /server directory
-    npm start
+    npm run dev
     ````
 
 2.  **Start the client:**
