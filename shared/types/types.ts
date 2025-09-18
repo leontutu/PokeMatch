@@ -1,4 +1,4 @@
-import { STAT_NAMES, TYPES } from "../constants/constants";
+import { STAT_NAMES, TYPES } from "../constants/constants.js";
 
 export type Pokemon = {
     id: number;
