@@ -1,0 +1,132 @@
+.outerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.flashOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.flashActive {
+    animation: flash 2s forwards;
+}
+
+.pokeballImage {
+    margin-top: 10rem;
+    width: 9rem;
+    height: 9rem;
+    display: flex;
+    animation: wiggle 1s ease-in-out infinite;
+}
+
+.pokemonImage {
+    width: 24rem;
+    height: 24rem;
+}
+
+.revealTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    text-align: center;
+    transform: translateY(400rem);
+}
+
+.pokemonName {
+    font-weight: 800;
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: "Jura", sans-serif;
+    color: #f0f0f0;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.subText {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-family: "Jura", sans-serif;
+    color: #d1d1d1;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.slideIn {
+    animation: slideIn 2s ease-out forwards;
+    animation-delay: 2.5s;
+}
+
+.fadeIn {
+    animation: fadeIn 2s ease-in-out forwards;
+    animation-delay: 5s;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: translateX(20px) rotate(40deg);
+    }
+    40% {
+        transform: translateX(-15px) rotate(-20deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes flash {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(40rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.8;
+    }
+}
