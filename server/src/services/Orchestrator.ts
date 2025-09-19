@@ -299,6 +299,25 @@ export default class Orchestrator {
         );
 
         this.#sendGameCommand(roomId, gameCommand);
+        this.#startSelectStatTimer(roomId);
+    }
+
+    /**
+     * Starts a timer that, after a delay, sends the command to transition to the stat selection phase.
+     * @param roomId The ID of the room.
+     */
+    #startSelectStatTimer(roomId: number) {
+        delay(TIMINGS.POKEMON_REVEAL_DURATION).then(() => {
+            this.#handleRoomErrors(() => {
+                this.#sendGameCommand(
+                    roomId,
+                    OrchestratorToGameCommand.fromSystem(
+                        GAME_COMMANDS.START_SELECT_STAT
+                    )
+                );
+            });
+            this.#updateRoomClients(roomId);
+        });
     }
 
     /**

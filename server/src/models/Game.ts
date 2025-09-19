@@ -51,6 +51,9 @@ export default class Game extends EventEmitter {
                     gameCommand.clientId!
                 );
                 break;
+            case GAME_COMMANDS.START_SELECT_STAT:
+                this.#handleStartSelectStat();
+                break;
             default:
                 logger.warn(
                     `[Game] Unknown command: ${gameCommand.actionType}`
@@ -65,7 +68,7 @@ export default class Game extends EventEmitter {
     #handleAssignNewPokemon(payload: Pokemon[]) {
         this.players[0].setPokemon(payload[0]);
         this.players[1].setPokemon(payload[1]);
-        this.phase = GAME_PHASES.SELECT_STAT;
+        this.phase = GAME_PHASES.POKEMON_REVEAL;
     }
 
     #handleSelectStat(payload: STAT_NAMES, clientId: string) {
@@ -101,6 +104,10 @@ export default class Game extends EventEmitter {
         ).name;
         this.phase = GAME_PHASES.GAME_FINISHED;
         this.#emitGameEvent(GAME_EVENTS.GAME_FINISHED);
+    }
+
+    #handleStartSelectStat() {
+        this.phase = GAME_PHASES.SELECT_STAT;
     }
 
     //================================================================
