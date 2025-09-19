@@ -31,6 +31,7 @@ export enum GAME_COMMANDS {
     // from server/system
     ASSIGN_NEW_POKEMON = "assignNewPokemon",
     BATTLE_END = "battleEnd",
+    START_SELECT_STAT = "startSelectStat",
 }
 
 /**
@@ -82,4 +83,5 @@ export enum TYPES {
 export enum TIMINGS {
     BATTLE_DURATION = 12000,
     PAGE_TRANSITION = 1500,
+    POKEMON_REVEAL_DURATION = 13000,
 }
