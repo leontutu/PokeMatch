@@ -3,10 +3,10 @@ export enum PAGES {
     POKEVIEWER = "pokeViewerPage",
     ENTER_NAME = "enterNamePage",
     ROOM = "roomPage",
-    MATCH_LAYOUT = "matchLayout",
     SELECT_STAT = "selectStatPage",
     BATTLE = "battlePage",
     VICTORY = "victoryPage",
+    POKEMON_REVEAL = "pokemonRevealPage",
 }
 
 export const DISPLAY_TO_STAT = new Map([

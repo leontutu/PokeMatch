@@ -40,6 +40,7 @@ export enum GAME_PHASES {
     SELECT_STAT = "selectStat",
     BATTLE = "battle",
     GAME_FINISHED = "gameFinished",
+    POKEMON_REVEAL = "pokemonReveal",
 }
 
 export enum STAT_NAMES {
