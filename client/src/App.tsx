@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { PAGES } from "./constants/constants.js";
 import { TIMINGS, GAME_PHASES } from "../../shared/constants/constants.js";
-import { useSocket } from "./contexts/SocketContext";
-import HomePage from "./components/menu/home/HomePage";
-import EnterNamePage from "./components/menu/enterName/EnterNamePage";
-import RoomPage from "./components/menu/room/RoomPage";
-import MatchLayout from "./components/match/layout/MatchLayout";
+import { useSocket } from "./contexts/SocketContext.jsx";
+import { NavigationHandler } from "./types.js";
+import HomePage from "./components/menu/home/HomePage.js";
+import EnterNamePage from "./components/menu/enterName/EnterNamePage.js";
+import RoomPage from "./components/menu/room/RoomPage.js";
 import SelectStatPage from "./components/match/SelectStat/SelectStatPage.js";
-import BattlePage from "./components/match/battle/BattlePage";
-import VictoryPage from "./components/match/victory/VictoryPage";
+import BattlePage from "./components/match/battle/BattlePage.js";
+import VictoryPage from "./components/match/victory/VictoryPage.js";
 
 import "./App.css";
 
@@ -23,8 +23,8 @@ function App() {
     const { roomCrashSignal } = useSocket();
     const [isFirstRender, setIsFirstRender] = useState(true);
 
-    const handleNavigate = useCallback(
-        (page, transition) => {
+    const handleNavigate: NavigationHandler = useCallback(
+        (page: PAGES, transition: boolean | undefined) => {
             if (currentPage === page) return;
 
             if (!transition) {
@@ -32,17 +32,14 @@ function App() {
                 return;
             }
 
-            // Start the wipe-out animation.
             setIsWipingOut(true);
 
-            // After the wipe-out animation completes, update the page and start the wipe-in animation.
             setTimeout(() => {
                 setCurrentPage(page);
                 setIsWipingOut(false);
                 setIsWipingIn(true);
             }, TIMINGS.PAGE_TRANSITION); // Must match the wipe-out animation duration
 
-            // After the wipe-in animation completes, reset the state.
             setTimeout(() => {
                 setIsWipingIn(false);
             }, 3000); // (Wipe-out duration + wipe-in duration)
@@ -58,8 +55,6 @@ function App() {
                 return <EnterNamePage onNavigate={handleNavigate} />;
             case PAGES.ROOM:
                 return <RoomPage onNavigate={handleNavigate} />;
-            case PAGES.MATCH_LAYOUT:
-                return <MatchLayout />;
             case PAGES.SELECT_STAT:
                 return <SelectStatPage onNavigate={handleNavigate} />;
             case PAGES.BATTLE:
@@ -86,7 +81,6 @@ function App() {
     useEffect(() => {
         if (import.meta.env.VITE_USE_MOCKS) {
             handleNavigate(PAGES.ENTER_NAME);
-            // handleNavigate(PAGES.ROOM);
         }
     }, [handleNavigate]);
 
