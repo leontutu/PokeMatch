@@ -9,6 +9,7 @@ import RoomPage from "./components/menu/room/RoomPage.js";
 import SelectStatPage from "./components/match/SelectStat/SelectStatPage.js";
 import BattlePage from "./components/match/battle/BattlePage.js";
 import VictoryPage from "./components/match/victory/VictoryPage.js";
+import PokemonRevealPage from "./components/match/reveal/PokemonRevealPage.js";
 
 import "./App.css";
 
@@ -61,6 +62,8 @@ function App() {
                 return <BattlePage onNavigate={handleNavigate} />;
             case PAGES.VICTORY:
                 return <VictoryPage onNavigate={handleNavigate} />;
+            case PAGES.POKEMON_REVEAL:
+                return <PokemonRevealPage onNavigate={handleNavigate} />;
             default:
                 return <HomePage onNavigate={handleNavigate} />;
         }
@@ -96,6 +99,9 @@ function App() {
                         break;
                     case GAME_PHASES.SELECT_STAT:
                         handleNavigate(PAGES.SELECT_STAT, true);
+                        break;
+                    case GAME_PHASES.POKEMON_REVEAL:
+                        handleNavigate(PAGES.POKEMON_REVEAL, true);
                         break;
                 }
             }
