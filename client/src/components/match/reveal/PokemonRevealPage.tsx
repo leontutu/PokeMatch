@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
 import { useSocket } from "../../../contexts/SocketContext";
 import { NavigationHandler } from "../../../types";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.css";
+import { useSound } from "use-sound";
 
 type PokemonRevealPageProps = {
     onNavigate: NavigationHandler;
@@ -31,17 +32,39 @@ export default function PokemonRevealPage({
 
     const [countDownFinished, setCountDownFinished] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
+    const [cryReady, setCryReady] = useState(false);
 
-    const flashCountdownTime = 3000;
+    const soundUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`;
+    const [play] = useSound(soundUrl, { volume: 1 });
+
+    const timersSet = useRef(false);
 
     useEffect(() => {
+        if (timersSet.current) return;
+        timersSet.current = true;
+
+        const INITIAL_DELAY = 3000;
+        const REVEAL_DELAY_AFTER_FLASH = 200;
+        const CRY_DELAY_AFTER_FLASH = 800;
+
         setTimeout(() => {
             setFlashActive(true);
-            setTimeout(() => {
-                setCountDownFinished(true);
-            }, 300);
-        }, flashCountdownTime);
+        }, INITIAL_DELAY);
+
+        setTimeout(() => {
+            setCountDownFinished(true);
+        }, INITIAL_DELAY + REVEAL_DELAY_AFTER_FLASH);
+
+        setTimeout(() => {
+            setCryReady(true);
+        }, INITIAL_DELAY + CRY_DELAY_AFTER_FLASH);
     }, []);
+
+    useEffect(() => {
+        if (cryReady) {
+            play();
+        }
+    }, [cryReady, play]);
 
     const getPokemonNameFontSize = (name: string) => {
         const length = name.length;
