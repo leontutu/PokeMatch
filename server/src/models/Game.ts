@@ -86,7 +86,6 @@ export default class Game extends EventEmitter {
     }
 
     #handleBattleEnd() {
-        logger.log(`[Game] Handling battle end`);
         this.#evaluateBattleOutcome();
     }
 
@@ -142,12 +141,12 @@ export default class Game extends EventEmitter {
 
         if (p1RoundScore > 0) {
             p1.addPoint();
-            logger.log(`[Game] ${p1.name} wins the round.`);
+            logger.debug(`[Game] ${p1.name} wins the round.`);
         } else if (p1RoundScore < 0) {
             p2.addPoint();
-            logger.log(`[Game] ${p2.name} wins the round.`);
+            logger.debug(`[Game] ${p2.name} wins the round.`);
         } else {
-            logger.log(`[Game] The round is a draw.`);
+            logger.debug(`[Game] The round is a draw.`);
             this.#nextRound();
             return;
         }
@@ -160,10 +159,8 @@ export default class Game extends EventEmitter {
     }
 
     #nextRound() {
-        // @ts-ignore
-        this.lockedStats.push(this.players[0].selectedStat.name);
-        // @ts-ignore
-        this.lockedStats.push(this.players[1].selectedStat.name);
+        this.lockedStats.push(this.players[0].selectedStat!.name);
+        this.lockedStats.push(this.players[1].selectedStat!.name);
         this.players.forEach((p) => p.resetSelectedStat());
         this.phase = GamePhases.SELECT_STAT;
     }
