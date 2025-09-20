@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { PAGES } from "./constants/constants.js";
 import { TIMINGS, GAME_PHASES } from "../../shared/constants/constants.js";
 import { useSocket } from "./contexts/SocketContext.jsx";
@@ -12,8 +12,12 @@ import VictoryPage from "./components/match/victory/VictoryPage.js";
 import PokemonRevealPage from "./components/match/reveal/PokemonRevealPage.js";
 
 import "./App.css";
+import { useSound } from "use-sound";
 
 function App() {
+    const audioRef = useRef<HTMLAudioElement>(null);
+
+    // const [currentPage, setCurrentPage] = useState(PAGES.POKEMON_REVEAL);
     const [currentPage, setCurrentPage] = useState(PAGES.HOME);
 
     const [isWipingOut, setIsWipingOut] = useState(false);
@@ -24,22 +28,31 @@ function App() {
     const { roomCrashSignal } = useSocket();
     const [isFirstRender, setIsFirstRender] = useState(true);
 
+    const [playPageTurn1] = useSound(`/pageTurn1.mp3`, {
+        volume: 0.3,
+    });
+    const [playPageTurn2] = useSound(`/pageTurn2.mp3`, {
+        volume: 0.1,
+    });
+
     const handleNavigate: NavigationHandler = useCallback(
         (page: PAGES, transition: boolean | undefined) => {
             if (currentPage === page) return;
+            audioRef?.current!.play();
 
             if (!transition) {
                 setCurrentPage(page);
                 return;
             }
 
+            playPageTurn1();
             setIsWipingOut(true);
-
             setTimeout(() => {
+                playPageTurn2();
                 setCurrentPage(page);
                 setIsWipingOut(false);
                 setIsWipingIn(true);
-            }, TIMINGS.PAGE_TRANSITION); // Must match the wipe-out animation duration
+            }, TIMINGS.PAGE_TRANSITION - 500);
 
             setTimeout(() => {
                 setIsWipingIn(false);
@@ -75,15 +88,13 @@ function App() {
         }
         if (roomCrashSignal) {
             setCurrentPage(PAGES.HOME);
-            alert(
-                "There was an oopsie on the server and your room crashed! Returning to Home..."
-            );
+            alert("There was an oopsie on the server and your room crashed! Returning to Home...");
         }
     }, [roomCrashSignal, isFirstRender]);
 
     useEffect(() => {
         if (import.meta.env.VITE_USE_MOCKS) {
-            handleNavigate(PAGES.ENTER_NAME);
+            handleNavigate(PAGES.POKEMON_REVEAL, false);
         }
     }, [handleNavigate]);
 
@@ -110,15 +121,16 @@ function App() {
 
     return (
         <>
+            <audio ref={audioRef} src="./ancient_ruins.mp3" loop />
             <div className="page-wrapper">
                 {/* The current page is always rendered */}
                 {renderPage()}
                 {/* The wipe element, visible only during a transition */}
                 {(isWipingOut || isWipingIn) && (
                     <div
-                        className={`animation-container ${
-                            isWipingOut ? "wipe-out-active" : ""
-                        } ${isWipingIn ? "wipe-in-active" : ""}`}
+                        className={`animation-container ${isWipingOut ? "wipe-out-active" : ""} ${
+                            isWipingIn ? "wipe-in-active" : ""
+                        }`}
                     ></div>
                 )}
             </div>

@@ -8,6 +8,7 @@ import CardWrapper from "./CardWrapper";
 import { DISPLAY_TO_STAT } from "../../../constants/constants";
 import { STAT_NAMES } from "../../../../../shared/constants/constants";
 import { NavigationHandler } from "../../../types";
+import { useSound } from "use-sound";
 
 type SelectStatPageProps = {
     onNavigate: NavigationHandler;
@@ -23,13 +24,21 @@ type SelectStatPageProps = {
  *
  * @example
  * <SelectStatPage onNavigate={handleNavigation} />
-*/
+ */
 export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
     const { roomState, sendSelectStat } = useSocket();
     const { selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
+
+    const [playSelect] = useSound(`/select.mp3`, {
+        volume: 1,
+    });
+
+    const [playConfirm] = useSound(`/confirm.mp3`, {
+        volume: 1,
+    });
 
     useEffect(() => {
         setButtonState(!lockedIn && selectedCardIndex !== null);
@@ -59,6 +68,8 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
             return;
         }
 
+        playSelect();
+
         // Unselect Card
         if (index === selectedCardIndex) {
             setSelectedCardIndex(null);
@@ -71,6 +82,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
         if (!buttonState) {
             return;
         }
+        playConfirm();
         setLockedIn(true);
         setButtonState(false);
         const selectedStat: STAT_NAMES = cards[selectedCardIndex!].statName as STAT_NAMES;
@@ -88,9 +100,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
             <div className={styles.outerContainer}>
                 <div className={styles.yourPokemonSection}>
                     <div className={styles.shadow}></div>
-                    <span className={styles.pokemonTitle}>
-                        {yourPokemon.name.toUpperCase()}
-                    </span>
+                    <span className={styles.pokemonTitle}>{yourPokemon.name.toUpperCase()}</span>
                     <div className={styles.typeList}>
                         {yourPokemon.types.map((type) => (
                             <TypeCard key={type} typeName={type} />
@@ -109,13 +119,10 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
                     </div>
                     <div className={styles.cardsContainer}>
                         {cards.map((card, index) => {
-                            const rawStatName = DISPLAY_TO_STAT.get(
-                                card.statName
+                            const rawStatName = DISPLAY_TO_STAT.get(card.statName);
+                            const isLocked = roomState.game!.lockedStats.includes(
+                                rawStatName as STAT_NAMES
                             );
-                            const isLocked =
-                                roomState.game!.lockedStats.includes(
-                                    rawStatName as STAT_NAMES
-                                );
 
                             return (
                                 <CardWrapper
