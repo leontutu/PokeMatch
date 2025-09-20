@@ -121,7 +121,7 @@ export default class Orchestrator {
         }
 
         client.setName(name);
-        logger.log(`[Orchestrator] Name entered: ${name}`);
+        logger.debug(`[Orchestrator] Name entered: ${name}`);
         const roomId = this.#assignClientToRoom(client);
 
         this.#handleRoomErrors(() => {
@@ -145,7 +145,7 @@ export default class Orchestrator {
 
         this.#handleRoomErrors(() => {
             this.roomManager.setClientOfRoomReady(roomId, client.uuid);
-            logger.log(`[Orchestrator] ${client.name} is ready in room ${roomId}`);
+            logger.debug(`[Orchestrator] ${client.name} is ready in room ${roomId}`);
             this.#updateRoomClients(roomId);
 
             if (this.roomManager.isRoomReady(roomId)) {
@@ -186,7 +186,7 @@ export default class Orchestrator {
             `[Orchestrator] onGameCommand called for client ${client.uuid} who is not in a room.`
         );
 
-        logger.log(`[Orchestrator] Game action from ${client.name}: ${data.actionType}`);
+        logger.debug(`[Orchestrator] Game action from ${client.name}: ${data.actionType}`);
 
         const gameCommand = OrchestratorToGameCommand.fromClient(
             data.actionType,
@@ -213,7 +213,7 @@ export default class Orchestrator {
         assertIsDefined(event.roomId, "[Orchestrator] Received game event without roomId.");
         const roomId = event.roomId;
 
-        logger.log(`[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`);
+        logger.debug(`[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`);
         this.#handleRoomErrors(async () => {
             switch (event.eventType) {
                 case GameEvents.ALL_SELECTED:
@@ -252,7 +252,7 @@ export default class Orchestrator {
      * @param roomId The ID of the room in battle.
      */
     #startBattle(roomId: number) {
-        logger.log(`[Orchestrator] Starting battle for room: ${roomId}`);
+        logger.debug(`[Orchestrator] Starting battle for room: ${roomId}`);
         delay(Timings.BATTLE_DURATION).then(() => {
             this.#handleRoomErrors(() => {
                 this.#sendGameCommand(
