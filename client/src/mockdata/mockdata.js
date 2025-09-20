@@ -9,7 +9,7 @@ export const mockRoomState = {
         { client: { name: "Bar" }, isReady: false },
     ],
     game: {
-        phase: GAME_PHASES.SELECT_STAT,
+        phase: GAME_PHASES.POKEMON_REVEAL,
         lockedStats: ["speed", "defense"],
         flags: {},
         winner: "Foo",
@@ -19,7 +19,8 @@ export const mockRoomState = {
             challengeStat: { name: "speed", value: 100 },
             challengedStat: { name: "defense", value: 100 },
             pokemon: {
-                name: "pikachu",
+                id: 25,
+                name: "Pikachu",
                 types: ["electric", "flying"],
                 sprites: {
                     back_default:
