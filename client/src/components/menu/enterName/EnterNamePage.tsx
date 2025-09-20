@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants/constants";
+import { Pages } from "../../../constants/constants";
 import { isValidName } from "../../../../../shared/utils/validation";
 import { NavigationHandler } from "../../../types";
 import HomeLayout from "../layout/HomeLayout";
@@ -24,8 +24,7 @@ type EnterNamePageProps = {
  * <EnterNamePage onNavigate={handleNavigation} />
  */
 export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
-    const { sendName, roomState, nameErrorSignal, setNameErrorSignal } =
-        useSocket();
+    const { sendName, roomState, nameErrorSignal, setNameErrorSignal } = useSocket();
 
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
@@ -33,17 +32,15 @@ export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
     useEffect(() => {
         // Note: This should rarely happen, as name validation is performed client-side.
         if (nameErrorSignal) {
-            onNavigate(PAGES.HOME);
+            onNavigate(Pages.HOME);
             setNameErrorSignal(false);
-            alert(
-                "Invalid name. Make sure your name is between 4 and 9 characters long"
-            );
+            alert("Invalid name. Make sure your name is between 4 and 9 characters long");
         }
     }, [nameErrorSignal, onNavigate, setNameErrorSignal]);
 
     useEffect(() => {
         if (roomState) {
-            onNavigate(PAGES.ROOM, false);
+            onNavigate(Pages.ROOM, false);
         }
     }, [roomState, onNavigate]);
 
@@ -65,10 +62,7 @@ export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
                         setIsNameValid={setIsNameValid}
                     />
                 </div>
-                <SubmitButton
-                    isNameValid={isNameValid}
-                    handleSubmit={handleSubmit}
-                />
+                <SubmitButton isNameValid={isNameValid} handleSubmit={handleSubmit} />
             </div>
         </HomeLayout>
     );

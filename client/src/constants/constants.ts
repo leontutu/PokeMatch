@@ -1,4 +1,4 @@
-export enum PAGES {
+export enum Pages {
     HOME = "homePage",
     POKEVIEWER = "pokeViewerPage",
     ENTER_NAME = "enterNamePage",
@@ -9,7 +9,7 @@ export enum PAGES {
     POKEMON_REVEAL = "pokemonRevealPage",
 }
 
-export const DISPLAY_TO_STAT = new Map([
+export const DisplayToStat = new Map([
     ["💖 HP", "hp"],
     ["⚔️ ATTACK", "attack"],
     ["🛡️ DEFENSE", "defense"],
@@ -20,6 +20,6 @@ export const DISPLAY_TO_STAT = new Map([
     ["📏 HEIGHT", "height"],
 ]);
 
-export const STAT_TO_DISPLAY = new Map(
-    [...DISPLAY_TO_STAT.entries()].map(([key, value]) => [value, key])
+export const StatToDisplay = new Map(
+    [...DisplayToStat.entries()].map(([key, value]) => [value, key])
 );

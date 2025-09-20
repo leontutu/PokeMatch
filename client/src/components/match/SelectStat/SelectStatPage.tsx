@@ -5,8 +5,8 @@ import MatchLayout from "../layout/MatchLayout";
 import TypeCard from "./TypeCard";
 import cardScaffold from "../../../scaffolds/cardScaffold";
 import CardWrapper from "./CardWrapper";
-import { DISPLAY_TO_STAT } from "../../../constants/constants";
-import { STAT_NAMES } from "../../../../../shared/constants/constants";
+import { DisplayToStat } from "../../../constants/constants";
+import { StatNames } from "../../../../../shared/constants/constants";
 import { NavigationHandler } from "../../../types";
 import { useSound } from "use-sound";
 
@@ -63,7 +63,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
     const handleCardClick = (index: number) => {
         if (!roomState || !roomState.game) return null;
 
-        const selectedStat = DISPLAY_TO_STAT.get(cards[index].statName) as STAT_NAMES;
+        const selectedStat = DisplayToStat.get(cards[index].statName) as StatNames;
         if (roomState.game.lockedStats.includes(selectedStat) || lockedIn) {
             return;
         }
@@ -85,7 +85,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
         playConfirm();
         setLockedIn(true);
         setButtonState(false);
-        const selectedStat: STAT_NAMES = cards[selectedCardIndex!].statName as STAT_NAMES;
+        const selectedStat: StatNames = cards[selectedCardIndex!].statName as StatNames;
         sendSelectStat(selectedStat);
     };
 
@@ -119,9 +119,9 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
                     </div>
                     <div className={styles.cardsContainer}>
                         {cards.map((card, index) => {
-                            const rawStatName = DISPLAY_TO_STAT.get(card.statName);
+                            const rawStatName = DisplayToStat.get(card.statName);
                             const isLocked = roomState.game!.lockedStats.includes(
-                                rawStatName as STAT_NAMES
+                                rawStatName as StatNames
                             );
 
                             return (

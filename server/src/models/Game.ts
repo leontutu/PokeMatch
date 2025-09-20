@@ -1,15 +1,12 @@
 import logger from "../utils/Logger.js";
 import Player from "./Player.js";
-import { GAME_EVENTS } from "../constants/constants.js";
+import { GameEvents } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 import { Pokemon, Stat } from "../../../shared/types/types.js";
-import { GAME_COMMANDS } from "../../../shared/constants/constants.js";
-import {
-    GAME_PHASES,
-    STAT_NAMES,
-} from "../../../shared/constants/constants.js";
+import { GameCommands } from "../../../shared/constants/constants.js";
+import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -18,13 +15,13 @@ import {
  */
 export default class Game extends EventEmitter {
     players: Player[];
-    phase: GAME_PHASES;
-    lockedStats: STAT_NAMES[];
+    phase: GamePhases;
+    lockedStats: StatNames[];
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
         super();
         this.players = participants.map((p) => new Player(p.name, p.uuid));
-        this.phase = GAME_PHASES.SELECT_STAT;
+        this.phase = GamePhases.SELECT_STAT;
         this.lockedStats = [];
         this.winner = null;
     }
@@ -39,25 +36,20 @@ export default class Game extends EventEmitter {
      */
     executeGameCommand(gameCommand: OrchestratorToGameCommand) {
         switch (gameCommand.actionType) {
-            case GAME_COMMANDS.ASSIGN_NEW_POKEMON:
+            case GameCommands.ASSIGN_NEW_POKEMON:
                 this.#handleAssignNewPokemon(gameCommand.payload);
                 break;
-            case GAME_COMMANDS.BATTLE_END:
+            case GameCommands.BATTLE_END:
                 this.#handleBattleEnd();
                 break;
-            case GAME_COMMANDS.SELECT_STAT:
-                this.#handleSelectStat(
-                    gameCommand.payload,
-                    gameCommand.clientId!
-                );
+            case GameCommands.SELECT_STAT:
+                this.#handleSelectStat(gameCommand.payload, gameCommand.clientId!);
                 break;
-            case GAME_COMMANDS.START_SELECT_STAT:
+            case GameCommands.START_SELECT_STAT:
                 this.#handleStartSelectStat();
                 break;
             default:
-                logger.warn(
-                    `[Game] Unknown command: ${gameCommand.actionType}`
-                );
+                logger.warn(`[Game] Unknown command: ${gameCommand.actionType}`);
         }
     }
 
@@ -68,14 +60,14 @@ export default class Game extends EventEmitter {
     #handleAssignNewPokemon(payload: Pokemon[]) {
         this.players[0].setPokemon(payload[0]);
         this.players[1].setPokemon(payload[1]);
-        this.phase = GAME_PHASES.POKEMON_REVEAL;
+        this.phase = GamePhases.POKEMON_REVEAL;
     }
 
-    #handleSelectStat(payload: STAT_NAMES, clientId: string) {
+    #handleSelectStat(payload: StatNames, clientId: string) {
         if (this.lockedStats.includes(payload)) {
             logger.warn(`[Game] Stat ${payload} is locked`);
             this.#emitGameEvent(
-                GAME_EVENTS.INVALID_STAT_SELECT,
+                GameEvents.INVALID_STAT_SELECT,
                 { reason: `Stat ${payload} is locked.` },
                 clientId
             );
@@ -88,8 +80,8 @@ export default class Game extends EventEmitter {
         player.setSelectedStat(stat);
 
         if (this.#isAllSelected()) {
-            this.phase = GAME_PHASES.BATTLE;
-            this.#emitGameEvent(GAME_EVENTS.ALL_SELECTED);
+            this.phase = GamePhases.BATTLE;
+            this.#emitGameEvent(GameEvents.ALL_SELECTED);
         }
     }
 
@@ -99,15 +91,13 @@ export default class Game extends EventEmitter {
     }
 
     #handleGameEnd() {
-        this.winner = this.players.reduce((a, b) =>
-            a.points > b.points ? a : b
-        ).name;
-        this.phase = GAME_PHASES.GAME_FINISHED;
-        this.#emitGameEvent(GAME_EVENTS.GAME_FINISHED);
+        this.winner = this.players.reduce((a, b) => (a.points > b.points ? a : b)).name;
+        this.phase = GamePhases.GAME_FINISHED;
+        this.#emitGameEvent(GameEvents.GAME_FINISHED);
     }
 
     #handleStartSelectStat() {
-        this.phase = GAME_PHASES.SELECT_STAT;
+        this.phase = GamePhases.SELECT_STAT;
     }
 
     //================================================================
@@ -135,9 +125,7 @@ export default class Game extends EventEmitter {
         // P1's challenge: P1's selected stat vs P2's value for that same stat
         if (p1.selectedStat.value > p2.pokemon.stats[p1.selectedStat.name]) {
             p1RoundScore++;
-        } else if (
-            p1.selectedStat.value < p2.pokemon.stats[p1.selectedStat.name]
-        ) {
+        } else if (p1.selectedStat.value < p2.pokemon.stats[p1.selectedStat.name]) {
             p1RoundScore--;
         }
 
@@ -177,29 +165,21 @@ export default class Game extends EventEmitter {
         // @ts-ignore
         this.lockedStats.push(this.players[1].selectedStat.name);
         this.players.forEach((p) => p.resetSelectedStat());
-        this.phase = GAME_PHASES.SELECT_STAT;
+        this.phase = GamePhases.SELECT_STAT;
     }
 
     #newBattle() {
         this.lockedStats = [];
         this.players.forEach((p) => p.resetSelectedStat());
-        this.#emitGameEvent(GAME_EVENTS.NEW_BATTLE);
+        this.#emitGameEvent(GameEvents.NEW_BATTLE);
     }
 
     //================================================================
     // Private Helpers
     //================================================================
 
-    #emitGameEvent(
-        eventType: GAME_EVENTS,
-        payload: any = null,
-        clientId: string | null = null
-    ) {
-        const command = new GameToOrchestratorCommand(
-            eventType,
-            payload,
-            clientId
-        );
+    #emitGameEvent(eventType: GameEvents, payload: any = null, clientId: string | null = null) {
+        const command = new GameToOrchestratorCommand(eventType, payload, clientId);
         this.emit("gameEvent", command);
     }
 
@@ -210,9 +190,7 @@ export default class Game extends EventEmitter {
     #findPlayer(clientId: string) {
         const player = this.players.find((p) => p.uuid === clientId);
         if (!player) {
-            throw new Error(
-                `Player with client ID '${clientId}' not found in this game.`
-            );
+            throw new Error(`Player with client ID '${clientId}' not found in this game.`);
         }
         return player;
     }
@@ -247,9 +225,7 @@ export default class Game extends EventEmitter {
         const player1 = this.players[0].toJSON();
         const player2 = this.players[1].toJSON();
 
-        const you = (
-            clientUuid === player1.uuid ? player1 : player2
-        ) as ClientPlayer;
+        const you = (clientUuid === player1.uuid ? player1 : player2) as ClientPlayer;
         const opponent = (you === player1 ? player2 : player1) as ClientPlayer;
 
         const clientState: ClientGameState = {
@@ -261,13 +237,13 @@ export default class Game extends EventEmitter {
         };
 
         // Prevent cheating by obscuring which stat the opponent has selected
-        if (clientState.phase === GAME_PHASES.SELECT_STAT) {
+        if (clientState.phase === GamePhases.SELECT_STAT) {
             clientState.opponent.selectedStat = null;
         }
 
         // Add battle-specific details
         if (
-            clientState.phase === GAME_PHASES.BATTLE &&
+            clientState.phase === GamePhases.BATTLE &&
             you.selectedStat?.name &&
             opponent.selectedStat?.name &&
             you.pokemon &&
@@ -304,7 +280,7 @@ interface ClientPlayer {
 }
 
 interface ClientGameState {
-    phase: GAME_PHASES;
+    phase: GamePhases;
     lockedStats: string[];
     winner: string | null;
     you: ClientPlayer;

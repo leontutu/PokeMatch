@@ -1,5 +1,5 @@
-import { GAME_EVENTS } from "../constants/constants.js";
-import { TIMINGS, GAME_COMMANDS } from "../../../shared/constants/constants.js";
+import { GameEvents } from "../constants/constants.js";
+import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
@@ -145,9 +145,7 @@ export default class Orchestrator {
 
         this.#handleRoomErrors(() => {
             this.roomManager.setClientOfRoomReady(roomId, client.uuid);
-            logger.log(
-                `[Orchestrator] ${client.name} is ready in room ${roomId}`
-            );
+            logger.log(`[Orchestrator] ${client.name} is ready in room ${roomId}`);
             this.#updateRoomClients(roomId);
 
             if (this.roomManager.isRoomReady(roomId)) {
@@ -188,9 +186,7 @@ export default class Orchestrator {
             `[Orchestrator] onGameCommand called for client ${client.uuid} who is not in a room.`
         );
 
-        logger.log(
-            `[Orchestrator] Game action from ${client.name}: ${data.actionType}`
-        );
+        logger.log(`[Orchestrator] Game action from ${client.name}: ${data.actionType}`);
 
         const gameCommand = OrchestratorToGameCommand.fromClient(
             data.actionType,
@@ -214,40 +210,28 @@ export default class Orchestrator {
      * @param event The event emitted by the game.
      */
     async handleGameEvent(event: GameToOrchestratorCommand) {
-        assertIsDefined(
-            event.roomId,
-            "[Orchestrator] Received game event without roomId."
-        );
+        assertIsDefined(event.roomId, "[Orchestrator] Received game event without roomId.");
         const roomId = event.roomId;
 
-        logger.log(
-            `[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`
-        );
+        logger.log(`[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`);
         this.#handleRoomErrors(async () => {
             switch (event.eventType) {
-                case GAME_EVENTS.ALL_SELECTED:
+                case GameEvents.ALL_SELECTED:
                     this.#updateRoomClients(roomId);
                     this.#startBattle(roomId);
                     break;
-                case GAME_EVENTS.INVALID_STAT_SELECT:
-                    const client = this.clientManager.getClientByUuid(
-                        event.clientId!
-                    );
+                case GameEvents.INVALID_STAT_SELECT:
+                    const client = this.clientManager.getClientByUuid(event.clientId!);
                     if (client) {
-                        this.socketService.emitActionError(
-                            client.socket!,
-                            event.payload
-                        );
+                        this.socketService.emitActionError(client.socket!, event.payload);
                     }
                     break;
-                case GAME_EVENTS.NEW_BATTLE:
+                case GameEvents.NEW_BATTLE:
                     await this.#assignNewPokemon(roomId);
                     this.#updateRoomClients(roomId);
                     break;
                 default:
-                    logger.warn(
-                        `[Orchestrator] Unknown event type: ${event.eventType}`
-                    );
+                    logger.warn(`[Orchestrator] Unknown event type: ${event.eventType}`);
             }
         });
     }
@@ -269,13 +253,11 @@ export default class Orchestrator {
      */
     #startBattle(roomId: number) {
         logger.log(`[Orchestrator] Starting battle for room: ${roomId}`);
-        delay(TIMINGS.BATTLE_DURATION).then(() => {
+        delay(Timings.BATTLE_DURATION).then(() => {
             this.#handleRoomErrors(() => {
                 this.#sendGameCommand(
                     roomId,
-                    OrchestratorToGameCommand.fromSystem(
-                        GAME_COMMANDS.BATTLE_END
-                    )
+                    OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
                 );
                 this.#updateRoomClients(roomId);
             });
@@ -290,13 +272,10 @@ export default class Orchestrator {
         const pokemon1 = await this.pokeAPIClient.getRandomPokemon();
         const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
 
-        const gameCommand = OrchestratorToGameCommand.fromSystem(
-            GAME_COMMANDS.ASSIGN_NEW_POKEMON,
-            [
-                createPokemonFromApiData(pokemon1),
-                createPokemonFromApiData(pokemon2),
-            ]
-        );
+        const gameCommand = OrchestratorToGameCommand.fromSystem(GameCommands.ASSIGN_NEW_POKEMON, [
+            createPokemonFromApiData(pokemon1),
+            createPokemonFromApiData(pokemon2),
+        ]);
 
         this.#sendGameCommand(roomId, gameCommand);
         this.#startSelectStatTimer(roomId);
@@ -307,13 +286,11 @@ export default class Orchestrator {
      * @param roomId The ID of the room.
      */
     #startSelectStatTimer(roomId: number) {
-        delay(TIMINGS.POKEMON_REVEAL_DURATION).then(() => {
+        delay(Timings.POKEMON_REVEAL_DURATION).then(() => {
             this.#handleRoomErrors(() => {
                 this.#sendGameCommand(
                     roomId,
-                    OrchestratorToGameCommand.fromSystem(
-                        GAME_COMMANDS.START_SELECT_STAT
-                    )
+                    OrchestratorToGameCommand.fromSystem(GameCommands.START_SELECT_STAT)
                 );
             });
             this.#updateRoomClients(roomId);

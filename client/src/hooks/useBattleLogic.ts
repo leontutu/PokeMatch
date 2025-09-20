@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { STAT_TO_DISPLAY } from "../constants/constants";
+import { StatToDisplay } from "../constants/constants";
 import { GameState, BattleStats } from "../types.js";
 
 /**
@@ -44,15 +44,11 @@ export const useBattleLogic = (gameState: GameState): BattleStats | null => {
         const opponentChallengedStat = gameState.opponent.challengedStat;
 
         // Determine outcomes
-        const isYourChallengeTie =
-            yourChallengedStat.value === opponentChallengeStat.value;
-        const yourChallengeOutcome =
-            yourChallengedStat.value > opponentChallengeStat.value;
+        const isYourChallengeTie = yourChallengedStat.value === opponentChallengeStat.value;
+        const yourChallengeOutcome = yourChallengedStat.value > opponentChallengeStat.value;
 
-        const isOpponentChallengeTie =
-            opponentChallengedStat.value === yourChallengeStat.value;
-        const opponentChallengeOutcome =
-            yourChallengeStat.value < opponentChallengedStat.value;
+        const isOpponentChallengeTie = opponentChallengedStat.value === yourChallengeStat.value;
+        const opponentChallengeOutcome = yourChallengeStat.value < opponentChallengedStat.value;
 
         return {
             yourPokemon,
@@ -63,18 +59,10 @@ export const useBattleLogic = (gameState: GameState): BattleStats | null => {
             yourChallengedStat,
             opponentChallengeStat,
             opponentChallengedStat,
-            yourChallengeStatDisplay: STAT_TO_DISPLAY.get(
-                yourChallengeStat.name
-            ),
-            yourChallengedStatDisplay: STAT_TO_DISPLAY.get(
-                yourChallengedStat.name
-            ),
-            opponentChallengeStatDisplay: STAT_TO_DISPLAY.get(
-                opponentChallengeStat.name
-            ),
-            opponentChallengedStatDisplay: STAT_TO_DISPLAY.get(
-                opponentChallengedStat.name
-            ),
+            yourChallengeStatDisplay: StatToDisplay.get(yourChallengeStat.name),
+            yourChallengedStatDisplay: StatToDisplay.get(yourChallengedStat.name),
+            opponentChallengeStatDisplay: StatToDisplay.get(opponentChallengeStat.name),
+            opponentChallengedStatDisplay: StatToDisplay.get(opponentChallengedStat.name),
             yourChallengeOutcome,
             isYourChallengeTie,
             opponentChallengeOutcome,

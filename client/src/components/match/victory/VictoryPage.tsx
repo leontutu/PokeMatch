@@ -1,6 +1,6 @@
 import styles from "./VictoryPage.module.css";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants/constants";
+import { Pages } from "../../../constants/constants";
 import { NavigationHandler } from "../../../types";
 
 type VictoryPageProps = {
@@ -21,7 +21,7 @@ export default function VictoryPage({ onNavigate }: VictoryPageProps) {
     const { roomState, sendLeaveRoom } = useSocket();
 
     const handleMenuButtonClick = () => {
-        onNavigate(PAGES.HOME, true);
+        onNavigate(Pages.HOME, true);
         sendLeaveRoom();
     };
 
@@ -33,9 +33,7 @@ export default function VictoryPage({ onNavigate }: VictoryPageProps) {
     return (
         <div className={styles.victoryContainer}>
             <div className={styles.mainContent}>
-                <h1 className={styles.winnerMessage}>
-                    {`${roomState.game.winner} won!`}
-                </h1>
+                <h1 className={styles.winnerMessage}>{`${roomState.game.winner} won!`}</h1>
 
                 <div className={styles.scoresContainer}>
                     <p className={styles.score}>
@@ -48,10 +46,7 @@ export default function VictoryPage({ onNavigate }: VictoryPageProps) {
             </div>
 
             <div className={styles.footer}>
-                <button
-                    className={styles.menuButton}
-                    onClick={handleMenuButtonClick}
-                >
+                <button className={styles.menuButton} onClick={handleMenuButtonClick}>
                     Return to Menu
                 </button>
             </div>

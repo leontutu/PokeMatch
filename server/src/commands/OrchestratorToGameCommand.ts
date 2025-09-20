@@ -1,4 +1,4 @@
-import { GAME_COMMANDS } from "../../../shared/constants/constants.js";
+import { GameCommands } from "../../../shared/constants/constants.js";
 
 /**
  * Represents a command sent from the Orchestrator to a Game instance.
@@ -12,7 +12,7 @@ export default class OrchestratorToGameCommand {
      * @param clientId The UUID of the client who initiated the action.
      */
     constructor(
-        public actionType: GAME_COMMANDS,
+        public actionType: GameCommands,
         public payload: any, //TODO: ponder object payload types
         public clientId: string | null
     ) {}
@@ -23,11 +23,7 @@ export default class OrchestratorToGameCommand {
      * @param payload
      * @param clientId
      */
-    static fromClient(
-        actionType: GAME_COMMANDS,
-        payload: object,
-        clientId: string
-    ) {
+    static fromClient(actionType: GameCommands, payload: object, clientId: string) {
         return new OrchestratorToGameCommand(actionType, payload, clientId);
     }
 
@@ -36,10 +32,7 @@ export default class OrchestratorToGameCommand {
      * @param actionType
      * @param payload
      */
-    static fromSystem(
-        actionType: GAME_COMMANDS,
-        payload: object | null = null
-    ) {
+    static fromSystem(actionType: GameCommands, payload: object | null = null) {
         return new OrchestratorToGameCommand(actionType, payload, null);
     }
 }

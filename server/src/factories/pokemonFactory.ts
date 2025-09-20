@@ -1,4 +1,4 @@
-import { STAT_NAMES } from "../../../shared/constants/constants.js";
+import { StatNames } from "../../../shared/constants/constants.js";
 import { Pokemon, PokemonStats, Sprites } from "../../../shared/types/types.js";
 /**
  * Factory function that creates a Pokemon instance from a raw PokeAPI response.
@@ -8,23 +8,20 @@ import { Pokemon, PokemonStats, Sprites } from "../../../shared/types/types.js";
 export function createPokemonFromApiData(pokemonApiData: any): Pokemon {
     const id = pokemonApiData.id;
     const name = pokemonApiData.name;
-    const types = pokemonApiData.types.map(
-        (type: { type: { name: string } }) => type.type.name
-    );
+    const types = pokemonApiData.types.map((type: { type: { name: string } }) => type.type.name);
     const sprites: Sprites = {
-        officialArtwork:
-            pokemonApiData.sprites.other["official-artwork"].front_default,
+        officialArtwork: pokemonApiData.sprites.other["official-artwork"].front_default,
         back_default: pokemonApiData.sprites.back_default,
     };
 
     const stats: PokemonStats = pokemonApiData.stats.reduce(
         (acc: any, stat: { stat: { name: string }; base_stat: number }) => {
             if (stat.stat.name === "special-defense") {
-                acc[STAT_NAMES.SPECIAL_DEFENSE] = stat.base_stat;
+                acc[StatNames.SPECIAL_DEFENSE] = stat.base_stat;
             } else if (stat.stat.name === "special-attack") {
-                acc[STAT_NAMES.SPECIAL_ATTACK] = stat.base_stat;
+                acc[StatNames.SPECIAL_ATTACK] = stat.base_stat;
             } else {
-                acc[stat.stat.name as STAT_NAMES] = stat.base_stat;
+                acc[stat.stat.name as StatNames] = stat.base_stat;
             }
             return acc;
         },

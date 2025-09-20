@@ -1,4 +1,4 @@
-import { PAGES } from "../../../constants/constants";
+import { Pages } from "../../../constants/constants";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./HomePage.module.css";
 import { NavigationHandler } from "../../../types";
@@ -19,7 +19,7 @@ type HomePageProps = {
  */
 export default function HomePage({ onNavigate }: HomePageProps) {
     const handleMatchClick = () => {
-        onNavigate(PAGES.ENTER_NAME, false);
+        onNavigate(Pages.ENTER_NAME, false);
     };
 
     const handlePokemonClick = () => {
@@ -32,18 +32,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <HomeLayout>
             <div className={styles.buttonColumn}>
                 <div className={styles.buttonContainer}>
-                    <button
-                        className={styles.matchBtn}
-                        onClick={handleMatchClick}
-                    >
+                    <button className={styles.matchBtn} onClick={handleMatchClick}>
                         <span>Match</span>
                     </button>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button
-                        onClick={handlePokemonClick}
-                        className={styles.randomPokemonBtn}
-                    >
+                    <button onClick={handlePokemonClick} className={styles.randomPokemonBtn}>
                         <span>PokéViewer</span>
                     </button>
                 </div>

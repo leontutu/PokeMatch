@@ -1,4 +1,4 @@
-import { GAME_EVENTS } from "../constants/constants.js";
+import { GameEvents } from "../constants/constants.js";
 
 /**
  * Represents an event emitted from a Game instance to the Orchestrator.
@@ -16,7 +16,7 @@ export default class GameToOrchestratorCommand {
      * @param clientId The UUID of a specific client related to the event.
      */
     constructor(
-        public eventType: GAME_EVENTS,
+        public eventType: GameEvents,
         public payload: any,
         public clientId: string | null = null
     ) {}

@@ -5,7 +5,7 @@ import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
 import { EventEmitter } from "events";
 import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import { GAME_PHASES } from "../../../shared/constants/constants.js";
+import { GamePhases } from "../../../shared/constants/constants.js";
 
 /**
  * Manages the lifecycle and storage of all game rooms.
@@ -155,7 +155,7 @@ export default class RoomManager extends EventEmitter {
      * @returns The current game phase.
      * @throws {RoomNotFoundException}
      */
-    getPhase(roomId: number): GAME_PHASES | null {
+    getPhase(roomId: number): GamePhases | null {
         return this.getRoom(roomId).getPhase();
     }
 
