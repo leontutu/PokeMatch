@@ -28,11 +28,11 @@ function App() {
     const { roomCrashSignal } = useSocket();
     const [isFirstRender, setIsFirstRender] = useState(true);
 
-    const [playPageTurn] = useSound(`/pageTurn.mp3`, {
-        volume: 1,
+    const [playPageTurn1] = useSound(`/pageTurn1.mp3`, {
+        volume: 0.3,
     });
-    const [playPageTurnReversed] = useSound(`/pageTurnReversed.mp3`, {
-        volume: 1,
+    const [playPageTurn2] = useSound(`/pageTurn2.mp3`, {
+        volume: 0.1,
     });
 
     const handleNavigate: NavigationHandler = useCallback(
@@ -45,10 +45,10 @@ function App() {
                 return;
             }
 
-            playPageTurn();
+            playPageTurn1();
             setIsWipingOut(true);
             setTimeout(() => {
-                playPageTurnReversed();
+                playPageTurn2();
                 setCurrentPage(page);
                 setIsWipingOut(false);
                 setIsWipingIn(true);
