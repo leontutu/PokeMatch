@@ -1,7 +1,7 @@
 import { GameEvents } from "../constants/constants.js";
 import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
-import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
+import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 import PokeAPIClient from "../clients/PokeAPIClient.js";
 import RoomManager from "../managers/RoomManager.js";
@@ -300,12 +300,10 @@ export default class Orchestrator {
     /**
      * Forcefully shuts down a room, notifies clients, and cleans up resources.
      * @param roomId The ID of the room to shut down.
-     * @param exception The error that caused the shutdown.
+     * @param error The error that caused the shutdown.
      */
-    #shutDownRoom(roomId: number, exception: Error) {
-        logger.warn(
-            `[Orchestrator] Shutting down room ${roomId} due to error: ${exception.message}`
-        );
+    #shutDownRoom(roomId: number, error: Error) {
+        logger.warn(`[Orchestrator] Shutting down room ${roomId} due to error: ${error.message}`);
         const clients = this.roomManager.getClientsOfRoom(roomId);
         clients.forEach((client) => {
             this.socketService.emitRoomCrash(client.socket!);
@@ -354,7 +352,7 @@ export default class Orchestrator {
         try {
             return fn();
         } catch (error) {
-            if (error instanceof RoomNotFoundException) {
+            if (error instanceof RoomNotFoundError) {
                 logger.warn(`Handled expected error: ${error.message}`);
                 if (socket) {
                     this.socketService.emitRoomCrash(socket);

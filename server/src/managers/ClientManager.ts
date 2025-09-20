@@ -79,7 +79,7 @@ export default class ClientManager {
      * @param socket The client's socket.
      */
     getClient(socket: Socket): Client {
-        // NOTE: While this should be safe, a ClientNotFoundException should be implemented
+        // NOTE: While this should be safe, a ClientNotFoundError should be implemented
         return this.clientsBySocket.get(socket)!;
     }
 

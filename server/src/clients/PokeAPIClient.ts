@@ -1,4 +1,4 @@
-import NoAPIResponseException from "../exceptions/NoAPIResponseException.js";
+import NoAPIResponseError from "../errors/NoAPIResponseError.js";
 
 /**
  * A client for interacting with the public PokeAPI (pokeapi.co).
@@ -17,7 +17,7 @@ export default class PokeApiClient {
             const response: Response = await fetch(url);
             return await response.json();
         } catch (e: unknown) {
-            throw new NoAPIResponseException(url);
+            throw new NoAPIResponseError(url);
         }
     }
 }

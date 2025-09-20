@@ -1,9 +1,9 @@
 /**
- * Custom exception for operations on non-existent rooms.
+ * Custom error for operations on non-existent rooms.
  * Thrown when an attempt is made to access a room that cannot be found.
  */
-export default class RoomNotFoundException extends Error {
-    public name: string = "RoomNotFoundException";
+export default class RoomNotFoundError extends Error {
+    public name: string = "RoomNotFoundError";
     /**
      * @param roomId The ID of the room that was not found.
      */
