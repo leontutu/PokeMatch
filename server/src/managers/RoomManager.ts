@@ -1,11 +1,11 @@
 import Room from "../models/Room.js";
 import Client from "../models/Client.js";
 import logger from "../utils/Logger.js";
-import RoomNotFoundException from "../exceptions/RoomNotFoundException.js";
+import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import { EventEmitter } from "events";
 import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import { GAME_PHASES } from "../../../shared/constants/constants.js";
+import { GamePhases } from "../../../shared/constants/constants.js";
 
 /**
  * Manages the lifecycle and storage of all game rooms.
@@ -32,7 +32,7 @@ export default class RoomManager extends EventEmitter {
      * Finds an available room or creates a new one for the client.
      * @param client The client to assign to a room.
      * @returns The ID of the room the client was assigned to.
-     * @throws {RoomNotFoundException} If the newly created room is not found, which indicates an internal error.
+     * @throws {RoomNotFoundError} If the newly created room is not found, which indicates an internal error.
      */
     assignClientToRoom(client: Client): number {
         let roomId;
@@ -54,7 +54,7 @@ export default class RoomManager extends EventEmitter {
      * Adds a client to a specific room.
      * @param roomId The ID of the room.
      * @param client The client to add.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     addClientToRoom(roomId: number, client: Client) {
         const room = this.getRoom(roomId);
@@ -65,7 +65,7 @@ export default class RoomManager extends EventEmitter {
      * Removes a client from a specific room and deletes the room if it becomes empty.
      * @param roomId The ID of the room.
      * @param client The client to remove.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     removeClientFromRoom(roomId: number, client: Client) {
         const room = this.getRoom(roomId);
@@ -79,7 +79,7 @@ export default class RoomManager extends EventEmitter {
      * Forwards a game command to the appropriate room's game instance.
      * @param roomId The ID of the room.
      * @param gameCommand The command to forward.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     forwardGameCommand(roomId: number, gameCommand: OrchestratorToGameCommand) {
         const room = this.getRoom(roomId);
@@ -90,7 +90,7 @@ export default class RoomManager extends EventEmitter {
      * Sets a client's status to ready within a room.
      * @param roomId The ID of the room.
      * @param clientId The ID of the client.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     setClientOfRoomReady(roomId: number, clientId: string) {
         this.getRoom(roomId).setClientReady(clientId);
@@ -99,7 +99,7 @@ export default class RoomManager extends EventEmitter {
     /**
      * Starts the game in a specific room with the given Pokémon.
      * @param roomId The ID of the room.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     startGame(roomId: number) {
         this.getRoom(roomId).startGame();
@@ -108,11 +108,11 @@ export default class RoomManager extends EventEmitter {
     /**
      * Deletes a room explicitly by its ID.
      * @param roomId The ID of the room to delete.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     deleteRoom(roomId: number) {
         if (!this.#hasRoom(roomId)) {
-            throw new RoomNotFoundException(roomId);
+            throw new RoomNotFoundError(roomId);
         }
         this.rooms.delete(roomId);
         logger.log(`[RoomManager] Room ${roomId} has been deleted.`);
@@ -126,11 +126,11 @@ export default class RoomManager extends EventEmitter {
      * Retrieves the room instance associated with the given room ID.
      * @param roomId - The unique identifier of the room to retrieve.
      * @returns The room instance corresponding to the provided roomId.
-     * @throws {RoomNotFoundException} If the room with the specified ID does not exist.
+     * @throws {RoomNotFoundError} If the room with the specified ID does not exist.
      */
     getRoom(roomId: number): Room {
         if (!this.#hasRoom(roomId)) {
-            throw new RoomNotFoundException(roomId);
+            throw new RoomNotFoundError(roomId);
         }
         return this.rooms.get(roomId)!;
     }
@@ -143,7 +143,7 @@ export default class RoomManager extends EventEmitter {
      * Retrieves all clients from a specific room.
      * @param roomId The ID of the room.
      * @returns An array of clients in the room.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     getClientsOfRoom(roomId: number): Client[] {
         return this.getRoom(roomId).getClients();
@@ -153,9 +153,9 @@ export default class RoomManager extends EventEmitter {
      * Gets the current game phase of a room.
      * @param roomId The ID of the room.
      * @returns The current game phase.
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
-    getPhase(roomId: number): GAME_PHASES | null {
+    getPhase(roomId: number): GamePhases | null {
         return this.getRoom(roomId).getPhase();
     }
 
@@ -163,7 +163,7 @@ export default class RoomManager extends EventEmitter {
      * Checks if a room is full.
      * @param roomId The ID of the room.
      * @returns boolean
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     isRoomFull(roomId: number): boolean {
         return this.getRoom(roomId).isFull();
@@ -173,7 +173,7 @@ export default class RoomManager extends EventEmitter {
      * Checks if all clients in a room are ready.
      * @param roomId The ID of the room.
      * @returns boolean
-     * @throws {RoomNotFoundException}
+     * @throws {RoomNotFoundError}
      */
     isRoomReady(roomId: number): boolean {
         return this.getRoom(roomId).isReady();

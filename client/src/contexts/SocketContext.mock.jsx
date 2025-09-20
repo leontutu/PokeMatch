@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { EVENTS, GAME_COMMANDS } from "../../../shared/constants/constants.js";
+import { Events, GameCommands } from "../../../shared/constants/constants.js";
 import { mockRoomState } from "../mockdata/mockdata.js";
 
 /**
@@ -50,9 +50,5 @@ export const SocketProvider = ({ children }) => {
         sendSelectStat,
     };
 
-    return (
-        <SocketContext.Provider value={value}>
-            {children}
-        </SocketContext.Provider>
-    );
+    return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };

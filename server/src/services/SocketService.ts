@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { EVENTS } from "../../../shared/constants/constants.js";
+import { Events } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import Orchestrator from "./Orchestrator.js";
 import { Server as HttpServer } from "node:http";
@@ -48,9 +48,7 @@ export default class SocketService {
         this.io.use((socket, next) => {
             const uuid = socket.handshake.auth.uuid;
             if (!uuid) {
-                logger.warn(
-                    `[SocketService] No UUID found for socket: ${socket.id}`
-                );
+                logger.warn(`[SocketService] No UUID found for socket: ${socket.id}`);
                 return next(new Error("No UUID found"));
             }
             next();
@@ -63,19 +61,19 @@ export default class SocketService {
                 this.orchestrator.onDisconnect(socket);
             });
 
-            socket.on(EVENTS.NAME_ENTER, (payload) => {
+            socket.on(Events.NAME_ENTER, (payload) => {
                 this.orchestrator.onNameEnter(socket, payload);
             });
 
-            socket.on(EVENTS.READY, () => {
+            socket.on(Events.READY, () => {
                 this.orchestrator.onReady(socket);
             });
 
-            socket.on(EVENTS.LEAVE_ROOM, () => {
+            socket.on(Events.LEAVE_ROOM, () => {
                 this.orchestrator.onLeaveRoom(socket);
             });
 
-            socket.on(EVENTS.GAME_COMMAND, (data) => {
+            socket.on(Events.GAME_COMMAND, (data) => {
                 this.orchestrator.onGameCommand(socket, data);
             });
         });
@@ -83,26 +81,26 @@ export default class SocketService {
 
     // Emits the latest room/game state to a client.
     emitUpdate(socket: Socket, data: any) {
-        socket.emit(EVENTS.UPDATE, data);
+        socket.emit(Events.UPDATE, data);
     }
 
     // Notifies a client that a room is full.
     emitRoomFull(socket: Socket) {
-        socket.emit(EVENTS.ROOM_FULL);
+        socket.emit(Events.ROOM_FULL);
     }
 
     // Notifies a client that their room has crashed.
     emitRoomCrash(socket: Socket) {
-        socket.emit(EVENTS.ROOM_CRASH);
+        socket.emit(Events.ROOM_CRASH);
     }
 
     // Notifies a client of a name validation error.
     emitNameError(socket: Socket) {
-        socket.emit(EVENTS.NAME_ERROR);
+        socket.emit(Events.NAME_ERROR);
     }
 
     // Notifies a client of an invalid select stat action.
     emitActionError(socket: Socket, reason = null) {
-        socket.emit(EVENTS.SELECT_STAT_ERROR, { reason });
+        socket.emit(Events.SELECT_STAT_ERROR, { reason });
     }
 }

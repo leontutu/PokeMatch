@@ -1,4 +1,4 @@
-import { GAME_PHASES } from "../../../shared/constants/constants";
+import { GamePhases } from "../../../shared/constants/constants";
 
 // NOTE: Deprecated. Still usable for quick testing but needs to be updated sooner or later
 
@@ -9,7 +9,7 @@ export const mockRoomState = {
         { client: { name: "Bar" }, isReady: false },
     ],
     game: {
-        phase: GAME_PHASES.POKEMON_REVEAL,
+        phase: GamePhases.POKEMON_REVEAL,
         lockedStats: ["speed", "defense"],
         flags: {},
         winner: "Foo",

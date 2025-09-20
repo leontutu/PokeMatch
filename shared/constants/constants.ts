@@ -5,7 +5,7 @@
 /**
  * Socket.IO event names for communication between client and server.
  */
-export enum EVENTS {
+export enum Events {
     // Client to Server events
     NAME_ENTER = "nameEnter", // Client submits their name
     READY = "ready", // Client waiting in Room is ready to start a game
@@ -24,7 +24,7 @@ export enum EVENTS {
  * Commands to the game on the server
  * OPTIMIZE: Refactor server commands to server and use a union type
  */
-export enum GAME_COMMANDS {
+export enum GameCommands {
     // from client
     SELECT_STAT = "selectStat", // Client selects a stat, payload being the stat name as string
 
@@ -37,14 +37,14 @@ export enum GAME_COMMANDS {
 /**
  * Enumerates the different phases of the game.
  */
-export enum GAME_PHASES {
+export enum GamePhases {
     SELECT_STAT = "selectStat",
     BATTLE = "battle",
     GAME_FINISHED = "gameFinished",
     POKEMON_REVEAL = "pokemonReveal",
 }
 
-export enum STAT_NAMES {
+export enum StatNames {
     HP = "hp",
     ATTACK = "attack",
     DEFENSE = "defense",
@@ -55,7 +55,7 @@ export enum STAT_NAMES {
     HEIGHT = "height",
 }
 
-export enum TYPES {
+export enum PokemonTypes {
     NORMAL = "normal",
     FIRE = "fire",
     FIGHTING = "fighting",
@@ -80,7 +80,7 @@ export enum TYPES {
 /**
  * Timing constants for various game events.
  */
-export enum TIMINGS {
+export enum Timings {
     BATTLE_DURATION = 12000,
     PAGE_TRANSITION = 1500,
     POKEMON_REVEAL_DURATION = 13000,

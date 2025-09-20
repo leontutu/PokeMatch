@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
-import { EVENTS, GAME_COMMANDS, STAT_NAMES } from "../../../shared/constants/constants.js";
-import { DISPLAY_TO_STAT } from "../constants/constants.js";
+import { Events, GameCommands, StatNames } from "../../../shared/constants/constants.js";
+import { DisplayToStat } from "../constants/constants.js";
 import { RoomState } from "../types.js";
 
 type SocketContextType = {
@@ -14,22 +14,22 @@ type SocketContextType = {
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
     sendReady: () => void;
-    sendSelectStat: (stat: STAT_NAMES) => void;
+    sendSelectStat: (stat: StatNames) => void;
     sendLeaveRoom: () => void;
 };
 
-    // const value = {
-    //     socket,
-    //     roomState: roomState,
-    //     roomCrashSignal,
-    //     nameErrorSignal,
-    //     selectStatErrorSignal,
-    //     setNameErrorSignal,
-    //     sendName,
-    //     sendReady,
-    //     sendSelectStat,
-    //     sendLeaveRoom,
-    // };
+// const value = {
+//     socket,
+//     roomState: roomState,
+//     roomCrashSignal,
+//     nameErrorSignal,
+//     selectStatErrorSignal,
+//     setNameErrorSignal,
+//     sendName,
+//     sendReady,
+//     sendSelectStat,
+//     sendLeaveRoom,
+// };
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
@@ -43,9 +43,9 @@ export const useSocket = () => {
 
 type SocketContextProps = {
     children: ReactNode;
-}
+};
 
-export const SocketProvider = ({ children }:SocketContextProps) => {
+export const SocketProvider = ({ children }: SocketContextProps) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [roomState, setRoomState] = useState<RoomState | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
@@ -72,22 +72,22 @@ export const SocketProvider = ({ children }:SocketContextProps) => {
             );
         });
 
-        socket.on(EVENTS.UPDATE, (data) => {
+        socket.on(Events.UPDATE, (data) => {
             setRoomState(data);
         });
 
-        socket.on(EVENTS.ROOM_CRASH, () => {
+        socket.on(Events.ROOM_CRASH, () => {
             setRoomCrashSignal(!roomCrashSignal);
             setTimeout(() => {
                 setRoomState(null);
             }, 500);
         });
 
-        socket.on(EVENTS.NAME_ERROR, () => {
+        socket.on(Events.NAME_ERROR, () => {
             setNameErrorSignal(true);
         });
 
-        socket.on(EVENTS.SELECT_STAT_ERROR, () => {
+        socket.on(Events.SELECT_STAT_ERROR, () => {
             setSelectStatErrorSignal(true);
         });
 
@@ -100,28 +100,28 @@ export const SocketProvider = ({ children }:SocketContextProps) => {
 
     const sendName = (name: string) => {
         if (socket) {
-            socket.emit(EVENTS.NAME_ENTER, name);
+            socket.emit(Events.NAME_ENTER, name);
         }
     };
 
     const sendReady = () => {
         if (socket) {
-            socket.emit(EVENTS.READY);
+            socket.emit(Events.READY);
         }
     };
 
     const sendLeaveRoom = () => {
         setRoomState(null);
         if (socket) {
-            socket.emit(EVENTS.LEAVE_ROOM);
+            socket.emit(Events.LEAVE_ROOM);
         }
     };
 
-    const sendSelectStat = (stat: STAT_NAMES) => {
+    const sendSelectStat = (stat: StatNames) => {
         if (socket) {
-            const statAsInJson = DISPLAY_TO_STAT.get(stat);
-            socket.emit(EVENTS.GAME_COMMAND, {
-                actionType: GAME_COMMANDS.SELECT_STAT,
+            const statAsInJson = DisplayToStat.get(stat);
+            socket.emit(Events.GAME_COMMAND, {
+                actionType: GameCommands.SELECT_STAT,
                 payload: statAsInJson,
             });
         }
@@ -141,11 +141,7 @@ export const SocketProvider = ({ children }:SocketContextProps) => {
         sendLeaveRoom,
     };
 
-    return (
-        <SocketContext.Provider value={value}>
-            {children}
-        </SocketContext.Provider>
-    );
+    return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };
 
 function getOrCreateUUID() {

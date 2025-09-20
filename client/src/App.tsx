@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { PAGES } from "./constants/constants.js";
-import { TIMINGS, GAME_PHASES } from "../../shared/constants/constants.js";
+import { Pages } from "./constants/constants.js";
+import { Timings, GamePhases } from "../../shared/constants/constants.js";
 import { useSocket } from "./contexts/SocketContext.jsx";
 import { NavigationHandler } from "./types.js";
 import HomePage from "./components/menu/home/HomePage.js";
@@ -18,7 +18,7 @@ function App() {
     const audioRef = useRef<HTMLAudioElement>(null);
 
     // const [currentPage, setCurrentPage] = useState(PAGES.POKEMON_REVEAL);
-    const [currentPage, setCurrentPage] = useState(PAGES.HOME);
+    const [currentPage, setCurrentPage] = useState(Pages.HOME);
 
     const [isWipingOut, setIsWipingOut] = useState(false);
     const [isWipingIn, setIsWipingIn] = useState(false);
@@ -36,7 +36,7 @@ function App() {
     });
 
     const handleNavigate: NavigationHandler = useCallback(
-        (page: PAGES, transition: boolean | undefined) => {
+        (page: Pages, transition: boolean | undefined) => {
             if (currentPage === page) return;
             audioRef?.current!.play();
 
@@ -52,7 +52,7 @@ function App() {
                 setCurrentPage(page);
                 setIsWipingOut(false);
                 setIsWipingIn(true);
-            }, TIMINGS.PAGE_TRANSITION - 500);
+            }, Timings.PAGE_TRANSITION - 500);
 
             setTimeout(() => {
                 setIsWipingIn(false);
@@ -63,19 +63,19 @@ function App() {
 
     const renderPage = () => {
         switch (currentPage) {
-            case PAGES.HOME:
+            case Pages.HOME:
                 return <HomePage onNavigate={handleNavigate} />;
-            case PAGES.ENTER_NAME:
+            case Pages.ENTER_NAME:
                 return <EnterNamePage onNavigate={handleNavigate} />;
-            case PAGES.ROOM:
+            case Pages.ROOM:
                 return <RoomPage onNavigate={handleNavigate} />;
-            case PAGES.SELECT_STAT:
+            case Pages.SELECT_STAT:
                 return <SelectStatPage onNavigate={handleNavigate} />;
-            case PAGES.BATTLE:
+            case Pages.BATTLE:
                 return <BattlePage onNavigate={handleNavigate} />;
-            case PAGES.VICTORY:
+            case Pages.VICTORY:
                 return <VictoryPage onNavigate={handleNavigate} />;
-            case PAGES.POKEMON_REVEAL:
+            case Pages.POKEMON_REVEAL:
                 return <PokemonRevealPage onNavigate={handleNavigate} />;
             default:
                 return <HomePage onNavigate={handleNavigate} />;
@@ -87,14 +87,14 @@ function App() {
             return;
         }
         if (roomCrashSignal) {
-            setCurrentPage(PAGES.HOME);
+            setCurrentPage(Pages.HOME);
             alert("There was an oopsie on the server and your room crashed! Returning to Home...");
         }
     }, [roomCrashSignal, isFirstRender]);
 
     useEffect(() => {
         if (import.meta.env.VITE_USE_MOCKS) {
-            handleNavigate(PAGES.POKEMON_REVEAL, false);
+            handleNavigate(Pages.POKEMON_REVEAL, false);
         }
     }, [handleNavigate]);
 
@@ -102,17 +102,17 @@ function App() {
         if (roomState) {
             if (roomState.game) {
                 switch (roomState.game.phase) {
-                    case GAME_PHASES.GAME_FINISHED:
-                        handleNavigate(PAGES.VICTORY, true);
+                    case GamePhases.GAME_FINISHED:
+                        handleNavigate(Pages.VICTORY, true);
                         break;
-                    case GAME_PHASES.BATTLE:
-                        handleNavigate(PAGES.BATTLE, true);
+                    case GamePhases.BATTLE:
+                        handleNavigate(Pages.BATTLE, true);
                         break;
-                    case GAME_PHASES.SELECT_STAT:
-                        handleNavigate(PAGES.SELECT_STAT, true);
+                    case GamePhases.SELECT_STAT:
+                        handleNavigate(Pages.SELECT_STAT, true);
                         break;
-                    case GAME_PHASES.POKEMON_REVEAL:
-                        handleNavigate(PAGES.POKEMON_REVEAL, true);
+                    case GamePhases.POKEMON_REVEAL:
+                        handleNavigate(Pages.POKEMON_REVEAL, true);
                         break;
                 }
             }

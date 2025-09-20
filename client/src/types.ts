@@ -1,6 +1,6 @@
-import { GAME_PHASES, STAT_NAMES } from "../../shared/constants/constants";
+import { GamePhases, StatNames } from "../../shared/constants/constants";
 import { Pokemon, Stat } from "../../shared/types/types";
-import { PAGES } from "./constants/constants";
+import { Pages } from "./constants/constants";
 
 export type RoomState = {
     id: number;
@@ -14,8 +14,8 @@ export type ClientRecord = {
 };
 
 export type GameState = {
-    phase: GAME_PHASES;
-    lockedStats: STAT_NAMES[];
+    phase: GamePhases;
+    lockedStats: StatNames[];
     winner: string | null;
     you: PlayerState;
     opponent: PlayerState;
@@ -36,7 +36,7 @@ export type BattleStats = {
     opponentPokemonImgUrl: string;
 };
 
-export type NavigationHandler = (page: PAGES, param?: boolean) => void;
+export type NavigationHandler = (page: Pages, param?: boolean) => void;
 
 // export const mockRoomState = {
 //     id: "0",

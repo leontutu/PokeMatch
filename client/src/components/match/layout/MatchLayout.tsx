@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
-import { PAGES } from "../../../constants/constants";
+import { Pages } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
 import styles from "./MatchLayout.module.css";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
@@ -33,7 +33,7 @@ export default function MatchLayout({ children, onNavigate }: MatchLayoutProps) 
 
     const handleLeaveConfirm = () => {
         sendLeaveRoom();
-        onNavigate(PAGES.HOME, true);
+        onNavigate(Pages.HOME, true);
         setIsLeaveDialogOpen(false);
     };
 

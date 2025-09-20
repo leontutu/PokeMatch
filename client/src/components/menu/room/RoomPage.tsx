@@ -22,7 +22,7 @@ import styles from "./RoomPage.module.css";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
-import { PAGES } from "../../../constants/constants";
+import { Pages } from "../../../constants/constants";
 import { NavigationHandler } from "../../../types";
 
 type RoomPageProps = {
@@ -49,7 +49,7 @@ export default function RoomPage({ onNavigate }: RoomPageProps) {
 
     useEffect(() => {
         if (roomState?.game) {
-            onNavigate(PAGES.POKEVIEWER);
+            onNavigate(Pages.POKEVIEWER);
         }
     }, [roomState, onNavigate]);
 
@@ -68,21 +68,13 @@ export default function RoomPage({ onNavigate }: RoomPageProps) {
         <HomeLayout>
             <div className={styles.roomPage}>
                 <div className={styles.mainContent}>
-                    <h1 className={styles.roomTitle}>
-                        Room ID: {roomState.id}
-                    </h1>
+                    <h1 className={styles.roomTitle}>Room ID: {roomState.id}</h1>
                     <ParticipantList participants={roomState.clientRecords} />
                 </div>
 
                 <div className={styles.footer}>
-                    <ReadyButton
-                        amIReady={amIReady}
-                        handleReadyClick={handleReadyClick}
-                    />
-                    <StatusText
-                        amIReady={amIReady}
-                        isGameStarted={roomState.game !== null}
-                    />
+                    <ReadyButton amIReady={amIReady} handleReadyClick={handleReadyClick} />
+                    <StatusText amIReady={amIReady} isGameStarted={roomState.game !== null} />
                 </div>
             </div>
         </HomeLayout>

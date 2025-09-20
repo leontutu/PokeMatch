@@ -1,20 +1,20 @@
-import { STAT_NAMES, TYPES } from "../constants/constants.js";
+import { StatNames, PokemonTypes } from "../constants/constants.js";
 
 export type Pokemon = {
     id: number;
     name: string;
-    types: TYPES[];
+    types: PokemonTypes[];
     stats: PokemonStats;
     sprites: Sprites;
 };
 
 export type Stat = {
-    name: STAT_NAMES;
+    name: StatNames;
     value: number;
 };
 
 export type PokemonStats = {
-    [key in STAT_NAMES]: number;
+    [key in StatNames]: number;
 };
 
 export type Sprites = {
