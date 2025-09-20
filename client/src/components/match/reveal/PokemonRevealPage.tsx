@@ -37,7 +37,7 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
     const [playCry] = useSound(soundUrl, { volume: 1 });
 
     const [playWiggle, { stop: stopWiggle }] = useSound(`/pobeballWiggle.mp3`, {
-        volume: 1,
+        volume: 0.5,
         loop: true,
     });
 
@@ -54,7 +54,6 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
 
         const pageTransitionTimeout = setTimeout(() => {
             setPageTransitionOver(true);
-            console.log("page transition over");
             setTimeout(() => setFlashActive(true), INITIAL_DELAY);
             setTimeout(() => setCountDownFinished(true), INITIAL_DELAY + REVEAL_DELAY_AFTER_FLASH);
             setTimeout(() => setCryReady(true), INITIAL_DELAY + CRY_DELAY_AFTER_FLASH);
@@ -67,7 +66,6 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
 
     useEffect(() => {
         if (!countDownFinished && pageTransitionOver) {
-            console.log("play wiggle");
             playWiggle();
         }
 
