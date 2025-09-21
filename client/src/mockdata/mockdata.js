@@ -16,8 +16,8 @@ export const mockRoomState = {
         you: {
             name: "Foo",
             points: 0,
-            challengeStat: { name: "speed", value: 100 },
-            challengedStat: { name: "defense", value: 100 },
+            challengeStat: { name: "speed", value: 120 },
+            challengedStat: { name: "defense", value: 40 },
             pokemon: {
                 id: 25,
                 name: "Pikachu",
@@ -34,7 +34,7 @@ export const mockRoomState = {
                     defense: 40,
                     specialAttack: 50,
                     specialDefense: 50,
-                    speed: 90,
+                    speed: 120,
                     height: 4,
                     weight: 3,
                 },
