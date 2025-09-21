@@ -9,7 +9,7 @@ export const mockRoomState = {
         { client: { name: "Bar" }, isReady: false },
     ],
     game: {
-        phase: GamePhases.POKEMON_REVEAL,
+        phase: GamePhases.BATTLE,
         lockedStats: ["speed", "defense"],
         flags: {},
         winner: "Foo",

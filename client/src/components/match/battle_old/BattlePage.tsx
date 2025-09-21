@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
+import BattleGrid from "./BattleGrid";
+import Countdown from "./Countdown";
 import { NavigationHandler } from "../../../types";
 
 type BattlePageProps = {
@@ -22,14 +24,39 @@ type BattlePageProps = {
  */
 export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { roomState } = useSocket();
-
-    if (!roomState || !roomState.game) {
+    const [displayState, setDisplayState] = useState(roomState);
+    const [isRevealed, setIsRevealed] = useState(false);
+    const [countdown, setCountdown] = useState(5);
+    
+    if (!roomState || !roomState.game || !displayState || !displayState.game) {
         return <>Loading...</>;
     }
-    const battleStats = useBattleLogic(roomState.game);
+    const battleStats = useBattleLogic(displayState.game);
     if (!battleStats) {
         return <>Loading...</>;
     }
+
+
+    // This effect manages the countdown and the final reveal
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+            return () => clearTimeout(timer);
+        } else {
+            setIsRevealed(true);
+        }
+    }, [countdown]);
+
+    // Ensures the display state doesn't change when stats are reset
+    useEffect(() => {
+        if (!roomState || !roomState.game) return;
+        if (
+            roomState.game.you.challengeStat &&
+            roomState.game.you.challengedStat.name
+        ) {
+            setDisplayState(roomState);
+        }
+    }, [roomState]);
 
     return (
         <MatchLayout onNavigate={onNavigate}>
@@ -40,7 +67,10 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                     isOpponent
                 />
 
-                <div className={styles.battleSection}></div>
+                <div className={styles.battleSection}>
+                    <Countdown count={countdown} />
+                    <BattleGrid isRevealed={isRevealed} stats={battleStats} />
+                </div>
 
                 <PokemonDisplay
                     pokemonName={battleStats.yourPokemon.name}
