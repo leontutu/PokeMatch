@@ -34,7 +34,19 @@ export type BattleStats = {
     opponentPokemon: Pokemon;
     yourPokemonImgUrl: string;
     opponentPokemonImgUrl: string;
-};
+    yourChallengeStat: Stat;
+    yourChallengedStat: Stat;
+    opponentChallengeStat: Stat;
+    opponentChallengedStat: Stat;
+    yourChallengeStatDisplay: string | undefined;
+    yourChallengedStatDisplay: string | undefined;
+    opponentChallengeStatDisplay: string | undefined;
+    opponentChallengedStatDisplay: string | undefined;
+    yourChallengeOutcome: boolean;
+    isYourChallengeTie: boolean;
+    opponentChallengeOutcome: boolean;
+    isOpponentChallengeTie: boolean;
+} | null;
 
 export type NavigationHandler = (page: Pages, param?: boolean) => void;
 
