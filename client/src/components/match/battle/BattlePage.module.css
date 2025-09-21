@@ -16,4 +16,5 @@
     position: relative;
     border-top: 1px solid #4a5568;
     border-bottom: 1px solid #4a5568;
+    z-index: 1;
 }

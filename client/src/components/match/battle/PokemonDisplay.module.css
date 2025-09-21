@@ -1,8 +1,8 @@
 .opponentPokemonSection,
 .yourPokemonSection {
-    flex: 1.2;
+    height: 27.5%;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
     display: flex;
     align-items: center;
@@ -19,6 +19,7 @@
     max-height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 0 1rem rgba(237, 242, 247, 0.2));
+    z-index: 3;
 }
 
 .yourPokemonImg {
@@ -45,4 +46,60 @@
     bottom: 15%;
     right: -0.25rem;
     z-index: 2;
+}
+
+.youAttack {
+    animation: youAttackAnimation 2s ease-out;
+}
+
+.opponentAttack {
+    animation: opponentAttackAnimation 2s ease-out;
+}
+
+@keyframes youAttackAnimation {
+    0% {
+        transform: 0;
+    }
+    25% {
+        transform: scale(1.4) translateY(-1rem) rotate(-21deg);
+    }
+    50% {
+        transform: scale(1.4) translateY(-1rem) rotate(-21deg);
+    }
+    60% {
+        transform: scale(1.4) translateY(-22rem) rotate(-21deg);
+    }
+    65% {
+        transform: scale(1.4) translateY(-20rem) rotate(-21deg);
+    }
+    85% {
+        transform: scale(1.4) translateY(-18rem) rotate(-21deg);
+    }
+    100% {
+        transform: 0;
+    }
+}
+
+@keyframes opponentAttackAnimation {
+    0% {
+        transform: 0;
+    }
+    25% {
+        transform: scale(1.4) translateY(1rem) rotate(-21deg);
+    }
+    50% {
+        transform: scale(1.4) translateY(1rem) rotate(-21deg);
+    }
+    57% {
+        transform: scale(1.4) translateY(20rem) rotate(-21deg);
+    }
+    59% {
+        transform: scale(1.4) translateY(16rem) rotate(-21deg);
+    }
+    85% {
+        transform: scale(1.4) translateY(12rem) rotate(-21deg);
+    }
+    100% {
+        transform: 0;
+    }
 }

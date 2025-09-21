@@ -1,11 +1,11 @@
 import styles from "./PokemonDisplay.module.css";
 import PokemonLabel from "./PokemonLabel";
 
-
 type PokemonDisplayProps = {
-    pokemonName: string ;
+    pokemonName: string;
     imageUrl: string;
     isOpponent?: boolean;
+    attack: boolean;
 };
 /**
  * Renders a display section for a single Pokémon in the battle.
@@ -21,23 +21,29 @@ type PokemonDisplayProps = {
  *   isOpponent={true}
  * />
  */
-export default function PokemonDisplay({ pokemonName, imageUrl, isOpponent = false }: PokemonDisplayProps) {
-    const sectionStyle = isOpponent
-        ? styles.opponentPokemonSection
-        : styles.yourPokemonSection;
-    const imageStyle = isOpponent
-        ? styles.opponentPokemonImg
-        : styles.yourPokemonImg;
-    const labelStyle = isOpponent
-        ? styles.opponentPokemonLabel
-        : styles.yourPokemonLabel;
+export default function PokemonDisplay({
+    pokemonName,
+    imageUrl,
+    attack,
+    isOpponent = false,
+}: PokemonDisplayProps) {
+    const sectionStyle = isOpponent ? styles.opponentPokemonSection : styles.yourPokemonSection;
+    const imageStyle = isOpponent ? styles.opponentPokemonImg : styles.yourPokemonImg;
+    const labelStyle = isOpponent ? styles.opponentPokemonLabel : styles.yourPokemonLabel;
 
     return (
         <div className={sectionStyle}>
             <div className={labelStyle}>
                 <PokemonLabel pokemonName={pokemonName} />
             </div>
-            <img src={imageUrl} className={imageStyle} alt={pokemonName} />
+            <img
+                src={imageUrl}
+                className={`
+                    ${imageStyle} 
+                    ${attack ? (isOpponent ? styles.opponentAttack : styles.youAttack) : ""}
+                `}
+                alt={pokemonName}
+            />
         </div>
     );
 }
