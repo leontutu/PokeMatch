@@ -42,11 +42,3 @@ export default function BattleField({
         </>
     );
 }
-
-// {
-/* <StatBubble
-    label={roomState.game.opponent.challengeStat.name.toUpperCase()}
-    flipped={true}
-    className={`${styles.opponentStatBubble} ${isPhase2 ? "" : styles.hidden}`}
-/> */
-// }

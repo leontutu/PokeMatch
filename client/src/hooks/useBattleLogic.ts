@@ -29,7 +29,7 @@ import { GameState, BattleStats } from "../types.js";
  * @param  gameState - The current game state from the `roomState`.
  * @returns An object containing all necessary computed values for rendering the battle page.
  */
-export const useBattleLogic = (gameState: GameState): BattleStats | null => {
+export const useBattleLogic = (gameState: GameState | null | undefined): BattleStats => {
     return useMemo(() => {
         if (!gameState || !gameState.you.challengeStat) {
             return null;

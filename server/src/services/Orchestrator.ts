@@ -74,7 +74,7 @@ export default class Orchestrator {
             if (client.roomId) {
                 if (this.roomManager.hasRoom(client.roomId)) {
                     this.roomManager.clearTimeoutForRoom(client.roomId);
-                    this.#updateRoomClients(client.roomId);
+                    this.#updateAllRoomClients(client.roomId);
                 } else {
                     this.clientManager.resetClients([client]);
                 }
@@ -125,7 +125,7 @@ export default class Orchestrator {
         const roomId = this.#assignClientToRoom(client);
 
         this.#handleRoomErrors(() => {
-            this.#updateRoomClients(roomId);
+            this.#updateAllRoomClients(roomId);
         }, socket);
     }
 
@@ -146,7 +146,7 @@ export default class Orchestrator {
         this.#handleRoomErrors(() => {
             this.roomManager.setClientOfRoomReady(roomId, client.uuid);
             logger.debug(`[Orchestrator] ${client.name} is ready in room ${roomId}`);
-            this.#updateRoomClients(roomId);
+            this.#updateAllRoomClients(roomId);
 
             if (this.roomManager.isRoomReady(roomId)) {
                 this.#startGame(roomId);
@@ -169,6 +169,29 @@ export default class Orchestrator {
         this.#handleRoomErrors(() => {
             this.roomManager.removeClientFromRoom(roomId, client);
             client.setRoomId(null);
+        }, socket);
+    }
+
+    /**
+     * Handles a client signaling they have finished watching the battle phase animation.
+     * @param socket The client's socket instance.
+     */
+    onBattleEnd(socket: Socket) {
+        const client = this.clientManager.getClient(socket);
+        const roomId = client.roomId;
+
+        assertIsDefined(
+            roomId,
+            `[Orchestrator] onBattlePhaseFinished called for client ${client.uuid} who is not in a room.`
+        );
+
+        this.#handleRoomErrors(() => {
+            // this will only have an effect the first time it's called in a battle phase
+            this.#sendGameCommand(
+                roomId,
+                OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
+            );
+            this.#updateRoomClient(roomId, client);
         }, socket);
     }
 
@@ -196,7 +219,7 @@ export default class Orchestrator {
 
         this.#handleRoomErrors(() => {
             this.#sendGameCommand(roomId, gameCommand);
-            this.#updateRoomClients(roomId);
+            this.#updateAllRoomClients(roomId);
         }, socket);
     }
 
@@ -217,7 +240,7 @@ export default class Orchestrator {
         this.#handleRoomErrors(async () => {
             switch (event.eventType) {
                 case GameEvents.ALL_SELECTED:
-                    this.#updateRoomClients(roomId);
+                    this.#updateAllRoomClients(roomId);
                     this.#startBattle(roomId);
                     break;
                 case GameEvents.INVALID_STAT_SELECT:
@@ -228,7 +251,7 @@ export default class Orchestrator {
                     break;
                 case GameEvents.NEW_BATTLE:
                     await this.#assignNewPokemon(roomId);
-                    this.#updateRoomClients(roomId);
+                    this.#updateAllRoomClients(roomId);
                     break;
                 default:
                     logger.warn(`[Orchestrator] Unknown event type: ${event.eventType}`);
@@ -244,7 +267,7 @@ export default class Orchestrator {
         logger.log(`[Orchestrator] Game starting for room: ${roomId}`);
         this.roomManager.startGame(roomId);
         await this.#assignNewPokemon(roomId);
-        this.#updateRoomClients(roomId);
+        this.#updateAllRoomClients(roomId);
     }
 
     /**
@@ -252,16 +275,17 @@ export default class Orchestrator {
      * @param roomId The ID of the room in battle.
      */
     #startBattle(roomId: number) {
+        // TODO: Clean up here
         logger.debug(`[Orchestrator] Starting battle for room: ${roomId}`);
-        delay(Timings.BATTLE_DURATION).then(() => {
-            this.#handleRoomErrors(() => {
-                this.#sendGameCommand(
-                    roomId,
-                    OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
-                );
-                this.#updateRoomClients(roomId);
-            });
-        });
+        // delay(Timings.BATTLE_DURATION).then(() => {
+        //     this.#handleRoomErrors(() => {
+        //         this.#sendGameCommand(
+        //             roomId,
+        //             OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
+        //         );
+        //         this.#updateRoomClients(roomId);
+        //     });
+        // });
     }
 
     /**
@@ -293,7 +317,7 @@ export default class Orchestrator {
                     OrchestratorToGameCommand.fromSystem(GameCommands.START_SELECT_STAT)
                 );
             });
-            this.#updateRoomClients(roomId);
+            this.#updateAllRoomClients(roomId);
         });
     }
 
@@ -316,13 +340,25 @@ export default class Orchestrator {
      * Sends the latest game state to every client in a specific room.
      * @param roomId The ID of the room to update.
      */
-    #updateRoomClients(roomId: number) {
+    #updateAllRoomClients(roomId: number) {
         this.#forEachRoomClient(roomId, (client: Client) => {
             if (!client.socket) return;
             const room = this.roomManager.getRoom(roomId);
             const clientGameState = room.toClientState(client.uuid);
             this.socketService.emitUpdate(client.socket, clientGameState);
         });
+    }
+
+    /**
+     * Sends the latest game state to a specific client in a specific room.
+     * @param roomId The ID of the room to update.
+     * @param client The client to update.
+     */
+    #updateRoomClient(roomId: number, client: Client) {
+        if (!client.socket) return;
+        const room = this.roomManager.getRoom(roomId);
+        const clientGameState = room.toClientState(client.uuid);
+        this.socketService.emitUpdate(client.socket, clientGameState);
     }
 
     //================================================================

@@ -10,7 +10,7 @@ type BattleColumnsProps = {
 export default function BattleColumns({
     yourValue,
     opponentValue,
-    setColumnsFinished: setBattleFinished,
+    setColumnsFinished,
 }: BattleColumnsProps) {
     const [currentUpperHeight, setCurrentUpperHeight] = useState(0);
     const [currentLowerHeight, setCurrentLowerHeight] = useState(0);
@@ -78,14 +78,19 @@ export default function BattleColumns({
 
     // both columns finished growing
     useEffect(() => {
+        let [timerA, timerB]: ReturnType<typeof setTimeout>[] = [];
         if (isGrowing.upper && isGrowing.lower) {
-            setTimeout(() => {
+            timerA = setTimeout(() => {
                 setGrowingFinished(true);
             }, DELAY_BETWEEN_GROWTH_AND_OUTCOME);
-            setTimeout(() => {
-                setBattleFinished(((prev: number) => prev + 1) as unknown as number); // oof
+            timerB = setTimeout(() => {
+                setColumnsFinished(((prev: number) => prev + 1) as unknown as number); // oof
             }, DELAY_BETWEEN_GROWTH_AND_FINISH);
         }
+        return () => {
+            clearTimeout(timerA);
+            clearTimeout(timerB);
+        };
     }, [isGrowing]);
 
     return (

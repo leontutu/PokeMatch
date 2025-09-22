@@ -86,13 +86,8 @@ export default class Game extends EventEmitter {
     }
 
     #handleBattleEnd() {
+        if (this.phase !== GamePhases.BATTLE) return;
         this.#evaluateBattleOutcome();
-    }
-
-    #handleGameEnd() {
-        this.winner = this.players.reduce((a, b) => (a.points > b.points ? a : b)).name;
-        this.phase = GamePhases.GAME_FINISHED;
-        this.#emitGameEvent(GameEvents.GAME_FINISHED);
     }
 
     #handleStartSelectStat() {
@@ -152,7 +147,7 @@ export default class Game extends EventEmitter {
         }
 
         if (this.#isThereAWinner()) {
-            this.#handleGameEnd();
+            this.#gameEnd();
         } else {
             this.#newBattle();
         }
@@ -163,6 +158,12 @@ export default class Game extends EventEmitter {
         this.lockedStats.push(this.players[1].selectedStat!.name);
         this.players.forEach((p) => p.resetSelectedStat());
         this.phase = GamePhases.SELECT_STAT;
+    }
+
+    #gameEnd() {
+        this.winner = this.players.reduce((a, b) => (a.points > b.points ? a : b)).name;
+        this.phase = GamePhases.GAME_FINISHED;
+        this.#emitGameEvent(GameEvents.GAME_FINISHED);
     }
 
     #newBattle() {
