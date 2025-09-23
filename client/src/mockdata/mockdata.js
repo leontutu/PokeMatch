@@ -13,7 +13,9 @@ export const mockRoomState = {
         lockedStats: ["speed", "defense"],
         flags: {},
         winner: "Foo",
+        firstMove: 1,
         you: {
+            inGameId: 1,
             name: "Foo",
             points: 0,
             challengeStat: { name: "speed", value: 120 },
@@ -41,6 +43,7 @@ export const mockRoomState = {
             },
         },
         opponent: {
+            inGameId: 2,
             name: "Bar",
             points: 0,
             challengeStat: { name: "defense", value: 105 },
