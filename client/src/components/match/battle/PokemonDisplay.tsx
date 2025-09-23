@@ -20,6 +20,8 @@ type PokemonDisplayProps = {
  *   pokemonName="Pikachu"
  *   imageUrl="https://example.com/pikachu.png"
  *   isOpponent={true}
+ *   attack,
+ *   stumble,
  * />
  */
 export default function PokemonDisplay({
@@ -29,7 +31,9 @@ export default function PokemonDisplay({
     stumble,
     isOpponent = false,
 }: PokemonDisplayProps) {
-    const sectionStyle = isOpponent ? styles.opponentPokemonSection : styles.yourPokemonSection;
+    const sectionStyle = `${
+        isOpponent ? styles.opponentPokemonSection : styles.yourPokemonSection
+    } ${attack ? styles.highZIndex : ""}`;
     const imageStyle = isOpponent ? styles.opponentPokemonImg : styles.yourPokemonImg;
     const labelStyle = isOpponent ? styles.opponentPokemonLabel : styles.yourPokemonLabel;
 
