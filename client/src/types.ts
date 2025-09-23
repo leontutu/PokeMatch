@@ -1,5 +1,5 @@
 import { GamePhases, StatNames } from "../../shared/constants/constants";
-import { Pokemon, Stat } from "../../shared/types/types";
+import { Pokemon, Stat, PlayerInGameId } from "../../shared/types/types";
 import { Pages } from "./constants/constants";
 
 export type RoomState = {
@@ -22,6 +22,7 @@ export type GameState = {
 };
 
 export type PlayerState = {
+    inGameId: PlayerInGameId;
     name: string;
     points: number;
     challengeStat: Stat;

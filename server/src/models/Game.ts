@@ -1,12 +1,12 @@
-import logger from "../utils/Logger.js";
-import Player from "./Player.js";
+import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
+import { PlayerInGameId, Pokemon, Stat } from "../../../shared/types/types.js";
 import { GameEvents } from "../constants/constants.js";
 import { EventEmitter } from "events";
-import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
-import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import { Pokemon, Stat } from "../../../shared/types/types.js";
 import { GameCommands } from "../../../shared/constants/constants.js";
-import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
+import logger from "../utils/Logger.js";
+import Player from "./Player.js";
+import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
+import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -20,7 +20,9 @@ export default class Game extends EventEmitter {
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
         super();
-        this.players = participants.map((p) => new Player(p.name, p.uuid));
+        this.players = participants.map(
+            (p, index) => new Player(p.name, p.uuid, (index + 1) as PlayerInGameId)
+        );
         this.phase = GamePhases.SELECT_STAT;
         this.lockedStats = [];
         this.winner = null;
@@ -268,6 +270,7 @@ export default class Game extends EventEmitter {
 
 // Shape of the data sent to the client
 interface ClientPlayer {
+    inGameId: PlayerInGameId;
     name: string;
     uuid: string;
     points: number;

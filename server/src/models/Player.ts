@@ -1,4 +1,4 @@
-import { Pokemon, Stat } from "../../../shared/types/types.js";
+import { PlayerInGameId, Pokemon, Stat } from "../../../shared/types/types.js";
 
 /**
  * Represents a player in a game session.
@@ -12,7 +12,7 @@ export default class Player {
      * @param name The player's chosen name.
      * @param uuid The player's persistent unique identifier.
      */
-    constructor(public name: string, public uuid: string) {
+    constructor(public name: string, public uuid: string, public inGameId: PlayerInGameId) {
         this.points = 0;
         this.pokemon = null;
         this.selectedStat = null;
@@ -54,6 +54,7 @@ export default class Player {
      */
     toJSON() {
         return {
+            inGameId: this.inGameId,
             name: this.name,
             uuid: this.uuid,
             points: this.points,
