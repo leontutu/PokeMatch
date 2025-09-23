@@ -15,9 +15,12 @@ export default function BattleColumns({
     const [currentUpperHeight, setCurrentUpperHeight] = useState(0);
     const [currentLowerHeight, setCurrentLowerHeight] = useState(0);
 
+    const [upperValue, setUpperValue] = useState(0);
+    const [lowerValue, setLowerValue] = useState(0);
+
     const total = yourValue + opponentValue;
-    const lowerHeightPercent = Math.round((yourValue / total) * 100);
-    const upperHeightPercent = Math.round((opponentValue / total) * 100);
+    const lowerHeightPercent = (yourValue / total) * 100;
+    const upperHeightPercent = (opponentValue / total) * 100;
 
     let upperGrowthInterval: ReturnType<typeof setInterval>;
     let lowerGrowthInterval: ReturnType<typeof setInterval>;
@@ -46,10 +49,13 @@ export default function BattleColumns({
     useEffect(() => {
         if (!statBubbleAnimFinished) return;
         upperGrowthInterval = setInterval(() => {
+            // setUpperValue(Math.round((currentUpperHeight / 100) * total));
             setCurrentUpperHeight((prev) => {
+                setUpperValue(Math.round((prev / 100) * total));
                 if (prev < upperHeightPercent) {
                     return prev + 1;
                 } else {
+                    setUpperValue(opponentValue);
                     clearInterval(upperGrowthInterval);
                     setIsGrowing((prev) => ({ ...prev, upper: true }));
                     return prev;
@@ -64,9 +70,11 @@ export default function BattleColumns({
         if (!statBubbleAnimFinished) return;
         lowerGrowthInterval = setInterval(() => {
             setCurrentLowerHeight((prev) => {
+                setLowerValue(Math.round((prev / 100) * total));
                 if (prev < lowerHeightPercent) {
                     return prev + 1;
                 } else {
+                    setLowerValue(yourValue);
                     clearInterval(lowerGrowthInterval);
                     setIsGrowing((prev) => ({ ...prev, lower: true }));
                     return prev;
@@ -104,9 +112,7 @@ export default function BattleColumns({
                 `}
                 style={{ height: `${currentUpperHeight}%` }}
             >
-                <span className={styles.percentageText}>
-                    {`${Math.round((currentUpperHeight / 100) * total)}`}
-                </span>
+                <span className={styles.valueText}>{upperValue}</span>
             </div>
             <div
                 className={`
@@ -117,9 +123,7 @@ export default function BattleColumns({
                 `}
                 style={{ height: `${currentLowerHeight}%` }}
             >
-                <span className={styles.percentageText}>
-                    {`${Math.round((currentLowerHeight / 100) * total)}`}
-                </span>
+                <span className={styles.valueText}>{lowerValue}</span>
             </div>
         </div>
     );
