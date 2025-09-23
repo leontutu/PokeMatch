@@ -30,13 +30,11 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
         const isOpponentChallengeTie = opponentChallengedStat.value === yourChallengeStat.value;
         const opponentChallengeOutcome = yourChallengeStat.value < opponentChallengedStat.value;
         //////////////////////////////////////
-        const yourTurnisFirstTurn = gameState.firstMove === gameState.you.inGameId;
-        let challenge1Outcome = yourTurnisFirstTurn
-            ? yourChallengeOutcome
-            : opponentChallengeOutcome;
-        let challenge2Outcome = yourTurnisFirstTurn
-            ? opponentChallengeOutcome
-            : yourChallengeOutcome;
+        const isYouFirst = gameState.firstMove === gameState.you.inGameId;
+        const isChallenge1Win = isYouFirst ? yourChallengeOutcome : opponentChallengeOutcome;
+        const isChallenge2Win = isYouFirst ? opponentChallengeOutcome : yourChallengeOutcome;
+        const isChallenge1Tie = isYouFirst ? isYourChallengeTie : isOpponentChallengeTie;
+        const isChallenge2Tie = isYouFirst ? isOpponentChallengeTie : isYourChallengeTie;
 
         /////////////////////////////////////
 
@@ -57,9 +55,11 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
             isYourChallengeTie,
             opponentChallengeOutcome,
             isOpponentChallengeTie,
-            challenge1Outcome,
-            challenge2Outcome,
-            yourTurnisFirstTurn,
+            isChallenge1Win,
+            isChallenge2Win,
+            isChallenge1Tie,
+            isChallenge2Tie,
+            isYouFirst,
         };
     }, [gameState]);
 };

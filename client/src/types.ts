@@ -48,9 +48,11 @@ export type BattleStats = {
     isYourChallengeTie: boolean;
     opponentChallengeOutcome: boolean;
     isOpponentChallengeTie: boolean;
-    yourTurnisFirstTurn: boolean;
-    challenge1Outcome: boolean;
-    challenge2Outcome: boolean;
+    isYouFirst: boolean;
+    isChallenge1Win: boolean;
+    isChallenge2Win: boolean;
+    isChallenge1Tie: boolean;
+    isChallenge2Tie: boolean;
 } | null;
 
 export type NavigationHandler = (page: Pages, param?: boolean) => void;

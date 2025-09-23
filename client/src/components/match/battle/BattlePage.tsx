@@ -45,13 +45,14 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         if (columnsFinished === 1) {
             console.log("Battle 1 finished");
 
-            // if (battleStats.isYourChallengeTie) {
-            //     console.log("It's a tie!");
-            //     setBattle1Finished(true); // Immediately move to the next battle
-            //     return;
-            // }
+            if (battleStats.isChallenge1Tie) {
+                console.log("It's a tie!");
+                // Immediately move to the next battle
+                setBattle1Finished(true);
+                return;
+            }
 
-            if (battleStats.challenge1Outcome) {
+            if (battleStats.isChallenge1Win) {
                 console.log("You won!");
                 setYouAttack(true);
             } else {
@@ -71,13 +72,14 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         if (columnsFinished === 2) {
             console.log("Battle 2 finished");
 
-            // if (battleStats.isOpponentChallengeTie) {
-            //     console.log("It's a tie!");
-            //     sendBattlePhaseFinished(); // Immediately end the phase
-            //     return;
-            // }
+            if (battleStats.isChallenge2Tie) {
+                console.log("It's a tie!");
+                // Immediately end the phase
+                sendBattlePhaseFinished();
+                return;
+            }
 
-            if (battleStats.challenge2Outcome) {
+            if (battleStats.isChallenge2Win) {
                 console.log("You won!");
                 setYouAttack(true);
             } else {
@@ -109,17 +111,17 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 />
 
                 <div className={styles.battleSection}>
-                    {battle1Finished ? (
+                    {!battle1Finished ? (
                         <BattleField
                             key="your-battle"
-                            yourBattle={battleStats.yourTurnisFirstTurn}
+                            yourBattle={battleStats.isYouFirst}
                             battleStats={battleStats}
                             setColumnsFinished={setColumnsFinished}
                         />
                     ) : (
                         <BattleField
                             key="opponent-battle"
-                            yourBattle={!battleStats.yourTurnisFirstTurn}
+                            yourBattle={!battleStats.isYouFirst}
                             battleStats={battleStats}
                             setColumnsFinished={setColumnsFinished}
                         />
