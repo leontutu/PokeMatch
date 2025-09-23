@@ -28,12 +28,14 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     const battleStats = useBattleLogic(roomState?.game);
     const { isWipingIn } = useUIInfoContext();
     const [columnsFinished, setColumnsFinished] = useState(0);
-    const [battle1Finished, setBattle1Finished] = useState(false);
+    const [isBattle2Start, setIsBattle2Start] = useState(false);
 
     const [youAttacking, setYouAttacking] = useState(false);
     const [oppAttacking, setOppAttacking] = useState(false);
     const [youFlashing, setYouFlashing] = useState(false);
     const [oppFlashing, setOppFlashing] = useState(false);
+
+    const [fadeOutBattleSection, setFadeOutBattleSection] = useState(false);
 
     const youCryUrl = battleStats
         ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.yourPokemon.id}.ogg`
@@ -49,6 +51,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
 
     const ATTACK_ANIMATION_DURATION = 3000;
     const ATTACK_START_TO_IMPACT = 1150;
+    const FADE_OUT_DURATION = 1400;
 
     useEffect(() => {
         if (!battleStats || isWipingIn) return;
@@ -62,7 +65,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
             if (battleStats.isChallenge1Tie) {
                 console.log("It's a tie!");
                 // Immediately move to the next battle
-                setBattle1Finished(true);
+                setIsBattle2Start(true);
                 return;
             }
 
@@ -76,13 +79,17 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
 
             phaseTimeout = setTimeout(() => {
                 console.log("Battle 1 over");
-                setBattle1Finished(true);
                 resetBattleAnims();
+                setFadeOutBattleSection(true);
+                setTimeout(() => {
+                    setIsBattle2Start(true);
+                    setFadeOutBattleSection(false);
+                }, FADE_OUT_DURATION);
             }, ATTACK_ANIMATION_DURATION);
         }
 
         // Second battle phase (opponent's challenge)
-        if (columnsFinished === 2) {
+        if (columnsFinished === 2 || isBattle2Start) {
             console.log("Battle 2 finished");
 
             if (battleStats.isChallenge2Tie) {
@@ -143,25 +150,29 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                     stumble={oppFlashing}
                     isOpponent={true}
                 />
-
-                <div className={styles.battleSection}>
-                    {!battle1Finished ? (
-                        <BattleField
-                            key="your-battle"
-                            yourBattle={battleStats.isYouFirst}
-                            battleStats={battleStats}
-                            isWipingIn={isWipingIn}
-                            setColumnsFinished={setColumnsFinished}
-                        />
-                    ) : (
-                        <BattleField
-                            key="opponent-battle"
-                            yourBattle={!battleStats.isYouFirst}
-                            battleStats={battleStats}
-                            isWipingIn={isWipingIn}
-                            setColumnsFinished={setColumnsFinished}
-                        />
-                    )}
+                <div className={styles.battleSectionWrapper}>
+                    <div
+                        className={`${styles.battleSection} 
+                    ${fadeOutBattleSection ? styles.fadeOut : ""}`}
+                    >
+                        {!isBattle2Start ? (
+                            <BattleField
+                                key="your-battle"
+                                yourBattle={battleStats.isYouFirst}
+                                battleStats={battleStats}
+                                isWipingIn={isWipingIn}
+                                setColumnsFinished={setColumnsFinished}
+                            />
+                        ) : (
+                            <BattleField
+                                key="opponent-battle"
+                                yourBattle={!battleStats.isYouFirst}
+                                battleStats={battleStats}
+                                isWipingIn={isWipingIn}
+                                setColumnsFinished={setColumnsFinished}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 <PokemonDisplay
