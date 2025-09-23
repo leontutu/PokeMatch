@@ -5,20 +5,20 @@ import { BattleStats } from "../../../types";
 
 type BattleFieldProps = {
     battleStats: BattleStats;
-    yourBattle: boolean;
     setColumnsFinished: (n: number) => void;
+    yourBattle: boolean;
 };
 
 export default function BattleField({
     battleStats,
+    setColumnsFinished,
     yourBattle,
-    setColumnsFinished: setBattleFinished,
 }: BattleFieldProps) {
     if (!battleStats) return <>Loading...</>;
     return (
         <>
             <BattleColumns
-                setColumnsFinished={setBattleFinished}
+                setColumnsFinished={setColumnsFinished}
                 yourValue={
                     yourBattle
                         ? battleStats.yourChallengeStat.value

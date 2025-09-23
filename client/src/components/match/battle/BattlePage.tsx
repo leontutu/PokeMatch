@@ -44,13 +44,14 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         // First battle phase (your challenge)
         if (columnsFinished === 1) {
             console.log("Battle 1 finished");
-            if (battleStats.isYourChallengeTie) {
-                console.log("It's a tie!");
-                setBattle1Finished(true); // Immediately move to the next battle
-                return;
-            }
 
-            if (battleStats.yourChallengeStat.value > battleStats.opponentChallengedStat.value) {
+            // if (battleStats.isYourChallengeTie) {
+            //     console.log("It's a tie!");
+            //     setBattle1Finished(true); // Immediately move to the next battle
+            //     return;
+            // }
+
+            if (battleStats.challenge1Outcome) {
                 console.log("You won!");
                 setYouAttack(true);
             } else {
@@ -69,13 +70,14 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         // Second battle phase (opponent's challenge)
         if (columnsFinished === 2) {
             console.log("Battle 2 finished");
-            if (battleStats.isOpponentChallengeTie) {
-                console.log("It's a tie!");
-                sendBattlePhaseFinished(); // Immediately end the phase
-                return;
-            }
 
-            if (battleStats.opponentChallengeStat.value < battleStats.yourChallengedStat.value) {
+            // if (battleStats.isOpponentChallengeTie) {
+            //     console.log("It's a tie!");
+            //     sendBattlePhaseFinished(); // Immediately end the phase
+            //     return;
+            // }
+
+            if (battleStats.challenge2Outcome) {
                 console.log("You won!");
                 setYouAttack(true);
             } else {
@@ -89,8 +91,6 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
             }, ATTACK_ANIMATION_DURATION);
         }
 
-        // Cleanup function to clear the timeout if the component unmounts
-        // or if the effect re-runs.
         return () => clearTimeout(phaseTimeout);
     }, [columnsFinished, battleStats, sendBattlePhaseFinished]);
 
@@ -109,18 +109,18 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 />
 
                 <div className={styles.battleSection}>
-                    {!battle1Finished ? (
+                    {battle1Finished ? (
                         <BattleField
                             key="your-battle"
+                            yourBattle={battleStats.yourTurnisFirstTurn}
                             battleStats={battleStats}
-                            yourBattle={true}
                             setColumnsFinished={setColumnsFinished}
                         />
                     ) : (
                         <BattleField
                             key="opponent-battle"
+                            yourBattle={!battleStats.yourTurnisFirstTurn}
                             battleStats={battleStats}
-                            yourBattle={false}
                             setColumnsFinished={setColumnsFinished}
                         />
                     )}

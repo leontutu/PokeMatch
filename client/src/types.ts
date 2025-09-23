@@ -17,6 +17,7 @@ export type GameState = {
     phase: GamePhases;
     lockedStats: StatNames[];
     winner: string | null;
+    firstMove: PlayerInGameId;
     you: PlayerState;
     opponent: PlayerState;
 };
@@ -47,6 +48,9 @@ export type BattleStats = {
     isYourChallengeTie: boolean;
     opponentChallengeOutcome: boolean;
     isOpponentChallengeTie: boolean;
+    yourTurnisFirstTurn: boolean;
+    challenge1Outcome: boolean;
+    challenge2Outcome: boolean;
 } | null;
 
 export type NavigationHandler = (page: Pages, param?: boolean) => void;

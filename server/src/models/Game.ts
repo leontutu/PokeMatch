@@ -17,6 +17,7 @@ export default class Game extends EventEmitter {
     players: Player[];
     phase: GamePhases;
     lockedStats: StatNames[];
+    firstMove: PlayerInGameId;
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
         super();
@@ -25,6 +26,7 @@ export default class Game extends EventEmitter {
         );
         this.phase = GamePhases.SELECT_STAT;
         this.lockedStats = [];
+        this.firstMove = (Math.floor(Math.random() * 2) + 1) as PlayerInGameId;
         this.winner = null;
     }
 
@@ -169,6 +171,7 @@ export default class Game extends EventEmitter {
     }
 
     #newBattle() {
+        this.firstMove = this.firstMove === 1 ? 2 : (1 as PlayerInGameId);
         this.lockedStats = [];
         this.players.forEach((p) => p.resetSelectedStat());
         this.#emitGameEvent(GameEvents.NEW_BATTLE);
@@ -232,6 +235,7 @@ export default class Game extends EventEmitter {
             phase: this.phase,
             lockedStats: this.lockedStats,
             winner: this.winner,
+            firstMove: this.firstMove,
             you: you,
             opponent: opponent,
         };
@@ -284,6 +288,7 @@ interface ClientGameState {
     phase: GamePhases;
     lockedStats: string[];
     winner: string | null;
+    firstMove: PlayerInGameId;
     you: ClientPlayer;
     opponent: ClientPlayer;
 }

@@ -3,26 +3,6 @@ import { StatToDisplay } from "../constants/constants";
 import { GameState, BattleStats } from "../types.js";
 
 /**
- * @typedef {object} BattleStats
- * @property {object} yourPokemon
- * @property {object} opponentPokemon
- * @property {string} yourPokemonImgUrl
- * @property {string} opponentPokemonImgUrl
- * @property {object} yourChallengeStat
- * @property {object} yourChallengedStat
- * @property {object} opponentChallengeStat
- * @property {object} opponentChallengedStat
- * @property {string} yourChallengeStatDisplay
- * @property {string} yourChallengedStatDisplay
- * @property {string} opponentChallengeStatDisplay
- * @property {string} opponentChallengedStatDisplay
- * @property {boolean} yourChallengeOutcome
- * @property {boolean} isYourChallengeTie
- * @property {boolean} opponentChallengeOutcome
- * @property {boolean} isOpponentChallengeTie
- */
-
-/**
  * Custom hook to encapsulate the business logic for the battle phase.
  * It computes derived state for Pokémon, stats, and battle outcomes from the raw `game`.
  *
@@ -49,6 +29,16 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
 
         const isOpponentChallengeTie = opponentChallengedStat.value === yourChallengeStat.value;
         const opponentChallengeOutcome = yourChallengeStat.value < opponentChallengedStat.value;
+        //////////////////////////////////////
+        const yourTurnisFirstTurn = gameState.firstMove === gameState.you.inGameId;
+        let challenge1Outcome = yourTurnisFirstTurn
+            ? yourChallengeOutcome
+            : opponentChallengeOutcome;
+        let challenge2Outcome = yourTurnisFirstTurn
+            ? opponentChallengeOutcome
+            : yourChallengeOutcome;
+
+        /////////////////////////////////////
 
         return {
             yourPokemon,
@@ -67,6 +57,9 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
             isYourChallengeTie,
             opponentChallengeOutcome,
             isOpponentChallengeTie,
+            challenge1Outcome,
+            challenge2Outcome,
+            yourTurnisFirstTurn,
         };
     }, [gameState]);
 };
