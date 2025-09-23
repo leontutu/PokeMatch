@@ -4,6 +4,7 @@ import styles from "./BattleColumns.module.scss";
 type BattleColumnsProps = {
     yourValue: number;
     opponentValue: number;
+    isStatBubbleAnimFinished: boolean;
     setColumnsFinished: (n: number) => void;
 };
 
@@ -11,6 +12,7 @@ export default function BattleColumns({
     yourValue,
     opponentValue,
     setColumnsFinished,
+    isStatBubbleAnimFinished,
 }: BattleColumnsProps) {
     const [currentUpperHeight, setCurrentUpperHeight] = useState(0);
     const [currentLowerHeight, setCurrentLowerHeight] = useState(0);
@@ -25,29 +27,18 @@ export default function BattleColumns({
     let upperGrowthInterval: ReturnType<typeof setInterval>;
     let lowerGrowthInterval: ReturnType<typeof setInterval>;
 
-    const [statBubbleAnimFinished, setStatBubbleAnimFinished] = useState(false);
-
     const [isGrowing, setIsGrowing] = useState({ upper: false, lower: false });
     const [growingFinished, setGrowingFinished] = useState(false);
 
     const INTERVAL_TIMER = 50;
     const DELAY_BETWEEN_GROWTH_AND_OUTCOME = 500;
     const DELAY_BETWEEN_GROWTH_AND_FINISH = 2500;
-    const STAT_BUBBLE_ANIMATION_DURATION = 2000;
 
     const upperWon = opponentValue > yourValue;
 
-    // wait for stat bubble animation to finish
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setStatBubbleAnimFinished(true);
-        }, STAT_BUBBLE_ANIMATION_DURATION);
-        return () => clearTimeout(timer);
-    }, []);
-
     // upper column growth
     useEffect(() => {
-        if (!statBubbleAnimFinished) return;
+        if (!isStatBubbleAnimFinished) return;
         upperGrowthInterval = setInterval(() => {
             // setUpperValue(Math.round((currentUpperHeight / 100) * total));
             setCurrentUpperHeight((prev) => {
@@ -63,11 +54,11 @@ export default function BattleColumns({
             });
         }, INTERVAL_TIMER);
         return () => clearInterval(upperGrowthInterval);
-    }, [statBubbleAnimFinished]);
+    }, [isStatBubbleAnimFinished]);
 
     // lower column growth
     useEffect(() => {
-        if (!statBubbleAnimFinished) return;
+        if (!isStatBubbleAnimFinished) return;
         lowerGrowthInterval = setInterval(() => {
             setCurrentLowerHeight((prev) => {
                 setLowerValue(Math.round((prev / 100) * total));
@@ -82,7 +73,7 @@ export default function BattleColumns({
             });
         }, INTERVAL_TIMER);
         return () => clearInterval(lowerGrowthInterval);
-    }, [statBubbleAnimFinished]);
+    }, [isStatBubbleAnimFinished]);
 
     // both columns finished growing
     useEffect(() => {
@@ -107,7 +98,7 @@ export default function BattleColumns({
                 className={`
                     ${styles.column} 
                     ${styles.upperColumn} 
-                    ${growingFinished && !upperWon ? styles.opaque : ""}
+                    ${growingFinished && !upperWon ? styles.lowlight : ""}
                     ${growingFinished && upperWon ? styles.upperHighlight : ""}
                 `}
                 style={{ height: `${currentUpperHeight}%` }}
@@ -118,7 +109,7 @@ export default function BattleColumns({
                 className={`
                     ${styles.column} 
                     ${styles.lowerColumn} 
-                    ${growingFinished && upperWon ? styles.opaque : ""}
+                    ${growingFinished && upperWon ? styles.lowlight : ""}
                     ${growingFinished && !upperWon ? styles.lowerHighlight : ""}
                 `}
                 style={{ height: `${currentLowerHeight}%` }}

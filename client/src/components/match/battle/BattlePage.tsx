@@ -7,6 +7,7 @@ import PokemonDisplay from "./PokemonDisplay";
 import { NavigationHandler } from "../../../types";
 import BattleField from "./BattleField";
 import useSound from "use-sound";
+import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 
 type BattlePageProps = {
     onNavigate: NavigationHandler;
@@ -25,6 +26,7 @@ type BattlePageProps = {
 export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { roomState, sendBattleEnd: sendBattlePhaseFinished } = useSocket();
     const battleStats = useBattleLogic(roomState?.game);
+    const { isWipingIn } = useUIInfoContext();
     const [columnsFinished, setColumnsFinished] = useState(0);
     const [battle1Finished, setBattle1Finished] = useState(false);
 
@@ -45,16 +47,11 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
 
     const [playNormalEffective] = useSound("/normal-effective.mp3", { volume: 1 });
 
-    const ATTACK_ANIMATION_DURATION = 2000;
+    const ATTACK_ANIMATION_DURATION = 3000;
     const ATTACK_START_TO_IMPACT = 1150;
 
-    // BUG: This hook keeps firing after the second battle ends. This currently causes no issues.
-    // I could not pinpoint the exact cause, I think a refactor of the animation orchestration
-    // is in order, but i have to triage here and move on for now.
-    // It seems to be caused by children rerendering
-    // I would probably investigate BattleField rerendering first if I were to debug this
     useEffect(() => {
-        if (!battleStats) return;
+        if (!battleStats || isWipingIn) return;
 
         let phaseTimeout: ReturnType<typeof setTimeout>;
 
@@ -110,7 +107,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         }
 
         return () => clearTimeout(phaseTimeout);
-    }, [columnsFinished, battleStats, sendBattlePhaseFinished]);
+    }, [isWipingIn, columnsFinished, battleStats, sendBattlePhaseFinished]);
 
     const playBattleAnims = (yourAttack: boolean) => {
         if (yourAttack) {
@@ -153,6 +150,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                             key="your-battle"
                             yourBattle={battleStats.isYouFirst}
                             battleStats={battleStats}
+                            isWipingIn={isWipingIn}
                             setColumnsFinished={setColumnsFinished}
                         />
                     ) : (
@@ -160,6 +158,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                             key="opponent-battle"
                             yourBattle={!battleStats.isYouFirst}
                             battleStats={battleStats}
+                            isWipingIn={isWipingIn}
                             setColumnsFinished={setColumnsFinished}
                         />
                     )}
