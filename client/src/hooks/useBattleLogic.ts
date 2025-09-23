@@ -24,18 +24,17 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
         const opponentChallengedStat = gameState.opponent.challengedStat;
 
         // Determine outcomes
-        const isYourChallengeTie = yourChallengedStat.value === opponentChallengeStat.value;
-        const yourChallengeOutcome = yourChallengedStat.value > opponentChallengeStat.value;
+        const isYourChallengeTie = yourChallengeStat.value === opponentChallengedStat.value;
+        const yourChallengeOutcome = yourChallengeStat.value > opponentChallengedStat.value;
 
-        const isOpponentChallengeTie = opponentChallengedStat.value === yourChallengeStat.value;
-        const opponentChallengeOutcome = yourChallengeStat.value < opponentChallengedStat.value;
+        const isOpponentChallengeTie = opponentChallengeStat.value === yourChallengedStat.value;
+        const opponentChallengeOutcome = opponentChallengeStat.value < yourChallengedStat.value;
         //////////////////////////////////////
         const isYouFirst = gameState.firstMove === gameState.you.inGameId;
         const isChallenge1Win = isYouFirst ? yourChallengeOutcome : opponentChallengeOutcome;
         const isChallenge2Win = isYouFirst ? opponentChallengeOutcome : yourChallengeOutcome;
         const isChallenge1Tie = isYouFirst ? isYourChallengeTie : isOpponentChallengeTie;
         const isChallenge2Tie = isYouFirst ? isOpponentChallengeTie : isYourChallengeTie;
-
         /////////////////////////////////////
 
         return {
