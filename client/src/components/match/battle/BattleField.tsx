@@ -2,6 +2,7 @@ import BattleColumns from "./BattleColumns";
 import StatBubble from "./StatBubble";
 import styles from "./BattleField.module.css";
 import { BattleStats } from "../../../types";
+import { StatToDisplay } from "../../../constants/constants";
 
 type BattleFieldProps = {
     battleStats: BattleStats;
@@ -33,8 +34,8 @@ export default function BattleField({
             <StatBubble
                 label={
                     yourBattle
-                        ? battleStats.yourChallengeStat.name.toUpperCase()
-                        : battleStats.yourChallengedStat.name.toUpperCase()
+                        ? StatToDisplay.get(battleStats.yourChallengeStat.name)
+                        : StatToDisplay.get(battleStats.opponentChallengeStat.name)
                 }
                 flipped={!yourBattle}
                 className={yourBattle ? styles.youStatBubble : styles.opponentStatBubble}
