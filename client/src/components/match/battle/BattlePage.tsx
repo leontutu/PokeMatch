@@ -6,6 +6,7 @@ import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
 import { NavigationHandler } from "../../../types";
 import BattleField from "./BattleField";
+import useSound from "use-sound";
 
 type BattlePageProps = {
     onNavigate: NavigationHandler;
@@ -26,10 +27,26 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     const battleStats = useBattleLogic(roomState?.game);
     const [columnsFinished, setColumnsFinished] = useState(0);
     const [battle1Finished, setBattle1Finished] = useState(false);
-    const [youAttack, setYouAttack] = useState(false);
-    const [opponentAttack, setOpponentAttack] = useState(false);
+
+    const [youAttacking, setYouAttacking] = useState(false);
+    const [oppAttacking, setOppAttacking] = useState(false);
+    const [youFlashing, setYouFlashing] = useState(false);
+    const [oppFlashing, setOppFlashing] = useState(false);
+
+    const youCryUrl = battleStats
+        ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.yourPokemon.id}.ogg`
+        : "";
+    const [playYouCry] = useSound(youCryUrl, { volume: 1, format: "ogg" });
+
+    const oppCryUrl = battleStats
+        ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.opponentPokemon.id}.ogg`
+        : "";
+    const [playOppCry] = useSound(oppCryUrl, { volume: 1, format: "ogg" });
+
+    const [playNormalEffective] = useSound("/normal-effective.mp3", { volume: 1 });
 
     const ATTACK_ANIMATION_DURATION = 2000;
+    const ATTACK_START_TO_IMPACT = 1150;
 
     // BUG: This hook keeps firing after the second battle ends. This currently causes no issues.
     // I could not pinpoint the exact cause, I think a refactor of the animation orchestration
@@ -54,17 +71,16 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
 
             if (battleStats.isChallenge1Win) {
                 console.log("You won!");
-                setYouAttack(true);
+                playBattleAnims(true);
             } else {
                 console.log("You lost!");
-                setOpponentAttack(true);
+                playBattleAnims(false);
             }
 
             phaseTimeout = setTimeout(() => {
                 console.log("Battle 1 over");
-                setYouAttack(false);
-                setOpponentAttack(false);
                 setBattle1Finished(true);
+                resetBattleAnims();
             }, ATTACK_ANIMATION_DURATION);
         }
 
@@ -81,10 +97,10 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
 
             if (battleStats.isChallenge2Win) {
                 console.log("You won!");
-                setYouAttack(true);
+                playBattleAnims(true);
             } else {
                 console.log("You lost!");
-                setOpponentAttack(true);
+                playBattleAnims(false);
             }
 
             phaseTimeout = setTimeout(() => {
@@ -96,6 +112,26 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         return () => clearTimeout(phaseTimeout);
     }, [columnsFinished, battleStats, sendBattlePhaseFinished]);
 
+    const playBattleAnims = (yourAttack: boolean) => {
+        if (yourAttack) {
+            playYouCry();
+            setYouAttacking(true);
+            setOppFlashing(true);
+        } else {
+            playOppCry();
+            setOppAttacking(true);
+            setYouFlashing(true);
+        }
+        setTimeout(() => playNormalEffective(), ATTACK_START_TO_IMPACT);
+    };
+
+    const resetBattleAnims = () => {
+        setYouAttacking(false);
+        setOppAttacking(false);
+        setYouFlashing(false);
+        setOppFlashing(false);
+    };
+
     if (!roomState || !roomState.game || !battleStats) {
         return <>Loading...</>;
     }
@@ -106,7 +142,8 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 <PokemonDisplay
                     pokemonName={battleStats.opponentPokemon.name}
                     imageUrl={battleStats.opponentPokemonImgUrl}
-                    attack={opponentAttack}
+                    attack={oppAttacking}
+                    stumble={oppFlashing}
                     isOpponent={true}
                 />
 
@@ -131,7 +168,8 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 <PokemonDisplay
                     pokemonName={battleStats.yourPokemon.name}
                     imageUrl={battleStats.yourPokemonImgUrl}
-                    attack={youAttack}
+                    attack={youAttacking}
+                    stumble={youFlashing}
                     isOpponent={false}
                 />
             </div>

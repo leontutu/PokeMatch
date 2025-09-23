@@ -56,11 +56,22 @@
     animation: opponentAttackAnimation 2s ease-out;
 }
 
+.youStumble {
+    animation: youStumble 0.5s linear;
+    animation-delay: 1.15s;
+}
+
+.oppStumble {
+    /* animation: oppStumble 0.5s ease-in-out; */
+    animation: oppStumble 0.5s linear;
+    animation-delay: 1.15s;
+}
+
 @keyframes youAttackAnimation {
     0% {
         transform: 0;
     }
-    25% {
+    10% {
         transform: scale(1.4) translateY(-1rem) rotate(-21deg);
     }
     50% {
@@ -101,5 +112,41 @@
     }
     100% {
         transform: 0;
+    }
+}
+
+@keyframes youStumble {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    20% {
+        transform: rotate(40deg) translate(1rem, 1rem);
+    }
+    40% {
+        transform: rotate(40deg) translate(-1rem, 3rem);
+    }
+    60% {
+        transform: rotate(40deg) translate(1rem, 5rem);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+@keyframes oppStumble {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    20% {
+        transform: rotate(30deg) translate(1rem, -1rem);
+    }
+    40% {
+        transform: rotate(30deg) translate(-1rem, -3rem);
+    }
+    60% {
+        transform: rotate(30deg) translate(1rem, -5rem);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
     }
 }
