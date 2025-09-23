@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
 import { useSocket } from "../../../contexts/SocketContext";
+import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import { NavigationHandler } from "../../../types";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.css";
@@ -25,10 +26,11 @@ type PokemonRevealPageProps = {
 
 export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps) {
     const { roomState } = useSocket();
+    const { isWipingIn } = useUIInfoContext();
+
     if (roomState === null || roomState.game === null) return null;
     let pokemon: Pokemon = roomState.game.you.pokemon;
 
-    const [pageTransitionOver, setPageTransitionOver] = useState(false);
     const [countDownFinished, setCountDownFinished] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
     const [cryReady, setCryReady] = useState(false);
@@ -46,26 +48,18 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
     });
 
     useEffect(() => {
-        const PAGE_TRANSITION_DELAY = 1000;
+        if (isWipingIn) return;
+        const WIGGLE_DURATION = 2000;
+        const FLASH_DURATION = 200;
+        const CRY_DELAY_AFTER_WIGGLE = 2000;
 
-        const INITIAL_DELAY = 2000;
-        const REVEAL_DELAY_AFTER_FLASH = 200;
-        const CRY_DELAY_AFTER_FLASH = 2000;
-
-        const pageTransitionTimeout = setTimeout(() => {
-            setPageTransitionOver(true);
-            setTimeout(() => setFlashActive(true), INITIAL_DELAY);
-            setTimeout(() => setCountDownFinished(true), INITIAL_DELAY + REVEAL_DELAY_AFTER_FLASH);
-            setTimeout(() => setCryReady(true), INITIAL_DELAY + CRY_DELAY_AFTER_FLASH);
-        }, PAGE_TRANSITION_DELAY);
-
-        return () => {
-            clearTimeout(pageTransitionTimeout);
-        };
-    }, []);
+        setTimeout(() => setFlashActive(true), WIGGLE_DURATION);
+        setTimeout(() => setCountDownFinished(true), WIGGLE_DURATION + FLASH_DURATION);
+        setTimeout(() => setCryReady(true), WIGGLE_DURATION + CRY_DELAY_AFTER_WIGGLE);
+    }, [isWipingIn]);
 
     useEffect(() => {
-        if (!countDownFinished && pageTransitionOver) {
+        if (!countDownFinished && !isWipingIn) {
             playWiggle();
         }
 
@@ -81,7 +75,7 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
         return () => {
             stopWiggle();
         };
-    }, [countDownFinished, cryReady, pageTransitionOver, playWiggle, playCry, stopWiggle]);
+    }, [isWipingIn, countDownFinished, cryReady, playWiggle, playCry, stopWiggle]);
 
     const getPokemonNameFontSize = (name: string) => {
         const length = name.length;
@@ -98,7 +92,10 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
                     className={`${styles.flashOverlay} ${flashActive ? styles.flashActive : ""}`}
                 ></div>
                 <img
-                    className={`${styles.pokeballImage} ${countDownFinished ? styles.hidden : ""}`}
+                    className={`${styles.pokeballImage} 
+                    ${countDownFinished ? styles.hidden : ""}
+                    ${!isWipingIn && !countDownFinished ? styles.wiggle : ""}
+                    `}
                     src={"/pokeball.png"}
                     alt={"pokeball"}
                 />
