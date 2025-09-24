@@ -7,16 +7,16 @@ import { useEffect, useState } from "react";
 
 type BattleFieldProps = {
     battleStats: BattleStats;
-    setColumnsFinished: (n: number) => void;
     yourBattle: boolean;
     isWipingIn: boolean;
+    onFinished: () => void;
 };
 
 export default function BattleField({
     battleStats,
-    setColumnsFinished,
     yourBattle,
     isWipingIn,
+    onFinished,
 }: BattleFieldProps) {
     const [isStatBubbleAnimFinished, setIsStatBubbleAnimFinished] = useState(false);
     const STAT_BUBBLE_ANIM_DURATION = 1500;
@@ -33,7 +33,7 @@ export default function BattleField({
     return (
         <>
             <BattleColumns
-                setColumnsFinished={setColumnsFinished}
+                onFinished={onFinished}
                 isStatBubbleAnimFinished={isStatBubbleAnimFinished}
                 yourValue={
                     yourBattle

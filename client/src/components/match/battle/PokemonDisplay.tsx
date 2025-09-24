@@ -5,8 +5,7 @@ type PokemonDisplayProps = {
     pokemonName: string;
     imageUrl: string;
     isOpponent?: boolean;
-    attack: boolean;
-    stumble: boolean;
+    animation: "attack" | "stumble" | "";
 };
 /**
  * Renders a display section for a single Pokémon in the battle.
@@ -27,13 +26,12 @@ type PokemonDisplayProps = {
 export default function PokemonDisplay({
     pokemonName,
     imageUrl,
-    attack,
-    stumble,
+    animation,
     isOpponent = false,
 }: PokemonDisplayProps) {
-    const sectionStyle = `${
-        isOpponent ? styles.opponentPokemonSection : styles.yourPokemonSection
-    } ${attack ? styles.highZIndex : ""}`;
+    const sectionStyle = `
+    ${isOpponent ? styles.opponentPokemonSection : styles.yourPokemonSection} 
+        ${animation === "attack" ? styles.highZIndex : ""}`;
     const imageStyle = isOpponent ? styles.opponentPokemonImg : styles.yourPokemonImg;
     const labelStyle = isOpponent ? styles.opponentPokemonLabel : styles.yourPokemonLabel;
 
@@ -46,8 +44,20 @@ export default function PokemonDisplay({
                 src={imageUrl}
                 className={`
                     ${imageStyle} 
-                    ${attack ? (isOpponent ? styles.opponentAttack : styles.youAttack) : ""}
-                    ${stumble ? (isOpponent ? styles.oppStumble : styles.youStumble) : ""}
+                    ${
+                        animation == "attack"
+                            ? isOpponent
+                                ? styles.opponentAttack
+                                : styles.youAttack
+                            : ""
+                    }
+                    ${
+                        animation == "stumble"
+                            ? isOpponent
+                                ? styles.oppStumble
+                                : styles.youStumble
+                            : ""
+                    }
                 `}
                 alt={pokemonName}
             />

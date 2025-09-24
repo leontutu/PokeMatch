@@ -5,14 +5,14 @@ type BattleColumnsProps = {
     yourValue: number;
     opponentValue: number;
     isStatBubbleAnimFinished: boolean;
-    setColumnsFinished: (n: number) => void;
+    onFinished: () => void;
 };
 
 export default function BattleColumns({
     yourValue,
     opponentValue,
-    setColumnsFinished,
     isStatBubbleAnimFinished,
+    onFinished,
 }: BattleColumnsProps) {
     const [currentUpperHeight, setCurrentUpperHeight] = useState(0);
     const [currentLowerHeight, setCurrentLowerHeight] = useState(0);
@@ -34,6 +34,7 @@ export default function BattleColumns({
     const DELAY_BETWEEN_GROWTH_AND_OUTCOME = 500;
     const DELAY_BETWEEN_GROWTH_AND_FINISH = 2500;
 
+    const isTie = opponentValue === yourValue;
     const upperWon = opponentValue > yourValue;
 
     // upper column growth
@@ -83,7 +84,7 @@ export default function BattleColumns({
                 setGrowingFinished(true);
             }, DELAY_BETWEEN_GROWTH_AND_OUTCOME);
             timerB = setTimeout(() => {
-                setColumnsFinished(((prev: number) => prev + 1) as unknown as number); // oof
+                onFinished();
             }, DELAY_BETWEEN_GROWTH_AND_FINISH);
         }
         return () => {
@@ -98,8 +99,8 @@ export default function BattleColumns({
                 className={`
                     ${styles.column} 
                     ${styles.upperColumn} 
-                    ${growingFinished && !upperWon ? styles.lowlight : ""}
-                    ${growingFinished && upperWon ? styles.upperHighlight : ""}
+                    ${growingFinished && !isTie && !upperWon ? styles.lowlight : ""}
+                    ${growingFinished && !isTie && upperWon ? styles.upperHighlight : ""}
                 `}
                 style={{ height: `${currentUpperHeight}%` }}
             >
@@ -109,8 +110,8 @@ export default function BattleColumns({
                 className={`
                     ${styles.column} 
                     ${styles.lowerColumn} 
-                    ${growingFinished && upperWon ? styles.lowlight : ""}
-                    ${growingFinished && !upperWon ? styles.lowerHighlight : ""}
+                    ${growingFinished && !isTie && upperWon ? styles.lowlight : ""}
+                    ${growingFinished && !isTie && !upperWon ? styles.lowerHighlight : ""}
                 `}
                 style={{ height: `${currentLowerHeight}%` }}
             >
