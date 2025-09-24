@@ -7,7 +7,7 @@ import { NavigationHandler } from "../../../types";
 import BattleField from "./BattleField";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import { useBattleSequence } from "../../../hooks/useBattleSequence";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type BattlePageProps = {
     onNavigate: NavigationHandler;
@@ -15,7 +15,13 @@ type BattlePageProps = {
 
 export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { roomState, sendBattleEnd } = useSocket();
-    const battleStats = useBattleLogic(roomState?.game);
+
+    // hack: Making can still render properly during page transition
+    const currentBattleStats = useBattleLogic(roomState?.game);
+    const battleStatsRef = useRef(currentBattleStats);
+    if (currentBattleStats) battleStatsRef.current = currentBattleStats;
+    const battleStats = battleStatsRef.current;
+
     const { isWipingIn } = useUIInfoContext();
     const [activeBattle, setActiveBattle] = useState<1 | 2>(1);
 
@@ -31,7 +37,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
         }
     }, [phase]);
 
-    if (!roomState || !roomState.game || !battleStats) {
+    if (!battleStats) {
         return <>Loading...</>;
     }
 
