@@ -14,7 +14,7 @@ export const useBattleSequence = (
     isWipingIn: boolean
 ) => {
     const [phase, setPhase] = useState<BattlePhase>("BATTLE_1_START");
-    const [animation, setAnimation] = useState<BattlePokemonAnimationState>({
+    const [pokemonAnimation, setPokemonAnimation] = useState<BattlePokemonAnimationState>({
         you: "",
         opponent: "",
     });
@@ -31,10 +31,10 @@ export const useBattleSequence = (
     const playBattleAnims = (isPlayerWinner: boolean) => {
         if (isPlayerWinner) {
             playYouCry();
-            setAnimation({ you: "attack", opponent: "stumble" });
+            setPokemonAnimation({ you: "attack", opponent: "stumble" });
         } else {
             playOppCry();
-            setAnimation({ you: "stumble", opponent: "attack" });
+            setPokemonAnimation({ you: "stumble", opponent: "attack" });
         }
         setTimeout(() => playNormalEffective(), ATTACK_START_TO_IMPACT);
     };
@@ -46,7 +46,6 @@ export const useBattleSequence = (
         let fadeTimer: ReturnType<typeof setTimeout>;
 
         if (phase === "BATTLE_1_END") {
-            // This phase is now only for triggering animations
             if (battleStats.isChallenge1Tie) {
                 setIsFading(true);
                 timer = setTimeout(() => {
@@ -60,7 +59,7 @@ export const useBattleSequence = (
                     fadeTimer = setTimeout(() => {
                         setPhase("BATTLE_2_START");
                         setIsFading(false);
-                        setAnimation({ you: "", opponent: "" });
+                        setPokemonAnimation({ you: "", opponent: "" });
                     }, FADE_OUT_DURATION);
                 }, ATTACK_ANIMATION_DURATION);
             }
@@ -71,7 +70,6 @@ export const useBattleSequence = (
                 onBattleEnd();
             } else {
                 playBattleAnims(battleStats.isChallenge2Win);
-                console.log("hey");
                 timer = setTimeout(onBattleEnd, ATTACK_ANIMATION_DURATION);
             }
         }
@@ -85,7 +83,7 @@ export const useBattleSequence = (
     return {
         phase,
         setPhase,
-        animation,
+        pokemonAnimation,
         isFading,
     };
 };

@@ -19,7 +19,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { isWipingIn } = useUIInfoContext();
     const [activeBattle, setActiveBattle] = useState<1 | 2>(1);
 
-    const { phase, setPhase, animation, isFading } = useBattleSequence(
+    const { phase, setPhase, pokemonAnimation, isFading } = useBattleSequence(
         battleStats,
         sendBattleEnd,
         isWipingIn
@@ -41,7 +41,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 <PokemonDisplay
                     pokemonName={battleStats.opponentPokemon.name}
                     imageUrl={battleStats.opponentPokemonImgUrl}
-                    animation={animation.opponent}
+                    animation={pokemonAnimation.opponent}
                     isOpponent={true}
                 />
                 <div className={styles.battleSectionWrapper}>
@@ -64,7 +64,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 <PokemonDisplay
                     pokemonName={battleStats.yourPokemon.name}
                     imageUrl={battleStats.yourPokemonImgUrl}
-                    animation={animation.you}
+                    animation={pokemonAnimation.you}
                     isOpponent={false}
                 />
             </div>
