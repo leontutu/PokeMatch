@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { StatToDisplay } from "../constants/constants";
 import { GameState, BattleStats } from "../types.js";
+import { StatNames } from "../../../shared/constants/constants.js";
 
 /**
  * Custom hook to encapsulate the business logic for the battle phase.
@@ -29,13 +30,19 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
 
         const isOpponentChallengeTie = opponentChallengeStat.value === yourChallengedStat.value;
         const opponentChallengeOutcome = opponentChallengeStat.value < yourChallengedStat.value;
-        //////////////////////////////////////
+
         const isYouFirst = gameState.firstMove === gameState.you.inGameId;
         const isChallenge1Win = isYouFirst ? yourChallengeOutcome : opponentChallengeOutcome;
         const isChallenge2Win = isYouFirst ? opponentChallengeOutcome : yourChallengeOutcome;
         const isChallenge1Tie = isYouFirst ? isYourChallengeTie : isOpponentChallengeTie;
         const isChallenge2Tie = isYouFirst ? isOpponentChallengeTie : isYourChallengeTie;
-        /////////////////////////////////////
+
+        // Converting hectogram to kilogram
+        [yourChallengeStat, yourChallengedStat, opponentChallengeStat, opponentChallengedStat].forEach(
+            (stat) => {
+                stat.value = stat.name == StatNames.WEIGHT ? stat.value / 10 : stat.value;
+            }
+        );
 
         return {
             yourPokemon,
