@@ -11,7 +11,7 @@ export default class PokeApiClient {
      * @throws If the API request fails.
      */
     async getRandomPokemon(): Promise<object> {
-        const randomPokeId: number = Math.floor(Math.random() * 600) + 1;
+        const randomPokeId: number = Math.floor(Math.random() * 151) + 1;
         const url: string = `https://pokeapi.co/api/v2/pokemon/${randomPokeId}`;
         try {
             const response: Response = await fetch(url);
