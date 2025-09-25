@@ -1,12 +1,12 @@
-import logger from "../utils/Logger.js";
-import Player from "./Player.js";
+import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
+import { PlayerInGameId, Pokemon, Stat } from "../../../shared/types/types.js";
 import { GameEvents } from "../constants/constants.js";
 import { EventEmitter } from "events";
-import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
-import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import { Pokemon, Stat } from "../../../shared/types/types.js";
 import { GameCommands } from "../../../shared/constants/constants.js";
-import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
+import logger from "../utils/Logger.js";
+import Player from "./Player.js";
+import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
+import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 
 /**
  * Represents the core game logic for a single match.
@@ -17,12 +17,16 @@ export default class Game extends EventEmitter {
     players: Player[];
     phase: GamePhases;
     lockedStats: StatNames[];
+    firstMove: PlayerInGameId;
     winner: string | null;
     constructor(public participants: { name: string; uuid: string }[]) {
         super();
-        this.players = participants.map((p) => new Player(p.name, p.uuid));
+        this.players = participants.map(
+            (p, index) => new Player(p.name, p.uuid, (index + 1) as PlayerInGameId)
+        );
         this.phase = GamePhases.SELECT_STAT;
         this.lockedStats = [];
+        this.firstMove = (Math.floor(Math.random() * 2) + 1) as PlayerInGameId;
         this.winner = null;
     }
 
@@ -86,13 +90,8 @@ export default class Game extends EventEmitter {
     }
 
     #handleBattleEnd() {
+        if (this.phase !== GamePhases.BATTLE) return;
         this.#evaluateBattleOutcome();
-    }
-
-    #handleGameEnd() {
-        this.winner = this.players.reduce((a, b) => (a.points > b.points ? a : b)).name;
-        this.phase = GamePhases.GAME_FINISHED;
-        this.#emitGameEvent(GameEvents.GAME_FINISHED);
     }
 
     #handleStartSelectStat() {
@@ -152,7 +151,7 @@ export default class Game extends EventEmitter {
         }
 
         if (this.#isThereAWinner()) {
-            this.#handleGameEnd();
+            this.#gameEnd();
         } else {
             this.#newBattle();
         }
@@ -165,10 +164,17 @@ export default class Game extends EventEmitter {
         this.phase = GamePhases.SELECT_STAT;
     }
 
+    #gameEnd() {
+        this.winner = this.players.reduce((a, b) => (a.points > b.points ? a : b)).name;
+        this.phase = GamePhases.GAME_FINISHED;
+        this.#emitGameEvent(GameEvents.GAME_FINISHED);
+    }
+
     #newBattle() {
+        this.firstMove = this.firstMove === 1 ? 2 : (1 as PlayerInGameId);
         this.lockedStats = [];
         this.players.forEach((p) => p.resetSelectedStat());
-        this.#emitGameEvent(GameEvents.NEW_BATTLE);
+        this.#emitGameEvent(GameEvents.NEW_MATCH);
     }
 
     //================================================================
@@ -229,6 +235,7 @@ export default class Game extends EventEmitter {
             phase: this.phase,
             lockedStats: this.lockedStats,
             winner: this.winner,
+            firstMove: this.firstMove,
             you: you,
             opponent: opponent,
         };
@@ -267,6 +274,7 @@ export default class Game extends EventEmitter {
 
 // Shape of the data sent to the client
 interface ClientPlayer {
+    inGameId: PlayerInGameId;
     name: string;
     uuid: string;
     points: number;
@@ -280,6 +288,7 @@ interface ClientGameState {
     phase: GamePhases;
     lockedStats: string[];
     winner: string | null;
+    firstMove: PlayerInGameId;
     you: ClientPlayer;
     opponent: ClientPlayer;
 }

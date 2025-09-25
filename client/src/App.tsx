@@ -10,18 +10,17 @@ import SelectStatPage from "./components/match/SelectStat/SelectStatPage.js";
 import BattlePage from "./components/match/battle/BattlePage.js";
 import VictoryPage from "./components/match/victory/VictoryPage.js";
 import PokemonRevealPage from "./components/match/reveal/PokemonRevealPage.js";
-
-import "./App.css";
+import { useUIInfoContext } from "./contexts/UIInfoContext.js";
 import { useSound } from "use-sound";
+import "./App.css";
 
 function App() {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    // const [currentPage, setCurrentPage] = useState(PAGES.POKEMON_REVEAL);
+    // const [currentPage, setCurrentPage] = useState(Pages.BATTLE);
     const [currentPage, setCurrentPage] = useState(Pages.HOME);
 
-    const [isWipingOut, setIsWipingOut] = useState(false);
-    const [isWipingIn, setIsWipingIn] = useState(false);
+    const { isWipingIn, setIsWipingIn, isWipingOut, setIsWipingOut } = useUIInfoContext();
 
     const { roomState } = useSocket();
 
@@ -29,10 +28,10 @@ function App() {
     const [isFirstRender, setIsFirstRender] = useState(true);
 
     const [playPageTurn1] = useSound(`/pageTurn1.mp3`, {
-        volume: 0.3,
+        volume: 0.6,
     });
     const [playPageTurn2] = useSound(`/pageTurn2.mp3`, {
-        volume: 0.1,
+        volume: 0.3,
     });
 
     const handleNavigate: NavigationHandler = useCallback(
@@ -94,7 +93,7 @@ function App() {
 
     useEffect(() => {
         if (import.meta.env.VITE_USE_MOCKS) {
-            handleNavigate(Pages.POKEMON_REVEAL, false);
+            handleNavigate(Pages.BATTLE, false);
         }
     }, [handleNavigate]);
 

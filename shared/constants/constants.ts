@@ -11,6 +11,7 @@ export enum Events {
     READY = "ready", // Client waiting in Room is ready to start a game
     GAME_COMMAND = "gameCommand", // Client sends a game command (the payload being of type GAME_COMMANDS)
     LEAVE_ROOM = "leaveRoom", // Client wishes to leave the current room
+    BATTLE_END = "battleEnd", // Client finished watching the battle phase animation
 
     // Server to Client events
     ROOM_FULL = "roomFull", // Room is full, cannot join
@@ -81,7 +82,6 @@ export enum PokemonTypes {
  * Timing constants for various game events.
  */
 export enum Timings {
-    BATTLE_DURATION = 12000,
     PAGE_TRANSITION = 1500,
     POKEMON_REVEAL_DURATION = 13000,
 }

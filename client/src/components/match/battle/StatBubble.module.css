@@ -1,0 +1,38 @@
+.outerWrapper {
+    width: 9rem;
+    height: 7rem;
+}
+
+.innerWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0.9rem;
+    top: 1rem;
+    width: 78%;
+    height: 58%;
+    padding-left: 0.6rem;
+    text-align: center;
+    position: absolute;
+    background-color: #dae1eb;
+}
+
+.label {
+    font-family: "Jura", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 1000;
+    color: #333;
+}
+
+.image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.flipped {
+    transform: scale(-1, -1);
+}

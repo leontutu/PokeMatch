@@ -1,62 +1,60 @@
 import styles from "./BattlePage.module.css";
 import MatchLayout from "../layout/MatchLayout";
-import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
-import BattleGrid from "./BattleGrid";
-import Countdown from "./Countdown";
 import { NavigationHandler } from "../../../types";
+import BattleField from "./BattleField";
+import { useUIInfoContext } from "../../../contexts/UIInfoContext";
+import { useBattleSequence } from "../../../hooks/useBattleSequence";
+import { useEffect, useState, useRef } from "react";
 
 type BattlePageProps = {
     onNavigate: NavigationHandler;
 };
 
 /**
- * Orchestrates the battle phase of the game.
+ * Orchestrates the entire battle phase of a match.
  *
- * This component displays a countdown, followed by the reveal of both players'
- * chosen stats and the battle outcome. It uses the `useBattleLogic` hook to
- * compute results and composes smaller components to build the UI.
+ * This component serves as the main container for the battle sequence. It uses the
+ * `useBattleLogic` hook to derive battle statistics and the `useBattleSequence` hook
+ * to manage the complex flow of animations and state transitions. It renders the
+ * player and opponent `PokemonDisplay` components and the central `BattleField`,
+ * progressing from the first battle to the second until a winner is decided.
+ *
+ * @param onNavigate - A handler for navigating to other parts of the application.
  *
  * @example
  * <BattlePage onNavigate={handleNavigation} />
  */
+
 export default function BattlePage({ onNavigate }: BattlePageProps) {
-    const { roomState } = useSocket();
-    const [displayState, setDisplayState] = useState(roomState);
-    const [isRevealed, setIsRevealed] = useState(false);
-    const [countdown, setCountdown] = useState(5);
-    
-    if (!roomState || !roomState.game || !displayState || !displayState.game) {
-        return <>Loading...</>;
-    }
-    const battleStats = useBattleLogic(displayState.game);
+    const { roomState, sendBattleEnd } = useSocket();
+
+    // hack: Making can still render properly during page transition
+    const currentBattleStats = useBattleLogic(roomState?.game);
+    const battleStatsRef = useRef(currentBattleStats);
+    if (currentBattleStats) battleStatsRef.current = currentBattleStats;
+    const battleStats = battleStatsRef.current;
+
+    const { isWipingIn } = useUIInfoContext();
+    const [activeBattle, setActiveBattle] = useState<1 | 2>(1);
+
+    const { phase, setPhase, pokemonAnimation, isFading } = useBattleSequence(
+        battleStats,
+        sendBattleEnd,
+        isWipingIn
+    );
+
+    useEffect(() => {
+        if (phase === "BATTLE_2_START") {
+            setActiveBattle(2);
+        }
+    }, [phase]);
+
     if (!battleStats) {
         return <>Loading...</>;
     }
-
-
-    // This effect manages the countdown and the final reveal
-    useEffect(() => {
-        if (countdown > 0) {
-            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-            return () => clearTimeout(timer);
-        } else {
-            setIsRevealed(true);
-        }
-    }, [countdown]);
-
-    // Ensures the display state doesn't change when stats are reset
-    useEffect(() => {
-        if (!roomState || !roomState.game) return;
-        if (
-            roomState.game.you.challengeStat &&
-            roomState.game.you.challengedStat.name
-        ) {
-            setDisplayState(roomState);
-        }
-    }, [roomState]);
 
     return (
         <MatchLayout onNavigate={onNavigate}>
@@ -64,17 +62,29 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                 <PokemonDisplay
                     pokemonName={battleStats.opponentPokemon.name}
                     imageUrl={battleStats.opponentPokemonImgUrl}
-                    isOpponent
+                    animation={pokemonAnimation.opponent}
+                    isOpponent={true}
                 />
-
-                <div className={styles.battleSection}>
-                    <Countdown count={countdown} />
-                    <BattleGrid isRevealed={isRevealed} stats={battleStats} />
+                <div className={styles.battleSectionWrapper}>
+                    <div className={`${styles.battleSection} ${isFading ? styles.fadeOut : ""}`}>
+                        <BattleField
+                            key={activeBattle === 1 ? "battle-1" : "battle-2"}
+                            yourBattle={
+                                activeBattle === 1 ? battleStats.isYouFirst : !battleStats.isYouFirst
+                            }
+                            battleStats={battleStats}
+                            isWipingIn={isWipingIn}
+                            onFinished={() =>
+                                setPhase(activeBattle === 1 ? "BATTLE_1_END" : "BATTLE_2_END")
+                            }
+                        />
+                    </div>
                 </div>
-
                 <PokemonDisplay
                     pokemonName={battleStats.yourPokemon.name}
                     imageUrl={battleStats.yourPokemonImgUrl}
+                    animation={pokemonAnimation.you}
+                    isOpponent={false}
                 />
             </div>
         </MatchLayout>

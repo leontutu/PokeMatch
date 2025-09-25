@@ -15,21 +15,9 @@ type SocketContextType = {
     sendName: (name: string) => void;
     sendReady: () => void;
     sendSelectStat: (stat: StatNames) => void;
+    sendBattleEnd: () => void;
     sendLeaveRoom: () => void;
 };
-
-// const value = {
-//     socket,
-//     roomState: roomState,
-//     roomCrashSignal,
-//     nameErrorSignal,
-//     selectStatErrorSignal,
-//     setNameErrorSignal,
-//     sendName,
-//     sendReady,
-//     sendSelectStat,
-//     sendLeaveRoom,
-// };
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
@@ -127,9 +115,15 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         }
     };
 
+    const sendBattleEnd = () => {
+        if (socket) {
+            socket.emit(Events.BATTLE_END, {});
+        }
+    };
+
     const value = {
         socket,
-        roomState: roomState,
+        roomState,
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
@@ -138,6 +132,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         sendName,
         sendReady,
         sendSelectStat,
+        sendBattleEnd,
         sendLeaveRoom,
     };
 

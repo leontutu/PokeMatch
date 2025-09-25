@@ -1,0 +1,46 @@
+.youStatBubble {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
+    animation: bottomSlideAndFadeIn 1s ease-out;
+}
+
+.opponentStatBubble {
+    position: absolute;
+    left: 1rem;
+    top: 0.5rem;
+    animation: flippedSlideAndFadeIn 1s ease-out forwards;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+@keyframes bottomSlideAndFadeIn {
+    0% {
+        transform: translateY(10rem);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes flippedSlideAndFadeIn {
+    0% {
+        transform: scale(-1, -1) translateY(10rem);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(-1, -1) translateY(0px);
+        opacity: 1;
+    }
+}

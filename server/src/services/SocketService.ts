@@ -73,6 +73,10 @@ export default class SocketService {
                 this.orchestrator.onLeaveRoom(socket);
             });
 
+            socket.on(Events.BATTLE_END, () => {
+                this.orchestrator.onBattleEnd(socket);
+            });
+
             socket.on(Events.GAME_COMMAND, (data) => {
                 this.orchestrator.onGameCommand(socket, data);
             });

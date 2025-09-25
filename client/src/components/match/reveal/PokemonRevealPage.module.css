@@ -32,7 +32,6 @@
     width: 9rem;
     height: 9rem;
     display: flex;
-    animation: wiggle 1s ease-in-out infinite;
 }
 
 .pokemonImage {
@@ -71,6 +70,10 @@
 
 .hidden {
     display: none;
+}
+
+.wiggle {
+    animation: wiggle 1s ease-in-out infinite;
 }
 
 .slideIn {

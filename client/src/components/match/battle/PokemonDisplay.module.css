@@ -1,45 +1,40 @@
-@keyframes wobble {
-    from {
-        transform: translateY(-15px) rotate(5deg);
-    }
-    to {
-        transform: translateY(5px) rotate(0deg);
-    }
-}
-
 .opponentPokemonSection,
 .yourPokemonSection {
-    flex: 1.2;
+    height: 27.5%;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 }
 
 .yourPokemonSection {
     background: linear-gradient(0deg, #4a5568 0%, #2d3748 100%);
+    position: relative;
 }
 
 .opponentPokemonImg,
 .yourPokemonImg {
-    max-width: 100%;
-    max-height: 100%;
+    /* max-width: 100%;
+    max-height: 100%; */
     object-fit: contain;
     filter: drop-shadow(0 0 1rem rgba(237, 242, 247, 0.2));
+    z-index: 3;
 }
 
 .yourPokemonImg {
-    width: 150%;
-    max-width: 150%;
+    width: 140%;
+    height: 140%;
     margin-bottom: -2rem;
-    animation: wobble 0.5s ease-in-out infinite alternate;
+    margin-right: 10rem;
 }
 
 .opponentPokemonImg {
-    animation: wobble 0.5s ease-in-out infinite alternate;
-    animation-delay: 0.5s;
+    max-width: 100%;
+    max-height: 100%;
+    margin-left: 10rem;
 }
 
 .opponentPokemonLabel {
@@ -54,4 +49,111 @@
     bottom: 15%;
     right: -0.25rem;
     z-index: 2;
+}
+
+.highZIndex {
+    z-index: 10;
+}
+
+.youAttack {
+    animation: youAttackAnimation 2s ease-out;
+}
+
+.opponentAttack {
+    animation: opponentAttackAnimation 2s ease-out;
+}
+
+.youStumble {
+    animation: youStumble 0.5s linear;
+    animation-delay: 1.15s;
+}
+
+.oppStumble {
+    /* animation: oppStumble 0.5s ease-in-out; */
+    animation: oppStumble 0.5s linear;
+    animation-delay: 1.15s;
+}
+
+@keyframes youAttackAnimation {
+    0% {
+        transform: 0;
+    }
+    10% {
+        transform: scale(1.4) translateY(-1rem) rotate(-21deg);
+    }
+    50% {
+        transform: scale(1.4) translateY(-1rem) rotate(-21deg);
+    }
+    60% {
+        transform: scale(1.4) translate(5rem, -22rem) rotate(-21deg);
+    }
+    65% {
+        transform: scale(1.4) translate(4.5rem, -20rem) rotate(-21deg);
+    }
+    85% {
+        transform: scale(1.4) translate(4rem, -18rem) rotate(-21deg);
+    }
+    100% {
+        transform: 0;
+    }
+}
+
+@keyframes opponentAttackAnimation {
+    0% {
+        transform: 0;
+    }
+    25% {
+        transform: scale(1.4) translateY(1rem) rotate(-21deg);
+    }
+    50% {
+        transform: scale(1.4) translateY(1rem) rotate(-21deg);
+    }
+    57% {
+        transform: scale(1.4) translate(-5rem, 22rem) rotate(-21deg);
+    }
+    59% {
+        transform: scale(1.4) translate(-4.5rem, 20rem) rotate(-21deg);
+    }
+    85% {
+        transform: scale(1.4) translate(-4rem, 18rem) rotate(-21deg);
+    }
+    100% {
+        transform: 0;
+    }
+}
+
+@keyframes youStumble {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    20% {
+        transform: rotate(40deg) translate(1rem, 1rem);
+    }
+    40% {
+        transform: rotate(40deg) translate(-1rem, 3rem);
+    }
+    60% {
+        transform: rotate(40deg) translate(1rem, 5rem);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+@keyframes oppStumble {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    20% {
+        transform: rotate(30deg) translate(1rem, -1rem);
+    }
+    40% {
+        transform: rotate(30deg) translate(-1rem, -3rem);
+    }
+    60% {
+        transform: rotate(30deg) translate(1rem, -5rem);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
 }
