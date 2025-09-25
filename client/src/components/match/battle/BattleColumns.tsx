@@ -1,6 +1,28 @@
 import { useState, useEffect } from "react";
 import styles from "./BattleColumns.module.scss";
 
+/**
+ * Renders two vertical columns representing competing stat values.
+ *
+ * This component visualizes a stat comparison by animating the height of two
+ * opposing columns. It also includes a number counter that increments as the
+ * columns grow. Once the columns reach their target height, it highlights the
+ * winner and calls an `onFinished` callback after a delay.
+ *
+ * @param yourValue - The stat value for the player.
+ * @param opponentValue - The stat value for the opponent.
+ * @param isStatBubbleAnimFinished - A boolean that triggers the start of the column animation.
+ * @param onFinished - A callback function that is called when the entire column animation sequence is complete.
+ *
+ * @example
+ * <BattleColumns
+ *   yourValue={100}
+ *   opponentValue={80}
+ *   isStatBubbleAnimFinished={true}
+ *   onFinished={handleAnimationEnd}
+ * />
+ */
+
 type BattleColumnsProps = {
     yourValue: number;
     opponentValue: number;
@@ -41,7 +63,6 @@ export default function BattleColumns({
     useEffect(() => {
         if (!isStatBubbleAnimFinished) return;
         upperGrowthInterval = setInterval(() => {
-            // setUpperValue(Math.round((currentUpperHeight / 100) * total));
             setCurrentUpperHeight((prev) => {
                 setUpperValue(Math.round((prev / 100) * total));
                 if (prev < upperHeightPercent) {

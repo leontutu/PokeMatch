@@ -12,7 +12,8 @@ type PokemonDisplayProps = {
  *
  * This component shows the Pokémon's image and name. It can be styled
  * differently for the player's Pokémon versus the opponent's based on the
- * `isOpponent` prop.
+ * `isOpponent` prop. It's animation state is controlled by the parent via
+ * the `animation` prop.
  *
  * @example
  * <PokemonDisplay
@@ -51,13 +52,7 @@ export default function PokemonDisplay({
                                 : styles.youAttack
                             : ""
                     }
-                    ${
-                        animation == "stumble"
-                            ? isOpponent
-                                ? styles.oppStumble
-                                : styles.youStumble
-                            : ""
-                    }
+                    ${animation == "stumble" ? (isOpponent ? styles.oppStumble : styles.youStumble) : ""}
                 `}
                 alt={pokemonName}
             />

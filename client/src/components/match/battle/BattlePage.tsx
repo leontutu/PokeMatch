@@ -13,6 +13,21 @@ type BattlePageProps = {
     onNavigate: NavigationHandler;
 };
 
+/**
+ * Orchestrates the entire battle phase of a match.
+ *
+ * This component serves as the main container for the battle sequence. It uses the
+ * `useBattleLogic` hook to derive battle statistics and the `useBattleSequence` hook
+ * to manage the complex flow of animations and state transitions. It renders the
+ * player and opponent `PokemonDisplay` components and the central `BattleField`,
+ * progressing from the first battle to the second until a winner is decided.
+ *
+ * @param onNavigate - A handler for navigating to other parts of the application.
+ *
+ * @example
+ * <BattlePage onNavigate={handleNavigation} />
+ */
+
 export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { roomState, sendBattleEnd } = useSocket();
 
@@ -55,9 +70,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                         <BattleField
                             key={activeBattle === 1 ? "battle-1" : "battle-2"}
                             yourBattle={
-                                activeBattle === 1
-                                    ? battleStats.isYouFirst
-                                    : !battleStats.isYouFirst
+                                activeBattle === 1 ? battleStats.isYouFirst : !battleStats.isYouFirst
                             }
                             battleStats={battleStats}
                             isWipingIn={isWipingIn}
