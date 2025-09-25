@@ -186,11 +186,8 @@ export default class Orchestrator {
         );
 
         this.#handleRoomErrors(() => {
-            // this will only have an effect the first time it's called in a battle phase
-            this.#sendGameCommand(
-                roomId,
-                OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
-            );
+            // line below has an effect the first time it's called in a battle phase
+            this.#sendGameCommand(roomId, OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END));
             this.#updateRoomClient(roomId, client);
         }, socket);
     }
@@ -240,23 +237,37 @@ export default class Orchestrator {
         this.#handleRoomErrors(async () => {
             switch (event.eventType) {
                 case GameEvents.ALL_SELECTED:
-                    this.#updateAllRoomClients(roomId);
-                    this.#startBattle(roomId);
+                    this.#onAllSelected(roomId);
                     break;
                 case GameEvents.INVALID_STAT_SELECT:
-                    const client = this.clientManager.getClientByUuid(event.clientId!);
-                    if (client) {
-                        this.socketService.emitActionError(client.socket!, event.payload);
-                    }
+                    this.#onInvalidStatSelect(roomId, event.payload, event.clientId);
                     break;
-                case GameEvents.NEW_BATTLE:
-                    await this.#assignNewPokemon(roomId);
-                    this.#updateAllRoomClients(roomId);
+                case GameEvents.NEW_MATCH:
+                    this.#onNewMatch(roomId);
                     break;
                 default:
                     logger.warn(`[Orchestrator] Unknown event type: ${event.eventType}`);
             }
         });
+    }
+
+    #onAllSelected(roomId: number) {
+        logger.debug(`[Orchestrator] Starting battle for room: ${roomId}`);
+        this.#updateAllRoomClients(roomId);
+    }
+
+    #onInvalidStatSelect(roomId: number, payload: any, clientId?: string | null) {
+        logger.warn(`[Orchestrator] Invalid stat select in room ${roomId}: ${payload}`);
+        const client = this.clientManager.getClientByUuid(clientId!);
+        if (client) {
+            this.socketService.emitActionError(client.socket!, payload);
+        }
+    }
+
+    async #onNewMatch(roomId: number) {
+        logger.log(`[Orchestrator] Starting new match for room: ${roomId}`);
+        await this.#assignNewPokemon(roomId);
+        this.#updateAllRoomClients(roomId);
     }
 
     /**
@@ -268,24 +279,6 @@ export default class Orchestrator {
         this.roomManager.startGame(roomId);
         await this.#assignNewPokemon(roomId);
         this.#updateAllRoomClients(roomId);
-    }
-
-    /**
-     * Starts the battle phase after a delay, then sends the BATTLE_END command.
-     * @param roomId The ID of the room in battle.
-     */
-    #startBattle(roomId: number) {
-        // TODO: Clean up here
-        logger.debug(`[Orchestrator] Starting battle for room: ${roomId}`);
-        // delay(Timings.BATTLE_DURATION).then(() => {
-        //     this.#handleRoomErrors(() => {
-        //         this.#sendGameCommand(
-        //             roomId,
-        //             OrchestratorToGameCommand.fromSystem(GameCommands.BATTLE_END)
-        //         );
-        //         this.#updateRoomClients(roomId);
-        //     });
-        // });
     }
 
     /**

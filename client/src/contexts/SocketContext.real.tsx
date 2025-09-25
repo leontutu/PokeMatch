@@ -116,7 +116,6 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     };
 
     const sendBattleEnd = () => {
-        console.log("Sending battle end");
         if (socket) {
             socket.emit(Events.BATTLE_END, {});
         }

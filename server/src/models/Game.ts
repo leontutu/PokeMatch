@@ -174,7 +174,7 @@ export default class Game extends EventEmitter {
         this.firstMove = this.firstMove === 1 ? 2 : (1 as PlayerInGameId);
         this.lockedStats = [];
         this.players.forEach((p) => p.resetSelectedStat());
-        this.#emitGameEvent(GameEvents.NEW_BATTLE);
+        this.#emitGameEvent(GameEvents.NEW_MATCH);
     }
 
     //================================================================

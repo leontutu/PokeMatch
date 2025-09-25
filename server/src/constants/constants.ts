@@ -2,7 +2,7 @@
  * - GAME_EVENTS: Events emitted by the Game to the Orchestrator.
  */
 export enum GameEvents {
-    NEW_BATTLE = "newBattle",
+    NEW_MATCH = "newMatch",
     GAME_FINISHED = "gameFinished",
     INVALID_STAT_SELECT = "invalidStatSelect",
     ALL_SELECTED = "allSelected",
