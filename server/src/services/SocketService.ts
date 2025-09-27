@@ -65,8 +65,8 @@ export default class SocketService {
                 this.orchestrator.onNameEnter(socket, payload);
             });
 
-            socket.on(Events.READY, () => {
-                this.orchestrator.onReady(socket);
+            socket.on(Events.TOGGLE_READY, () => {
+                this.orchestrator.onToggleReady(socket);
             });
 
             socket.on(Events.LEAVE_ROOM, () => {

@@ -8,7 +8,7 @@
 export enum Events {
     // Client to Server events
     NAME_ENTER = "nameEnter", // Client submits their name
-    READY = "ready", // Client waiting in Room is ready to start a game
+    TOGGLE_READY = "ready", // Client waiting in Room is ready to start a game
     GAME_COMMAND = "gameCommand", // Client sends a game command (the payload being of type GAME_COMMANDS)
     LEAVE_ROOM = "leaveRoom", // Client wishes to leave the current room
     BATTLE_END = "battleEnd", // Client finished watching the battle phase animation

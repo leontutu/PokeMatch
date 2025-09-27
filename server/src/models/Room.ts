@@ -31,9 +31,7 @@ export default class Room extends EventEmitter {
      * @returns True if the client was added, false otherwise.
      */
     addClient(client: Client) {
-        const isAlreadyInRoom = this.clientRecords.some(
-            (record) => record.client.uuid === client.uuid
-        );
+        const isAlreadyInRoom = this.clientRecords.some((record) => record.client.uuid === client.uuid);
         if (this.isFull() || isAlreadyInRoom) {
             return false;
         }
@@ -46,21 +44,17 @@ export default class Room extends EventEmitter {
      * @param client The client to remove.
      */
     removeClient(client: Client) {
-        this.clientRecords = this.clientRecords.filter(
-            (c) => c.client.uuid !== client.uuid
-        );
+        this.clientRecords = this.clientRecords.filter((c) => c.client.uuid !== client.uuid);
     }
 
     /**
-     * Sets a client's status to ready.
+     * Toggles a client's ready status.
      * @param clientUuid The UUID of the client.
      */
-    setClientReady(clientUuid: string) {
-        const clientRecord = this.clientRecords.find(
-            (c) => c.client.uuid === clientUuid
-        );
+    toggleClientReady(clientUuid: string) {
+        const clientRecord = this.clientRecords.find((c) => c.client.uuid === clientUuid);
         if (clientRecord) {
-            clientRecord.isReady = true;
+            clientRecord.isReady = !clientRecord.isReady;
         }
     }
 

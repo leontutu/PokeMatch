@@ -22,11 +22,6 @@ import styles from "./RoomPage.module.css";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
-import { NavigationHandler } from "../../../types";
-
-type RoomPageProps = {
-    onNavigate: NavigationHandler;
-};
 
 /**
  * Renders the UI for a game room where players wait before a match starts.
@@ -36,21 +31,13 @@ type RoomPageProps = {
  * to send a "ready" signal to the server. When the server starts the game,
  * it automatically navigates the user to the next page.
  */
-export default function RoomPage({ onNavigate }: RoomPageProps) {
-    const { roomState, sendReady } = useSocket();
-
-    //NOTE reconsider this
-    // Determine if the current client has already pressed the ready button.
-    // const amIReady = roomState.clients.find(
-    //     (c) => c.uuid === clientUuid
-    // )?.isReady;
+export default function RoomPage() {
+    const { roomState, toggleReady: sendReady } = useSocket();
     const [amIReady, setAmIReady] = useState(false);
 
     const handleReadyClick = () => {
-        if (!amIReady) {
-            setAmIReady(true);
-            sendReady();
-        }
+        setAmIReady(!amIReady);
+        sendReady();
     };
 
     if (!roomState) {

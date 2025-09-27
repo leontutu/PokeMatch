@@ -13,7 +13,7 @@ type SocketContextType = {
     setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
-    sendReady: () => void;
+    toggleReady: () => void;
     sendSelectStat: (stat: StatNames) => void;
     sendBattleEnd: () => void;
     sendLeaveRoom: () => void;
@@ -92,9 +92,9 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         }
     };
 
-    const sendReady = () => {
+    const toggleReady = () => {
         if (socket) {
-            socket.emit(Events.READY);
+            socket.emit(Events.TOGGLE_READY);
         }
     };
 
@@ -130,7 +130,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         setSelectStatErrorSignal,
         setNameErrorSignal,
         sendName,
-        sendReady,
+        toggleReady: toggleReady,
         sendSelectStat,
         sendBattleEnd,
         sendLeaveRoom,

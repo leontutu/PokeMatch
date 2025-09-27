@@ -67,7 +67,7 @@ function App() {
             case Pages.ENTER_NAME:
                 return <EnterNamePage onNavigate={handleNavigate} />;
             case Pages.ROOM:
-                return <RoomPage onNavigate={handleNavigate} />;
+                return <RoomPage />;
             case Pages.SELECT_STAT:
                 return <SelectStatPage onNavigate={handleNavigate} />;
             case Pages.BATTLE:

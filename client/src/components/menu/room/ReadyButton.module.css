@@ -28,6 +28,5 @@
 .readyBtn.pressed {
     background-color: #718096;
     box-shadow: 0 5px 0 #4a5568;
-    cursor: not-allowed;
     filter: brightness(0.8);
 }

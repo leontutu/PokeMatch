@@ -130,22 +130,22 @@ export default class Orchestrator {
     }
 
     /**
-     * Handles a client signaling they are ready to start the game.
+     * Handles a client pressing ready button. Unreadies the client if they were already ready.
      * If all clients in the room are ready, the game begins.
      * @param socket The client's socket instance.
      */
-    onReady(socket: Socket) {
+    onToggleReady(socket: Socket) {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
 
         assertIsDefined(
             roomId,
-            `[Orchestrator] onReady called for client ${client.uuid} who is not in a room.`
+            `[Orchestrator] onToggleReady called for client ${client.uuid} who is not in a room.`
         );
 
         this.#handleRoomErrors(() => {
-            this.roomManager.setClientOfRoomReady(roomId, client.uuid);
-            logger.debug(`[Orchestrator] ${client.name} is ready in room ${roomId}`);
+            this.roomManager.toggleClientOfRoomReady(roomId, client.uuid);
+            logger.debug(`[Orchestrator] ${client.name} toggled ready in room ${roomId}`);
             this.#updateAllRoomClients(roomId);
 
             if (this.roomManager.isRoomReady(roomId)) {

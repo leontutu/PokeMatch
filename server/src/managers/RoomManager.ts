@@ -87,13 +87,13 @@ export default class RoomManager extends EventEmitter {
     }
 
     /**
-     * Sets a client's status to ready within a room.
+     * Toggles a client's ready status within a room.
      * @param roomId The ID of the room.
      * @param clientId The ID of the client.
      * @throws {RoomNotFoundError}
      */
-    setClientOfRoomReady(roomId: number, clientId: string) {
-        this.getRoom(roomId).setClientReady(clientId);
+    toggleClientOfRoomReady(roomId: number, clientId: string) {
+        this.getRoom(roomId).toggleClientReady(clientId);
     }
 
     /**
