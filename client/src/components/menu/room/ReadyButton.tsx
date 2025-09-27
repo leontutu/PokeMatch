@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./ReadyButton.module.css";
 
 type ReadyButtonProps = {
@@ -10,9 +11,19 @@ type ReadyButtonProps = {
  * The button is disabled and styled differently when the player is already marked as ready.
  */
 export default function ReadyButton({ amIReady, handleReadyClick }: ReadyButtonProps) {
+    const [canReadyBePressed, setCanReadyBePressed] = useState(true);
+    const handleClick = () => {
+        if (!canReadyBePressed) return;
+        setCanReadyBePressed(false);
+        handleReadyClick();
+        setTimeout(() => {
+            setCanReadyBePressed(true);
+        }, 500); // Prevent spamming the ready button
+    };
+
     return (
         <button
-            onClick={handleReadyClick}
+            onClick={handleClick}
             className={`${styles.readyBtn} ${amIReady ? styles.pressed : ""}`}
             // disabled={amIReady}
         >
