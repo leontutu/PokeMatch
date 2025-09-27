@@ -15,14 +15,13 @@
  * <RoomPage onNavigate={yourNavigateFunction} />
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./RoomPage.module.css";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
-import { Pages } from "../../../constants/constants";
 import { NavigationHandler } from "../../../types";
 
 type RoomPageProps = {
@@ -46,12 +45,6 @@ export default function RoomPage({ onNavigate }: RoomPageProps) {
     //     (c) => c.uuid === clientUuid
     // )?.isReady;
     const [amIReady, setAmIReady] = useState(false);
-
-    useEffect(() => {
-        if (roomState?.game) {
-            onNavigate(Pages.POKEVIEWER);
-        }
-    }, [roomState, onNavigate]);
 
     const handleReadyClick = () => {
         if (!amIReady) {
