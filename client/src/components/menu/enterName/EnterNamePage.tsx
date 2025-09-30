@@ -24,7 +24,7 @@ type EnterNamePageProps = {
  * <EnterNamePage onNavigate={handleNavigation} />
  */
 export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
-    const { sendName, roomState, nameErrorSignal, setNameErrorSignal } = useSocket();
+    const { sendName, viewRoom, nameErrorSignal, setNameErrorSignal } = useSocket();
 
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
@@ -39,10 +39,10 @@ export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
     }, [nameErrorSignal, onNavigate, setNameErrorSignal]);
 
     useEffect(() => {
-        if (roomState) {
+        if (viewRoom) {
             onNavigate(Pages.ROOM, false);
         }
-    }, [roomState, onNavigate]);
+    }, [viewRoom, onNavigate]);
 
     function handleSubmit() {
         if (!isValidName(name)) {

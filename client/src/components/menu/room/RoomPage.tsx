@@ -32,7 +32,7 @@ import StatusText from "./StatusText";
  * it automatically navigates the user to the next page.
  */
 export default function RoomPage() {
-    const { roomState, toggleReady: sendReady } = useSocket();
+    const { viewRoom, toggleReady: sendReady } = useSocket();
     const [amIReady, setAmIReady] = useState(false);
 
     const handleReadyClick = () => {
@@ -40,7 +40,7 @@ export default function RoomPage() {
         sendReady();
     };
 
-    if (!roomState) {
+    if (!viewRoom) {
         return <p>Loading room...</p>;
     }
 
@@ -48,13 +48,13 @@ export default function RoomPage() {
         <HomeLayout>
             <div className={styles.roomPage}>
                 <div className={styles.mainContent}>
-                    <h1 className={styles.roomTitle}>Room ID: {roomState.id}</h1>
-                    <ParticipantList participants={roomState.clientRecords} />
+                    <h1 className={styles.roomTitle}>Room ID: {viewRoom.id}</h1>
+                    <ParticipantList participants={viewRoom.viewClientRecords} />
                 </div>
 
                 <div className={styles.footer}>
                     <ReadyButton amIReady={amIReady} handleReadyClick={handleReadyClick} />
-                    <StatusText amIReady={amIReady} isGameStarted={roomState.game !== null} />
+                    <StatusText amIReady={amIReady} isGameStarted={viewRoom.viewGame !== null} />
                 </div>
             </div>
         </HomeLayout>

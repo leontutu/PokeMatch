@@ -25,11 +25,11 @@ type PokemonRevealPageProps = {
  */
 
 export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps) {
-    const { roomState } = useSocket();
+    const { viewRoom } = useSocket();
     const { isWipingIn } = useUIInfoContext();
 
-    if (roomState === null || roomState.game === null) return null;
-    let pokemon: Pokemon = roomState.game.you.pokemon;
+    if (viewRoom === null || viewRoom.viewGame === null) return null;
+    let pokemon: Pokemon = viewRoom.viewGame.you.pokemon;
 
     const [countDownFinished, setCountDownFinished] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
@@ -88,9 +88,7 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
     return (
         <MatchLayout onNavigate={onNavigate}>
             <div className={styles.outerContainer}>
-                <div
-                    className={`${styles.flashOverlay} ${flashActive ? styles.flashActive : ""}`}
-                ></div>
+                <div className={`${styles.flashOverlay} ${flashActive ? styles.flashActive : ""}`}></div>
                 <img
                     className={`${styles.pokeballImage} 
                     ${countDownFinished ? styles.hidden : ""}

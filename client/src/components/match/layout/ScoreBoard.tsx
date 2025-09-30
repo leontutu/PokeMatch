@@ -1,8 +1,8 @@
 import styles from "./ScoreBoard.module.css";
-import { GameState } from "../../../types";
+import { ViewGame } from "../../../../../shared/types/types";
 
 type ScoreBoardProps = {
-    game: GameState;
+    viewGame: ViewGame;
     onHomeClick: () => void;
 };
 
@@ -14,11 +14,11 @@ type ScoreBoardProps = {
  * to allow the user to leave the match.
  *
  * @example
- * <ScoreBoard game={gameState} onHomeClick={handleGoHome} />
+ * <ScoreBoard viewGame={gameState} onHomeClick={handleGoHome} />
  */
-export default function ScoreBoard({ game, onHomeClick }: ScoreBoardProps) {
-    const you = game.you;
-    const opponent = game.opponent;
+export default function ScoreBoard({ viewGame, onHomeClick }: ScoreBoardProps) {
+    const you = viewGame.you;
+    const opponent = viewGame.opponent;
 
     return (
         <div className={styles.bottomSpansContainer}>

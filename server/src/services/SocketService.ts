@@ -3,6 +3,7 @@ import { Events } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import Orchestrator from "./Orchestrator.js";
 import { Server as HttpServer } from "node:http";
+import { ViewRoom } from "../../../shared/types/types.js";
 /**
  * SocketService
  * -------------
@@ -84,8 +85,8 @@ export default class SocketService {
     }
 
     // Emits the latest room/game state to a client.
-    emitUpdate(socket: Socket, data: any) {
-        socket.emit(Events.UPDATE, data);
+    emitUpdate(socket: Socket, viewRoom: ViewRoom) {
+        socket.emit(Events.UPDATE, viewRoom);
     }
 
     // Notifies a client that a room is full.

@@ -26,7 +26,7 @@ type SelectStatPageProps = {
  * <SelectStatPage onNavigate={handleNavigation} />
  */
 export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
-    const { roomState, sendSelectStat } = useSocket();
+    const { viewRoom, sendSelectStat } = useSocket();
     const { selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [buttonState, setButtonState] = useState(false);
@@ -54,17 +54,17 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
         }
     }, [selectStatErrorSignal, setSelectStatErrorSignal]);
 
-    if (!roomState || !roomState.game) return null;
+    if (!viewRoom || !viewRoom.viewGame) return null;
 
-    const yourPokemon = roomState.game.you.pokemon;
-    const opponentPokemon = roomState.game.opponent.pokemon;
+    const yourPokemon = viewRoom.viewGame.you.pokemon;
+    const opponentPokemon = viewRoom.viewGame.opponent.pokemon;
     const cards = cardScaffold(yourPokemon);
 
     const handleCardClick = (index: number) => {
-        if (!roomState || !roomState.game) return null;
+        if (!viewRoom || !viewRoom.viewGame) return null;
 
         const selectedStat = DisplayToStat.get(cards[index].statName) as StatNames;
-        if (roomState.game.lockedStats.includes(selectedStat) || lockedIn) {
+        if (viewRoom.viewGame.lockedStats.includes(selectedStat) || lockedIn) {
             return;
         }
 
@@ -120,7 +120,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
                     <div className={styles.cardsContainer}>
                         {cards.map((card, index) => {
                             const rawStatName = DisplayToStat.get(card.statName);
-                            const isLocked = roomState.game!.lockedStats.includes(
+                            const isLocked = viewRoom.viewGame!.lockedStats.includes(
                                 rawStatName as StatNames
                             );
 

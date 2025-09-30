@@ -2,11 +2,11 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import io, { Socket } from "socket.io-client";
 import { Events, GameCommands, StatNames } from "../../../shared/constants/constants.js";
 import { DisplayToStat } from "../constants/constants.js";
-import { RoomState } from "../types.js";
+import { ViewRoom } from "../../../shared/types/types.js";
 
 type SocketContextType = {
     socket: Socket | null;
-    roomState: RoomState | null;
+    viewRoom: ViewRoom | null;
     roomCrashSignal: boolean;
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
@@ -35,7 +35,7 @@ type SocketContextProps = {
 
 export const SocketProvider = ({ children }: SocketContextProps) => {
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [roomState, setRoomState] = useState<RoomState | null>(null);
+    const [viewRoom, setViewRoom] = useState<ViewRoom | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
@@ -60,14 +60,14 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
             );
         });
 
-        socket.on(Events.UPDATE, (data) => {
-            setRoomState(data);
+        socket.on(Events.UPDATE, (viewRoom) => {
+            setViewRoom(viewRoom);
         });
 
         socket.on(Events.ROOM_CRASH, () => {
             setRoomCrashSignal(!roomCrashSignal);
             setTimeout(() => {
-                setRoomState(null);
+                setViewRoom(null);
             }, 500);
         });
 
@@ -99,7 +99,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     };
 
     const sendLeaveRoom = () => {
-        setRoomState(null);
+        setViewRoom(null);
         if (socket) {
             socket.emit(Events.LEAVE_ROOM);
         }
@@ -123,7 +123,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
 
     const value = {
         socket,
-        roomState,
+        viewRoom,
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,

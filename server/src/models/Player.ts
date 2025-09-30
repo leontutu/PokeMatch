@@ -47,19 +47,4 @@ export default class Player {
     resetSelectedStat() {
         this.selectedStat = null;
     }
-
-    /**
-     * Returns a JSON representation of the player.
-     * @returns The player data.
-     */
-    toJSON() {
-        return {
-            inGameId: this.inGameId,
-            name: this.name,
-            uuid: this.uuid,
-            points: this.points,
-            pokemon: this.pokemon,
-            selectedStat: this.selectedStat,
-        };
-    }
 }
