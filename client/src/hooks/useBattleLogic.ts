@@ -1,28 +1,35 @@
 import { useMemo } from "react";
 import { StatToDisplay } from "../constants/constants";
-import { GameState, BattleStats } from "../types.js";
+import { BattleStats } from "../types.js";
+import { ViewGame } from "../../../shared/types/types.js";
 import { StatNames } from "../../../shared/constants/constants.js";
 
 /**
  * Custom hook to encapsulate the business logic for the battle phase.
  * It computes derived state for Pokémon, stats, and battle outcomes from the raw `game`.
  *
- * @param  gameState - The current game state from the `roomState`.
+ * @param  viewGame - The current game state from the `viewRoom`.
  * @returns An object containing all necessary computed values for rendering the battle page.
  */
-export const useBattleLogic = (gameState: GameState | null | undefined): BattleStats => {
+export const useBattleLogic = (viewGame: ViewGame | null | undefined): BattleStats => {
     return useMemo(() => {
-        if (!gameState || !gameState.you.challengeStat) {
+        if (
+            !viewGame ||
+            !viewGame.you.challengeStat ||
+            !viewGame.opponent.challengedStat ||
+            !viewGame.opponent.challengeStat ||
+            !viewGame.you.challengedStat
+        ) {
             return null;
         }
 
-        const yourPokemon = gameState.you.pokemon;
-        const opponentPokemon = gameState.opponent.pokemon;
+        const yourPokemon = viewGame.you.pokemon;
+        const opponentPokemon = viewGame.opponent.pokemon;
 
-        const yourChallengeStat = gameState.you.challengeStat;
-        const yourChallengedStat = gameState.you.challengedStat;
-        const opponentChallengeStat = gameState.opponent.challengeStat;
-        const opponentChallengedStat = gameState.opponent.challengedStat;
+        const yourChallengeStat = viewGame.you.challengeStat;
+        const yourChallengedStat = viewGame.you.challengedStat;
+        const opponentChallengeStat = viewGame.opponent.challengeStat;
+        const opponentChallengedStat = viewGame.opponent.challengedStat;
 
         // Determine outcomes
         const isYourChallengeTie = yourChallengeStat.value === opponentChallengedStat.value;
@@ -31,7 +38,7 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
         const isOpponentChallengeTie = opponentChallengeStat.value === yourChallengedStat.value;
         const opponentChallengeOutcome = opponentChallengeStat.value < yourChallengedStat.value;
 
-        const isYouFirst = gameState.firstMove === gameState.you.inGameId;
+        const isYouFirst = viewGame.firstMove === viewGame.you.inGameId;
         const isChallenge1Win = isYouFirst ? yourChallengeOutcome : opponentChallengeOutcome;
         const isChallenge2Win = isYouFirst ? opponentChallengeOutcome : yourChallengeOutcome;
         const isChallenge1Tie = isYouFirst ? isYourChallengeTie : isOpponentChallengeTie;
@@ -67,5 +74,5 @@ export const useBattleLogic = (gameState: GameState | null | undefined): BattleS
             isChallenge2Tie,
             isYouFirst,
         };
-    }, [gameState]);
+    }, [viewGame]);
 };

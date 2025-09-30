@@ -1,8 +1,8 @@
 import styles from "./ParticipantList.module.css";
-import { ClientRecord } from "../../../types";
+import { ViewClientRecord } from "../../../../../shared/types/types";
 
 type ParticipantListProps = {
-    participants: ClientRecord[];
+    participants: ViewClientRecord[];
 };
 
 /**
@@ -11,15 +11,15 @@ type ParticipantListProps = {
 export default function ParticipantList({ participants }: ParticipantListProps) {
     return (
         <ul className={styles.participantsList}>
-            {participants.map((clientRecord, index) => (
+            {participants.map((viewClientRecord, index) => (
                 <li key={index} className={styles.participantItem}>
-                    <span className={styles.participantName}>{clientRecord.client.name}</span>
+                    <span className={styles.participantName}>{viewClientRecord.clientName}</span>
                     <span
                         className={`${styles.statusIndicator} ${
-                            clientRecord.isReady ? styles.ready : ""
+                            viewClientRecord.isReady ? styles.ready : ""
                         }`}
                     >
-                        {clientRecord.isReady ? "Ready" : "Not Ready"}
+                        {viewClientRecord.isReady ? "Ready" : "Not Ready"}
                     </span>
                 </li>
             ))}

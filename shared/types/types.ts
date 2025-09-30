@@ -1,4 +1,4 @@
-import { StatNames, PokemonTypes } from "../constants/constants.js";
+import { StatNames, PokemonTypes, GamePhases } from "../constants/constants.js";
 
 export type Pokemon = {
     id: number;
@@ -29,9 +29,31 @@ export type Sprites = {
  */
 export type PlayerInGameId = 1 | 2;
 
-export enum GamePhases {
-    WAITING = "WAITING",
-    SELECT_STAT = "SELECT_STAT",
-    BATTLE = "BATTLE",
-    GAME_OVER = "GAME_OVER",
-}
+export type ViewRoom = {
+    id: number;
+    viewClientRecords: ViewClientRecord[];
+    viewGame: ViewGame | null;
+};
+
+export type ViewClientRecord = {
+    clientName: string;
+    isReady: boolean;
+};
+
+export type ViewGame = {
+    phase: GamePhases;
+    lockedStats: StatNames[];
+    winner: string | null;
+    firstMove: PlayerInGameId;
+    you: ViewPlayer;
+    opponent: ViewPlayer;
+};
+
+export type ViewPlayer = {
+    inGameId: PlayerInGameId;
+    name: string;
+    points: number;
+    challengeStat: Stat | null;
+    challengedStat: Stat | null;
+    pokemon: Pokemon;
+};

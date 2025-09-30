@@ -18,7 +18,7 @@ type VictoryPageProps = {
  * <VictoryPage onNavigate={handleNavigation} />
  */
 export default function VictoryPage({ onNavigate }: VictoryPageProps) {
-    const { roomState, sendLeaveRoom } = useSocket();
+    const { viewRoom, sendLeaveRoom } = useSocket();
 
     const handleMenuButtonClick = () => {
         onNavigate(Pages.HOME, true);
@@ -26,21 +26,21 @@ export default function VictoryPage({ onNavigate }: VictoryPageProps) {
     };
 
     // A guard clause in case the component renders before the game state is settled.
-    if (!roomState?.game?.winner) {
+    if (!viewRoom?.viewGame?.winner) {
         return null;
     }
 
     return (
         <div className={styles.victoryContainer}>
             <div className={styles.mainContent}>
-                <h1 className={styles.winnerMessage}>{`${roomState.game.winner} won!`}</h1>
+                <h1 className={styles.winnerMessage}>{`${viewRoom.viewGame.winner} won!`}</h1>
 
                 <div className={styles.scoresContainer}>
                     <p className={styles.score}>
-                        {`${roomState.game.you.name}: ${roomState.game.you.points}`}
+                        {`${viewRoom.viewGame.you.name}: ${viewRoom.viewGame.you.points}`}
                     </p>
                     <p className={styles.score}>
-                        {`${roomState.game.opponent.name}: ${roomState.game.opponent.points}`}
+                        {`${viewRoom.viewGame.opponent.name}: ${viewRoom.viewGame.opponent.points}`}
                     </p>
                 </div>
             </div>

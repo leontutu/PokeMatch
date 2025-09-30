@@ -15,7 +15,7 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
-    const [roomState, setRoomState] = useState(mockRoomState);
+    const [viewRoom, setViewRoom] = useState(mockRoomState);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
 
@@ -42,7 +42,7 @@ export const SocketProvider = ({ children }) => {
 
     const value = {
         socket,
-        roomState: roomState,
+        viewRoom,
         roomCrashSignal,
         nameErrorSignal,
         sendName,

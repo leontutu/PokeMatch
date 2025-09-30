@@ -26,10 +26,10 @@ type MatchLayoutProps = {
  * </MatchLayout>
  */
 export default function MatchLayout({ children, onNavigate }: MatchLayoutProps) {
-    const { roomState, sendLeaveRoom } = useSocket();
+    const { viewRoom, sendLeaveRoom } = useSocket();
     const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 
-    if (!roomState) return null;
+    if (!viewRoom) return null;
 
     const handleLeaveConfirm = () => {
         sendLeaveRoom();
@@ -45,14 +45,14 @@ export default function MatchLayout({ children, onNavigate }: MatchLayoutProps) 
         setIsLeaveDialogOpen(true);
     };
 
-    if (!roomState.game) {
+    if (!viewRoom.viewGame) {
         return <p>Loading...</p>;
     }
 
     return (
         <div className={styles.matchLayout}>
             <div className={styles.contentArea}>{children}</div>
-            <ScoreBoard game={roomState.game} onHomeClick={handleOpenDialog} />
+            <ScoreBoard viewGame={viewRoom.viewGame} onHomeClick={handleOpenDialog} />
             <LeaveConfirmationDialog
                 isOpen={isLeaveDialogOpen}
                 onConfirm={handleLeaveConfirm}

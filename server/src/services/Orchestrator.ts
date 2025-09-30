@@ -13,6 +13,7 @@ import SocketService from "./SocketService.js";
 import { Socket } from "socket.io";
 import Client from "../models/Client.js";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
+import { mapRoomToViewRoom } from "../mappers/mappers.js";
 
 /**
  * The central controller of the application.
@@ -336,9 +337,7 @@ export default class Orchestrator {
     #updateAllRoomClients(roomId: number) {
         this.#forEachRoomClient(roomId, (client: Client) => {
             if (!client.socket) return;
-            const room = this.roomManager.getRoom(roomId);
-            const clientGameState = room.toClientState(client.uuid);
-            this.socketService.emitUpdate(client.socket, clientGameState);
+            this.#updateRoomClient(roomId, client);
         });
     }
 
@@ -350,8 +349,8 @@ export default class Orchestrator {
     #updateRoomClient(roomId: number, client: Client) {
         if (!client.socket) return;
         const room = this.roomManager.getRoom(roomId);
-        const clientGameState = room.toClientState(client.uuid);
-        this.socketService.emitUpdate(client.socket, clientGameState);
+        const viewRoom = mapRoomToViewRoom(room, client.uuid);
+        this.socketService.emitUpdate(client.socket, viewRoom);
     }
 
     //================================================================

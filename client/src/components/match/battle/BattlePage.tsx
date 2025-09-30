@@ -29,10 +29,10 @@ type BattlePageProps = {
  */
 
 export default function BattlePage({ onNavigate }: BattlePageProps) {
-    const { roomState, sendBattleEnd } = useSocket();
+    const { viewRoom, sendBattleEnd } = useSocket();
 
     // hack: Making can still render properly during page transition
-    const currentBattleStats = useBattleLogic(roomState?.game);
+    const currentBattleStats = useBattleLogic(viewRoom?.viewGame);
     const battleStatsRef = useRef(currentBattleStats);
     if (currentBattleStats) battleStatsRef.current = currentBattleStats;
     const battleStats = battleStatsRef.current;

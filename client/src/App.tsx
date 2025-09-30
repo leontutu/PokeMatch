@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Pages } from "./constants/constants.js";
-import { Timings, GamePhases } from "../../shared/constants/constants.js";
+import { Timings, GamePhases } from "../../shared/constants/constants";
 import { useSocket } from "./contexts/SocketContext.jsx";
 import { NavigationHandler } from "./types.js";
 import HomePage from "./components/menu/home/HomePage.js";
@@ -22,7 +22,7 @@ function App() {
 
     const { isWipingIn, setIsWipingIn, isWipingOut, setIsWipingOut } = useUIInfoContext();
 
-    const { roomState } = useSocket();
+    const { viewRoom } = useSocket();
 
     const { roomCrashSignal } = useSocket();
     const [isFirstRender, setIsFirstRender] = useState(true);
@@ -98,9 +98,9 @@ function App() {
     }, [handleNavigate]);
 
     useEffect(() => {
-        if (roomState) {
-            if (roomState.game) {
-                switch (roomState.game.phase) {
+        if (viewRoom) {
+            if (viewRoom.viewGame) {
+                switch (viewRoom.viewGame.phase) {
                     case GamePhases.GAME_FINISHED:
                         handleNavigate(Pages.VICTORY, true);
                         break;
@@ -116,7 +116,7 @@ function App() {
                 }
             }
         }
-    }, [roomState, handleNavigate]);
+    }, [viewRoom, handleNavigate]);
 
     return (
         <>
