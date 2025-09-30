@@ -1,16 +1,21 @@
 import Player from "../models/Player.js";
-import { PlayerInGameId, Stat, ViewGame, ViewPlayer, ViewRoom } from "../../../shared/types/types.js";
+import { ViewGame, ViewPlayer, ViewRoom } from "../../../shared/types/types.js";
 import MappingError from "../errors/MappingError.js";
 import Room from "../models/Room.js";
 import Game from "../models/Game.js";
 import { StatNames } from "../../../shared/constants/constants.js";
+
+/**
+ * Convert domain models (Room, Game, Player) into client view DTOs.
+ * Validates required fields and throws MappingError on critical misses.
+ */
 
 export function mapRoomToViewRoom(room: Room, uuid: string): ViewRoom {
     return {
         id: room.id,
         viewClientRecords: room.clientRecords.map((clientRecord) => {
             return {
-                clientName: clientRecord.client.name || "NameNotFound",
+                clientName: clientRecord.client.name,
                 isReady: clientRecord.isReady,
             };
         }),
@@ -19,7 +24,6 @@ export function mapRoomToViewRoom(room: Room, uuid: string): ViewRoom {
 }
 
 function mapGameToViewGame(game: Game, uuid: string): ViewGame {
-    // fixme: consider game implementation -> does it need to know about uuid?
     const you = game.players[0].uuid === uuid ? game.players[0] : game.players[1];
     const opponent = game.players[0].uuid === uuid ? game.players[1] : game.players[0];
     return {
