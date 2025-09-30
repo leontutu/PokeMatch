@@ -133,41 +133,4 @@ export default class Room extends EventEmitter {
     isReady() {
         return this.isFull() && this.clientRecords.every((c) => c.isReady);
     }
-
-    /**
-     * Returns a JSON representation of the room
-     * @returns The Room data
-     */
-    toJSON() {
-        return {
-            id: this.id,
-            clientRecords: this.clientRecords.map((clientRecord) => {
-                return {
-                    isReady: clientRecord.isReady,
-                    client: clientRecord.client.toJSON(),
-                };
-            }),
-            game: this.game ? this.game.toJSON() : null,
-        };
-    }
-
-    /**
-     * Creates a client-safe representation of the room state.
-     * NOTE: This used to be clean and use toJSON(), which is termporarily not possible
-     * due to ts migration
-     * @param client The client for whom the state is being prepared.
-     * @returns The room state object for the client.
-     */
-    toClientState(clientUuid: string) {
-        return {
-            id: this.id,
-            clientRecords: this.clientRecords.map((clientRecord) => {
-                return {
-                    isReady: clientRecord.isReady,
-                    client: clientRecord.client.toJSON(),
-                };
-            }),
-            game: this.game ? this.game.toClientState(clientUuid) : null,
-        };
-    }
 }

@@ -48,16 +48,4 @@ export default class Client {
         this.name = null;
         this.roomId = null;
     }
-
-    /**
-     * Returns a JSON representation of the client without socket
-     * @returns The client Data
-     */
-    toJSON() {
-        return {
-            uuid: this.uuid,
-            name: this.name,
-            roomId: this.roomId,
-        };
-    }
 }
