@@ -47,6 +47,7 @@ export type ViewGame = {
     firstMove: PlayerInGameId;
     you: ViewPlayer;
     opponent: ViewPlayer;
+    currentRound: 1 | 2 | 3;
 };
 
 export type ViewPlayer = {
