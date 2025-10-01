@@ -1,6 +1,6 @@
 import { GamePhases, StatNames } from "../../../shared/constants/constants.js";
 import { PlayerInGameId, Pokemon, Stat } from "../../../shared/types/types.js";
-import { GameEvents } from "../constants/constants.js";
+import { GameEvents, POINTS_NEEDED_FOR_WIN } from "../constants/constants.js";
 import { EventEmitter } from "events";
 import { GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
@@ -106,15 +106,7 @@ export default class Game extends EventEmitter {
     #evaluateBattleOutcome() {
         const [p1, p2] = this.players;
 
-        //OPTIMIZE: find a better solution to this
-        if (
-            !p1.pokemon ||
-            !p2.pokemon ||
-            p1.selectedStat === null ||
-            p2.selectedStat === null ||
-            typeof p2.pokemon.stats[p1.selectedStat.name] !== "number" ||
-            typeof p1.pokemon.stats[p2.selectedStat.name] !== "number"
-        ) {
+        if (!p1.pokemon || !p2.pokemon || p1.selectedStat === null || p2.selectedStat === null) {
             logger.warn("[Game] Cannot evaluate battle outcome: missing data");
             return;
         }
@@ -183,7 +175,7 @@ export default class Game extends EventEmitter {
     }
 
     #isThereAWinner() {
-        return this.players.some((p) => p.points >= 20);
+        return this.players.some((p) => p.points >= POINTS_NEEDED_FOR_WIN);
     }
 
     #findPlayer(clientId: string) {
