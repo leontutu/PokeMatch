@@ -19,6 +19,7 @@ export default class Game extends EventEmitter {
     lockedStats: StatNames[];
     firstMove: PlayerInGameId;
     winner: string | null;
+    currentRound: 1 | 2 | 3 = 1;
     constructor(public participants: { name: string; uuid: string }[]) {
         super();
         this.players = participants.map(
@@ -118,42 +119,33 @@ export default class Game extends EventEmitter {
             return;
         }
 
-        let p1RoundScore = 0;
+        let p1Wins = 0;
+        let p2Wins = 0;
 
         // P1's challenge: P1's selected stat vs P2's value for that same stat
         if (p1.selectedStat.value > p2.pokemon.stats[p1.selectedStat.name]) {
-            p1RoundScore++;
+            p1Wins++;
         } else if (p1.selectedStat.value < p2.pokemon.stats[p1.selectedStat.name]) {
-            p1RoundScore--;
+            p2Wins++;
         }
 
         // P2's challenge: P2's selected stat vs P1's value for that same stat
-        // @ts-ignore
         if (p2.selectedStat.value > p1.pokemon.stats[p2.selectedStat.name]) {
-            p1RoundScore--;
-        } else if (
-            // @ts-ignore
-            p2.selectedStat.value < p1.pokemon.stats[p2.selectedStat.name]
-        ) {
-            p1RoundScore++;
+            p2Wins++;
+        } else if (p2.selectedStat.value < p1.pokemon.stats[p2.selectedStat.name]) {
+            p1Wins++;
         }
 
-        if (p1RoundScore > 0) {
-            p1.addPoint();
-            logger.debug(`[Game] ${p1.name} wins the round.`);
-        } else if (p1RoundScore < 0) {
-            p2.addPoint();
-            logger.debug(`[Game] ${p2.name} wins the round.`);
-        } else {
-            logger.debug(`[Game] The round is a draw.`);
-            this.#nextRound();
-            return;
-        }
+        p1.addPoints(p1Wins * this.currentRound);
+        p2.addPoints(p2Wins * this.currentRound);
+        logger.debug(`[Game] Score Update: ${p1.name}: ${p1.points}, ${p2.name}: ${p2.points}`);
 
         if (this.#isThereAWinner()) {
             this.#gameEnd();
+        } else if (this.currentRound <= 2) {
+            this.#nextRound();
         } else {
-            this.#newBattle();
+            this.#newMatch();
         }
     }
 
@@ -161,7 +153,10 @@ export default class Game extends EventEmitter {
         this.lockedStats.push(this.players[0].selectedStat!.name);
         this.lockedStats.push(this.players[1].selectedStat!.name);
         this.players.forEach((p) => p.resetSelectedStat());
+        this.firstMove = this.firstMove === 1 ? 2 : 1; // alternate who goes first each round
+        this.currentRound += 1;
         this.phase = GamePhases.SELECT_STAT;
+        logger.debug(`[Game] Starting round ${this.currentRound}`);
     }
 
     #gameEnd() {
@@ -170,10 +165,11 @@ export default class Game extends EventEmitter {
         this.#emitGameEvent(GameEvents.GAME_FINISHED);
     }
 
-    #newBattle() {
-        this.firstMove = this.firstMove === 1 ? 2 : (1 as PlayerInGameId);
+    #newMatch() {
         this.lockedStats = [];
+        this.firstMove = (Math.floor(Math.random() * 2) + 1) as PlayerInGameId;
         this.players.forEach((p) => p.resetSelectedStat());
+        this.currentRound = 1;
         this.#emitGameEvent(GameEvents.NEW_MATCH);
     }
 
@@ -187,7 +183,7 @@ export default class Game extends EventEmitter {
     }
 
     #isThereAWinner() {
-        return this.players.some((p) => p.points >= 3);
+        return this.players.some((p) => p.points >= 20);
     }
 
     #findPlayer(clientId: string) {

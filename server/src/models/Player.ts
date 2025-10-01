@@ -19,10 +19,11 @@ export default class Player {
     }
 
     /**
-     * Increments the player's points by one.
+     * Increments the player's points by a specified amount.
+     * @param points The number of points to add.
      */
-    addPoint() {
-        this.points += 1;
+    addPoints(points: number) {
+        this.points += points;
     }
 
     /**
