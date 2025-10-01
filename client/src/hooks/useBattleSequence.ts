@@ -23,17 +23,25 @@ import { BattleStats, BattlePokemonAnimationState } from "../types";
  * );
  */
 
-type BattlePhase = "BATTLE_1_START" | "BATTLE_1_END" | "BATTLE_2_START" | "BATTLE_2_END";
+type BattlePhase =
+    | "WAITING"
+    | "SHOW_CURRENT_ROUND"
+    | "BATTLE_1_START"
+    | "BATTLE_1_END"
+    | "BATTLE_2_START"
+    | "BATTLE_2_END"
+    | "FINISHED";
 const ATTACK_ANIMATION_DURATION = 3000;
 const ATTACK_START_TO_IMPACT = 1150;
 const FADE_OUT_DURATION = 1400;
+const SHOW_CURRENT_ROUND_DURATION = 3000;
 
 export const useBattleSequence = (
     battleStats: BattleStats | null,
     onBattleEnd: () => void,
     isWipingIn: boolean
 ) => {
-    const [phase, setPhase] = useState<BattlePhase>("BATTLE_1_START");
+    const [phase, setPhase] = useState<BattlePhase>("WAITING");
     const [pokemonAnimation, setPokemonAnimation] = useState<BattlePokemonAnimationState>({
         you: "",
         opponent: "",
@@ -60,23 +68,27 @@ export const useBattleSequence = (
     };
 
     useEffect(() => {
-        if (!battleStats || isWipingIn) return;
+        if (!battleStats || isWipingIn || phase === "SHOW_CURRENT_ROUND") return;
 
-        let timer: ReturnType<typeof setTimeout>;
-        let fadeTimer: ReturnType<typeof setTimeout>;
+        if (phase === "WAITING") {
+            setPhase("SHOW_CURRENT_ROUND");
+            setTimeout(() => {
+                setPhase("BATTLE_1_START");
+            }, SHOW_CURRENT_ROUND_DURATION);
+        }
 
         if (phase === "BATTLE_1_END") {
             if (battleStats.isChallenge1Tie) {
                 setIsFading(true);
-                timer = setTimeout(() => {
+                setTimeout(() => {
                     setPhase("BATTLE_2_START");
                     setIsFading(false);
                 }, FADE_OUT_DURATION);
             } else {
                 playBattleAnims(battleStats.isChallenge1Win);
-                timer = setTimeout(() => {
+                setTimeout(() => {
                     setIsFading(true);
-                    fadeTimer = setTimeout(() => {
+                    setTimeout(() => {
                         setPhase("BATTLE_2_START");
                         setIsFading(false);
                         setPokemonAnimation({ you: "", opponent: "" });
@@ -86,18 +98,14 @@ export const useBattleSequence = (
         }
 
         if (phase === "BATTLE_2_END") {
+            setPhase("FINISHED");
             if (battleStats.isChallenge2Tie) {
                 onBattleEnd();
             } else {
                 playBattleAnims(battleStats.isChallenge2Win);
-                timer = setTimeout(onBattleEnd, ATTACK_ANIMATION_DURATION);
+                setTimeout(onBattleEnd, ATTACK_ANIMATION_DURATION);
             }
         }
-
-        return () => {
-            clearTimeout(timer);
-            clearTimeout(fadeTimer);
-        };
     }, [phase, battleStats, isWipingIn, onBattleEnd]);
 
     return {
