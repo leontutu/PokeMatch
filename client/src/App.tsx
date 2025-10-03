@@ -13,7 +13,7 @@ function App() {
                 <Router page={currentPage} />
                 {(isWipingOut || isWipingIn) && (
                     <div
-                        className={`animation-container 
+                        className={`screen-wipe-container 
                             ${isWipingOut ? "wipe-out-active" : ""} 
                             ${isWipingIn ? "wipe-in-active" : ""}
                         `}

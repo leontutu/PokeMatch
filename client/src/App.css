@@ -62,7 +62,7 @@ html {
     width: 100%;
 }
 
-.animation-container {
+.screen-wipe-container {
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
