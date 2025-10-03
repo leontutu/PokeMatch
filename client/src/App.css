@@ -62,46 +62,6 @@ html {
     width: 100%;
 }
 
-.screen-wipe-container {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-    transform-origin: top left;
-    animation-fill-mode: forwards;
-    z-index: 10;
-    top: -100vh;
-}
-
-@keyframes wipe-out-animation {
-    0% {
-        transform: rotate(45deg) scale(0);
-    }
-    100% {
-        transform: rotate(45deg) scale(10);
-    }
-}
-
-@keyframes wipe-in-animation {
-    0% {
-        transform: rotate(45deg) scale(10);
-    }
-    100% {
-        transform: rotate(45deg) scale(0);
-    }
-}
-
-.wipe-out-active {
-    animation-name: wipe-out-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-in;
-}
-
-.wipe-in-active {
-    animation-name: wipe-in-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-out;
-}
-
 @media (min-width: 600px) and (min-height: 700px) {
     #root {
         max-height: calc(100vh - 80px);
