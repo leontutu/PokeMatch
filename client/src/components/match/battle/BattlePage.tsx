@@ -81,7 +81,11 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                             />
                         </div>
                     ) : (
-                        <img src={`/round-1.png`} alt="Round ?" className={styles.showCurrentRoundImg} />
+                        <img
+                            src={`/round-${viewRoom?.viewGame?.currentRound}.png`}
+                            alt="Round ?"
+                            className={styles.showCurrentRoundImg}
+                        />
                     )}
                 </div>
                 <PokemonDisplay
