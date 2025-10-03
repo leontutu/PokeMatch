@@ -4,6 +4,13 @@ import { Events, GameCommands, StatNames } from "../../../shared/constants/const
 import { DisplayToStat } from "../constants/constants.js";
 import { ViewRoom } from "../../../shared/types/types.js";
 
+/**
+ * @file Socket provider (real implementation).
+ *
+ * Creates and manages the socket connection, exposes `viewRoom` updates and
+ * various socket-driven signals and emit helpers to the app.
+ */
+
 type SocketContextType = {
     socket: Socket | null;
     viewRoom: ViewRoom | null;

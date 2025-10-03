@@ -7,12 +7,7 @@ import cardScaffold from "../../../scaffolds/cardScaffold";
 import CardWrapper from "./CardWrapper";
 import { DisplayToStat } from "../../../constants/constants";
 import { StatNames } from "../../../../../shared/constants/constants";
-import { NavigationHandler } from "../../../types";
 import { useSound } from "use-sound";
-
-type SelectStatPageProps = {
-    onNavigate: NavigationHandler;
-};
 
 /**
  * Renders the stat selection screen for the match.
@@ -25,9 +20,9 @@ type SelectStatPageProps = {
  * @example
  * <SelectStatPage onNavigate={handleNavigation} />
  */
-export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
-    const { viewRoom, sendSelectStat } = useSocket();
-    const { selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
+export default function SelectStatPage() {
+    const { viewRoom, sendSelectStat, selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
+
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
@@ -96,7 +91,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
     const opponentPokemonImgUrl = opponentPokemon.sprites.officialArtwork;
 
     return (
-        <MatchLayout onNavigate={onNavigate}>
+        <MatchLayout>
             <div className={styles.outerContainer}>
                 <div className={styles.yourPokemonSection}>
                     <div className={styles.shadow}></div>

@@ -3,15 +3,10 @@ import MatchLayout from "../layout/MatchLayout";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
-import { NavigationHandler } from "../../../types";
 import BattleField from "./BattleField";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import { useBattleSequence } from "../../../hooks/useBattleSequence";
 import { useEffect, useState, useRef } from "react";
-
-type BattlePageProps = {
-    onNavigate: NavigationHandler;
-};
 
 /**
  * Orchestrates the entire battle phase of a match.
@@ -25,10 +20,10 @@ type BattlePageProps = {
  * @param onNavigate - A handler for navigating to other parts of the application.
  *
  * @example
- * <BattlePage onNavigate={handleNavigation} />
+ * <BattlePage />
  */
 
-export default function BattlePage({ onNavigate }: BattlePageProps) {
+export default function BattlePage() {
     const { viewRoom, sendBattleEnd } = useSocket();
 
     // hack: Making sure page can still render properly during page out transition
@@ -57,7 +52,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     }
 
     return (
-        <MatchLayout onNavigate={onNavigate}>
+        <MatchLayout>
             <div className={styles.outerContainer}>
                 <PokemonDisplay
                     pokemonName={battleStats.opponentPokemon.name}

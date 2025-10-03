@@ -1,11 +1,7 @@
 import styles from "./VictoryPage.module.css";
 import { useSocket } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
-import { NavigationHandler } from "../../../types";
-
-type VictoryPageProps = {
-    onNavigate: NavigationHandler;
-};
+import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 /**
  * Renders the victory screen after a match concludes.
@@ -15,17 +11,16 @@ type VictoryPageProps = {
  * home page and signals the server to leave the room.
  *
  * @example
- * <VictoryPage onNavigate={handleNavigation} />
+ * <VictoryPage />
  */
-export default function VictoryPage({ onNavigate }: VictoryPageProps) {
+export default function VictoryPage() {
     const { viewRoom, sendLeaveRoom } = useSocket();
-
+    const { handleNavigate } = useNavigationContext();
     const handleMenuButtonClick = () => {
-        onNavigate(Pages.HOME, true);
+        handleNavigate(Pages.HOME, true);
         sendLeaveRoom();
     };
 
-    // A guard clause in case the component renders before the game state is settled.
     if (!viewRoom?.viewGame?.winner) {
         return null;
     }
