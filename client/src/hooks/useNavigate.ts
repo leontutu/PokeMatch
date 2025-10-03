@@ -6,6 +6,13 @@ import { NavigationHandler } from "../types";
 import { useUIInfoContext } from "../contexts/UIInfoContext";
 import { useSound } from "use-sound";
 
+/**
+ * @file Navigation hook for the app.
+ *
+ * Encapsulates current page state, transition timing and page-turn sound effects.
+ * Returns { currentPage, handleNavigate }  NavigationProvider can consume.
+ */
+
 export function useNavigate() {
     const { viewRoom, roomCrashSignal } = useSocket();
     const phase = viewRoom?.viewGame?.phase;
@@ -27,6 +34,7 @@ export function useNavigate() {
         }
     }, [roomCrashSignal]);
 
+    //NOTE: Consider reafctoring transition logic to a different hook
     const handleNavigate: NavigationHandler = useCallback(
         (page: Pages, transition: boolean | undefined) => {
             if (currentPage === page) return;

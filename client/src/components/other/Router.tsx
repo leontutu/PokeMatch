@@ -7,6 +7,13 @@ import EnterNamePage from "../menu/enterName/EnterNamePage";
 import HomePage from "../menu/home/HomePage";
 import RoomPage from "../menu/room/RoomPage";
 
+/**
+ * @file Router component.
+ *
+ * Maps the `Pages` enum to the corresponding page component and returns the
+ * rendered page for the current app route.
+ */
+
 type RouterProps = {
     page: Pages;
 };
