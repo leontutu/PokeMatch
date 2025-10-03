@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
+import { useSocket } from "../contexts/SocketContext";
 
 /**
  * Manages the state and timing for the entire battle sequence.
@@ -26,10 +27,10 @@ import { BattleStats, BattlePokemonAnimationState } from "../types";
 type BattlePhase =
     | "WAITING"
     | "SHOW_CURRENT_ROUND"
-    | "BATTLE_1_START"
-    | "BATTLE_1_END"
-    | "BATTLE_2_START"
-    | "BATTLE_2_END"
+    | "COLUMNS_1_START"
+    | "COLUMNS_1_END"
+    | "COLUMNS_2_START"
+    | "COLUMNS_2_END"
     | "FINISHED";
 const ATTACK_ANIMATION_DURATION = 3000;
 const ATTACK_START_TO_IMPACT = 1150;
@@ -47,6 +48,7 @@ export const useBattleSequence = (
         opponent: "",
     });
     const [isFading, setIsFading] = useState(false);
+    const { viewRoom } = useSocket();
 
     const [playYouCry] = useSound(
         `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.yourPokemon.id}.ogg`
@@ -64,7 +66,10 @@ export const useBattleSequence = (
             playOppCry();
             setPokemonAnimation({ you: "stumble", opponent: "attack" });
         }
-        setTimeout(() => playNormalEffective(), ATTACK_START_TO_IMPACT);
+        setTimeout(() => {
+            playNormalEffective();
+            awardTemporaryPoints();
+        }, ATTACK_START_TO_IMPACT);
     };
 
     useEffect(() => {
@@ -73,15 +78,15 @@ export const useBattleSequence = (
         if (phase === "WAITING") {
             setPhase("SHOW_CURRENT_ROUND");
             setTimeout(() => {
-                setPhase("BATTLE_1_START");
+                setPhase("COLUMNS_1_START");
             }, SHOW_CURRENT_ROUND_DURATION);
         }
 
-        if (phase === "BATTLE_1_END") {
+        if (phase === "COLUMNS_1_END") {
             if (battleStats.isChallenge1Tie) {
                 setIsFading(true);
                 setTimeout(() => {
-                    setPhase("BATTLE_2_START");
+                    setPhase("COLUMNS_2_START");
                     setIsFading(false);
                 }, FADE_OUT_DURATION);
             } else {
@@ -89,7 +94,7 @@ export const useBattleSequence = (
                 setTimeout(() => {
                     setIsFading(true);
                     setTimeout(() => {
-                        setPhase("BATTLE_2_START");
+                        setPhase("COLUMNS_2_START");
                         setIsFading(false);
                         setPokemonAnimation({ you: "", opponent: "" });
                     }, FADE_OUT_DURATION);
@@ -97,7 +102,7 @@ export const useBattleSequence = (
             }
         }
 
-        if (phase === "BATTLE_2_END") {
+        if (phase === "COLUMNS_2_END") {
             setPhase("FINISHED");
             if (battleStats.isChallenge2Tie) {
                 onBattleEnd();
@@ -107,6 +112,32 @@ export const useBattleSequence = (
             }
         }
     }, [phase, battleStats, isWipingIn, onBattleEnd]);
+
+    /**
+     * DISPLAY ONLY
+     * Awards temporary `fake` points based on the outcome of the challenges.
+     * These points are for display only and will be overwritten by the server.
+     */
+    const awardTemporaryPoints = () => {
+        if (!battleStats || !viewRoom?.viewGame) return;
+
+        const { viewGame } = viewRoom;
+        const { isChallenge1Tie, isChallenge1Win, isChallenge2Tie, isChallenge2Win } = battleStats;
+
+        if (phase === "COLUMNS_1_END") {
+            if (isChallenge1Win) {
+                viewGame.you.points += viewGame.currentRound;
+            } else if (!isChallenge1Tie) {
+                viewGame.opponent.points += viewGame.currentRound;
+            }
+        } else if (phase === "COLUMNS_2_END") {
+            if (isChallenge2Win) {
+                viewGame.you.points += viewGame.currentRound;
+            } else if (!isChallenge2Tie) {
+                viewGame.opponent.points += viewGame.currentRound;
+            }
+        }
+    };
 
     return {
         phase,

@@ -47,7 +47,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     );
 
     useEffect(() => {
-        if (phase === "BATTLE_2_START") {
+        if (phase === "COLUMNS_2_START") {
             setActiveBattle(2);
         }
     }, [phase]);
@@ -76,7 +76,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                                 battleStats={battleStats}
                                 isWipingIn={isWipingIn}
                                 onFinished={() =>
-                                    setPhase(activeBattle === 1 ? "BATTLE_1_END" : "BATTLE_2_END")
+                                    setPhase(activeBattle === 1 ? "COLUMNS_1_END" : "COLUMNS_2_END")
                                 }
                             />
                         </div>
