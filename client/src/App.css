@@ -8,7 +8,6 @@
     flex-direction: column;
 }
 
-/* Add these new styles for the desktop message */
 .desktop-only-message {
     display: none; /* Hidden by default on mobile */
     color: #a0aec0;
@@ -21,7 +20,7 @@
 @media (min-width: 1024px) and (min-height: 700px) {
     #root {
         max-height: calc(100vh - 80px);
-        aspect-ratio: 9 / 16.7;
+        aspect-ratio: 9 / 15;
         max-width: 500px;
         width: auto;
         height: auto;
@@ -29,15 +28,11 @@
         box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.18);
     }
 
-    /* Show and position the message on wide screens */
     .desktop-only-message {
         display: block;
-        position: absolute; /* This ensures it's out of the document flow */
+        position: absolute;
         top: 50%;
-        /* Position it to the right of the app container */
-        left: calc(
-            50% + 215px + 50px
-        ); /* (50% viewport + half app width + margin) */
+        left: calc(50% + 215px + 50px);
         transform: translateY(-50%);
     }
 }
