@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
-import { NavigationHandler } from "../../../types";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.css";
 import { useSound } from "use-sound";
-
-type PokemonRevealPageProps = {
-    onNavigate: NavigationHandler;
-};
 
 /**
  * Renders the Pokémon reveal animation sequence.
@@ -21,10 +16,10 @@ type PokemonRevealPageProps = {
  * This page is shown at the start of a match, before transitioning to the stat selection phase.
  *
  * @example
- * <PokemonRevealPage onNavigate={handleNavigation} />
+ * <PokemonRevealPage />
  */
 
-export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps) {
+export default function PokemonRevealPage() {
     const { viewRoom } = useSocket();
     const { isWipingIn } = useUIInfoContext();
 
@@ -86,7 +81,7 @@ export default function PokemonRevealPage({ onNavigate }: PokemonRevealPageProps
     };
 
     return (
-        <MatchLayout onNavigate={onNavigate}>
+        <MatchLayout>
             <div className={styles.outerContainer}>
                 <div className={`${styles.flashOverlay} ${flashActive ? styles.flashActive : ""}`}></div>
                 <img

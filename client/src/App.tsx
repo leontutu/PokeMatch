@@ -7,31 +7,31 @@ import BattlePage from "./components/match/battle/BattlePage.js";
 import VictoryPage from "./components/match/victory/VictoryPage.js";
 import PokemonRevealPage from "./components/match/reveal/PokemonRevealPage.js";
 import { useUIInfoContext } from "./contexts/UIInfoContext.js";
-import { useNavigate } from "./hooks/useNavigate.js";
+import { useNavigationContext } from "./contexts/NavigationContext.js";
 import "./App.css";
 
 function App() {
     const { isWipingIn, isWipingOut } = useUIInfoContext();
-    const { currentPage, handleNavigate } = useNavigate();
+    const { currentPage } = useNavigationContext();
 
     const renderPage = () => {
         switch (currentPage) {
             case Pages.HOME:
-                return <HomePage onNavigate={handleNavigate} />;
+                return <HomePage />;
             case Pages.ENTER_NAME:
-                return <EnterNamePage onNavigate={handleNavigate} />;
+                return <EnterNamePage />;
             case Pages.ROOM:
                 return <RoomPage />;
             case Pages.SELECT_STAT:
-                return <SelectStatPage onNavigate={handleNavigate} />;
+                return <SelectStatPage />;
             case Pages.BATTLE:
-                return <BattlePage onNavigate={handleNavigate} />;
+                return <BattlePage />;
             case Pages.VICTORY:
-                return <VictoryPage onNavigate={handleNavigate} />;
+                return <VictoryPage />;
             case Pages.POKEMON_REVEAL:
-                return <PokemonRevealPage onNavigate={handleNavigate} />;
+                return <PokemonRevealPage />;
             default:
-                return <HomePage onNavigate={handleNavigate} />;
+                return <HomePage />;
         }
     };
 

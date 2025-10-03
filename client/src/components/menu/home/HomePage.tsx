@@ -1,11 +1,7 @@
 import { Pages } from "../../../constants/constants";
+import { useNavigationContext } from "../../../contexts/NavigationContext";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./HomePage.module.css";
-import { NavigationHandler } from "../../../types";
-
-type HomePageProps = {
-    onNavigate: NavigationHandler;
-};
 
 /**
  * Renders the application's main menu screen, providing navigation options.
@@ -15,17 +11,19 @@ type HomePageProps = {
  * - "PokéViewer": A placeholder for a future feature, currently disabled.
  *
  * @example
- * <HomePage onNavigate={handleNavigation} />
+ * <HomePage />
  */
-export default function HomePage({ onNavigate }: HomePageProps) {
+export default function HomePage() {
+    const { handleNavigate } = useNavigationContext();
+
     const handleMatchClick = () => {
-        onNavigate(Pages.ENTER_NAME, false);
+        handleNavigate(Pages.ENTER_NAME, false);
     };
 
     const handlePokemonClick = () => {
         // note: disabled in current version (0.1)
         return;
-        // onNavigate(PAGES.POKEVIEWER, true);
+        // handleNavigate(PAGES.POKEVIEWER, true);
     };
 
     return (

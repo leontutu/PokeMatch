@@ -4,12 +4,11 @@ import { Pages } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
 import styles from "./MatchLayout.module.css";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
-import { NavigationHandler } from "../../../types";
 import React from "react";
+import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 type MatchLayoutProps = {
     children: React.ReactNode;
-    onNavigate: NavigationHandler;
 };
 
 /**
@@ -25,15 +24,16 @@ type MatchLayoutProps = {
  *   <StatSelectionScreen />
  * </MatchLayout>
  */
-export default function MatchLayout({ children, onNavigate }: MatchLayoutProps) {
+export default function MatchLayout({ children }: MatchLayoutProps) {
     const { viewRoom, sendLeaveRoom } = useSocket();
+    const { handleNavigate } = useNavigationContext();
     const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 
     if (!viewRoom) return null;
 
     const handleLeaveConfirm = () => {
         sendLeaveRoom();
-        onNavigate(Pages.HOME, true);
+        handleNavigate(Pages.HOME, true);
         setIsLeaveDialogOpen(false);
     };
 

@@ -2,15 +2,11 @@ import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { isValidName } from "../../../../../shared/utils/validation";
-import { NavigationHandler } from "../../../types";
 import HomeLayout from "../layout/HomeLayout";
 import NameInput from "./NameInput";
 import SubmitButton from "./SubmitButton";
 import styles from "./EnterNamePage.module.css";
-
-type EnterNamePageProps = {
-    onNavigate: NavigationHandler;
-};
+import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 /**
  * Renders the UI for entering a player's name before joining a room.
@@ -21,28 +17,28 @@ type EnterNamePageProps = {
  * game room or display an error and return them to the home page.
  *
  * @example
- * <EnterNamePage onNavigate={handleNavigation} />
+ * <EnterNamePage />
  */
-export default function EnterNamePage({ onNavigate }: EnterNamePageProps) {
+export default function EnterNamePage() {
     const { sendName, viewRoom, nameErrorSignal, setNameErrorSignal } = useSocket();
-
+    const { handleNavigate } = useNavigationContext();
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
 
     useEffect(() => {
-        // Note: This should rarely happen, as name validation is performed client-side.
+        // Note: This should rarely happen, as name validation is already performed client-side.
         if (nameErrorSignal) {
-            onNavigate(Pages.HOME);
+            handleNavigate(Pages.HOME);
             setNameErrorSignal(false);
             alert("Invalid name. Make sure your name is between 4 and 9 characters long");
         }
-    }, [nameErrorSignal, onNavigate, setNameErrorSignal]);
+    }, [nameErrorSignal, handleNavigate, setNameErrorSignal]);
 
     useEffect(() => {
         if (viewRoom) {
-            onNavigate(Pages.ROOM, false);
+            handleNavigate(Pages.ROOM, false);
         }
-    }, [viewRoom, onNavigate]);
+    }, [viewRoom, handleNavigate]);
 
     function handleSubmit() {
         if (!isValidName(name)) {
