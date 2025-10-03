@@ -1,8 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
 import { Pages } from "./constants/constants.js";
-import { Timings, GamePhases } from "../../shared/constants/constants";
-import { useSocket } from "./contexts/SocketContext.jsx";
-import { NavigationHandler } from "./types.js";
 import HomePage from "./components/menu/home/HomePage.js";
 import EnterNamePage from "./components/menu/enterName/EnterNamePage.js";
 import RoomPage from "./components/menu/room/RoomPage.js";
@@ -11,54 +7,12 @@ import BattlePage from "./components/match/battle/BattlePage.js";
 import VictoryPage from "./components/match/victory/VictoryPage.js";
 import PokemonRevealPage from "./components/match/reveal/PokemonRevealPage.js";
 import { useUIInfoContext } from "./contexts/UIInfoContext.js";
-import { useSound } from "use-sound";
+import { useNavigate } from "./hooks/useNavigate.js";
 import "./App.css";
 
 function App() {
-    const audioRef = useRef<HTMLAudioElement>(null);
-
-    // const [currentPage, setCurrentPage] = useState(Pages.BATTLE);
-    const [currentPage, setCurrentPage] = useState(Pages.HOME);
-
-    const { isWipingIn, setIsWipingIn, isWipingOut, setIsWipingOut } = useUIInfoContext();
-
-    const { viewRoom } = useSocket();
-
-    const { roomCrashSignal } = useSocket();
-    const [isFirstRender, setIsFirstRender] = useState(true);
-
-    const [playPageTurn1] = useSound(`/pageTurn1.mp3`, {
-        volume: 0.6,
-    });
-    const [playPageTurn2] = useSound(`/pageTurn2.mp3`, {
-        volume: 0.3,
-    });
-
-    const handleNavigate: NavigationHandler = useCallback(
-        (page: Pages, transition: boolean | undefined) => {
-            if (currentPage === page) return;
-            audioRef?.current!.play();
-
-            if (!transition) {
-                setCurrentPage(page);
-                return;
-            }
-
-            playPageTurn1();
-            setIsWipingOut(true);
-            setTimeout(() => {
-                playPageTurn2();
-                setCurrentPage(page);
-                setIsWipingOut(false);
-                setIsWipingIn(true);
-            }, Timings.PAGE_TRANSITION - 500);
-
-            setTimeout(() => {
-                setIsWipingIn(false);
-            }, 3000); // (Wipe-out duration + wipe-in duration)
-        },
-        [currentPage]
-    );
+    const { isWipingIn, isWipingOut } = useUIInfoContext();
+    const { currentPage, handleNavigate } = useNavigate();
 
     const renderPage = () => {
         switch (currentPage) {
@@ -80,56 +34,17 @@ function App() {
                 return <HomePage onNavigate={handleNavigate} />;
         }
     };
-    useEffect(() => {
-        if (isFirstRender) {
-            setIsFirstRender(false);
-            return;
-        }
-        if (roomCrashSignal) {
-            setCurrentPage(Pages.HOME);
-            alert("There was an oopsie on the server and your room crashed! Returning to Home...");
-        }
-    }, [roomCrashSignal, isFirstRender]);
-
-    useEffect(() => {
-        if (import.meta.env.VITE_USE_MOCKS) {
-            handleNavigate(Pages.BATTLE, false);
-        }
-    }, [handleNavigate]);
-
-    useEffect(() => {
-        if (viewRoom) {
-            if (viewRoom.viewGame) {
-                switch (viewRoom.viewGame.phase) {
-                    case GamePhases.GAME_FINISHED:
-                        handleNavigate(Pages.VICTORY, true);
-                        break;
-                    case GamePhases.BATTLE:
-                        handleNavigate(Pages.BATTLE, true);
-                        break;
-                    case GamePhases.SELECT_STAT:
-                        handleNavigate(Pages.SELECT_STAT, true);
-                        break;
-                    case GamePhases.POKEMON_REVEAL:
-                        handleNavigate(Pages.POKEMON_REVEAL, true);
-                        break;
-                }
-            }
-        }
-    }, [viewRoom, handleNavigate]);
 
     return (
         <>
-            <audio ref={audioRef} src="./ancient_ruins.mp3" loop />
             <div className="page-wrapper">
-                {/* The current page is always rendered */}
                 {renderPage()}
-                {/* The wipe element, visible only during a transition */}
                 {(isWipingOut || isWipingIn) && (
                     <div
-                        className={`animation-container ${isWipingOut ? "wipe-out-active" : ""} ${
-                            isWipingIn ? "wipe-in-active" : ""
-                        }`}
+                        className={`animation-container 
+                            ${isWipingOut ? "wipe-out-active" : ""} 
+                            ${isWipingIn ? "wipe-in-active" : ""}
+                        `}
                     ></div>
                 )}
             </div>
