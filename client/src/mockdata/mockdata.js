@@ -4,16 +4,17 @@ import { GamePhases } from "../../../shared/constants/constants";
 
 export const mockRoomState = {
     id: "0",
-    clientRecords: [
+    viewClientRecords: [
         { client: { name: "Foo" }, isReady: true },
         { client: { name: "Bar" }, isReady: false },
     ],
-    game: {
+    viewGame: {
         phase: GamePhases.BATTLE,
         lockedStats: ["speed", "defense"],
         flags: {},
         winner: "Foo",
         firstMove: 1,
+        currentRound: 1,
         you: {
             inGameId: 1,
             name: "Foo",

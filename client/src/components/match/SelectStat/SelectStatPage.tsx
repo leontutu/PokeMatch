@@ -138,6 +138,7 @@ export default function SelectStatPage({ onNavigate }: SelectStatPageProps) {
                             );
                         })}
                     </div>
+                    <span className={styles.roundLabel}>Round {viewRoom.viewGame.currentRound}</span>
                 </div>
                 <div className={styles.lockInSection}>
                     <button

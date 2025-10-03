@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
+import { useSocket } from "../contexts/SocketContext";
 
 /**
  * Manages the state and timing for the entire battle sequence.
@@ -23,22 +24,31 @@ import { BattleStats, BattlePokemonAnimationState } from "../types";
  * );
  */
 
-type BattlePhase = "BATTLE_1_START" | "BATTLE_1_END" | "BATTLE_2_START" | "BATTLE_2_END";
+type BattlePhase =
+    | "WAITING"
+    | "SHOW_CURRENT_ROUND"
+    | "COLUMNS_1_START"
+    | "COLUMNS_1_END"
+    | "COLUMNS_2_START"
+    | "COLUMNS_2_END"
+    | "FINISHED";
 const ATTACK_ANIMATION_DURATION = 3000;
 const ATTACK_START_TO_IMPACT = 1150;
 const FADE_OUT_DURATION = 1400;
+const SHOW_CURRENT_ROUND_DURATION = 3000;
 
 export const useBattleSequence = (
     battleStats: BattleStats | null,
     onBattleEnd: () => void,
     isWipingIn: boolean
 ) => {
-    const [phase, setPhase] = useState<BattlePhase>("BATTLE_1_START");
+    const [phase, setPhase] = useState<BattlePhase>("WAITING");
     const [pokemonAnimation, setPokemonAnimation] = useState<BattlePokemonAnimationState>({
         you: "",
         opponent: "",
     });
     const [isFading, setIsFading] = useState(false);
+    const { viewRoom } = useSocket();
 
     const [playYouCry] = useSound(
         `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.yourPokemon.id}.ogg`
@@ -56,28 +66,35 @@ export const useBattleSequence = (
             playOppCry();
             setPokemonAnimation({ you: "stumble", opponent: "attack" });
         }
-        setTimeout(() => playNormalEffective(), ATTACK_START_TO_IMPACT);
+        setTimeout(() => {
+            playNormalEffective();
+            awardTemporaryPoints();
+        }, ATTACK_START_TO_IMPACT);
     };
 
     useEffect(() => {
-        if (!battleStats || isWipingIn) return;
+        if (!battleStats || isWipingIn || phase === "SHOW_CURRENT_ROUND") return;
 
-        let timer: ReturnType<typeof setTimeout>;
-        let fadeTimer: ReturnType<typeof setTimeout>;
+        if (phase === "WAITING") {
+            setPhase("SHOW_CURRENT_ROUND");
+            setTimeout(() => {
+                setPhase("COLUMNS_1_START");
+            }, SHOW_CURRENT_ROUND_DURATION);
+        }
 
-        if (phase === "BATTLE_1_END") {
+        if (phase === "COLUMNS_1_END") {
             if (battleStats.isChallenge1Tie) {
                 setIsFading(true);
-                timer = setTimeout(() => {
-                    setPhase("BATTLE_2_START");
+                setTimeout(() => {
+                    setPhase("COLUMNS_2_START");
                     setIsFading(false);
                 }, FADE_OUT_DURATION);
             } else {
                 playBattleAnims(battleStats.isChallenge1Win);
-                timer = setTimeout(() => {
+                setTimeout(() => {
                     setIsFading(true);
-                    fadeTimer = setTimeout(() => {
-                        setPhase("BATTLE_2_START");
+                    setTimeout(() => {
+                        setPhase("COLUMNS_2_START");
                         setIsFading(false);
                         setPokemonAnimation({ you: "", opponent: "" });
                     }, FADE_OUT_DURATION);
@@ -85,20 +102,42 @@ export const useBattleSequence = (
             }
         }
 
-        if (phase === "BATTLE_2_END") {
+        if (phase === "COLUMNS_2_END") {
+            setPhase("FINISHED");
             if (battleStats.isChallenge2Tie) {
                 onBattleEnd();
             } else {
                 playBattleAnims(battleStats.isChallenge2Win);
-                timer = setTimeout(onBattleEnd, ATTACK_ANIMATION_DURATION);
+                setTimeout(onBattleEnd, ATTACK_ANIMATION_DURATION);
             }
         }
-
-        return () => {
-            clearTimeout(timer);
-            clearTimeout(fadeTimer);
-        };
     }, [phase, battleStats, isWipingIn, onBattleEnd]);
+
+    /**
+     * DISPLAY ONLY
+     * Awards temporary `fake` points based on the outcome of the challenges.
+     * These points are for display only and will be overwritten by the server.
+     */
+    const awardTemporaryPoints = () => {
+        if (!battleStats || !viewRoom?.viewGame) return;
+
+        const { viewGame } = viewRoom;
+        const { isChallenge1Tie, isChallenge1Win, isChallenge2Tie, isChallenge2Win } = battleStats;
+
+        if (phase === "COLUMNS_1_END") {
+            if (isChallenge1Win) {
+                viewGame.you.points += viewGame.currentRound;
+            } else if (!isChallenge1Tie) {
+                viewGame.opponent.points += viewGame.currentRound;
+            }
+        } else if (phase === "COLUMNS_2_END") {
+            if (isChallenge2Win) {
+                viewGame.you.points += viewGame.currentRound;
+            } else if (!isChallenge2Tie) {
+                viewGame.opponent.points += viewGame.currentRound;
+            }
+        }
+    };
 
     return {
         phase,

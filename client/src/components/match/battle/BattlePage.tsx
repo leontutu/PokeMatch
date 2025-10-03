@@ -31,7 +31,7 @@ type BattlePageProps = {
 export default function BattlePage({ onNavigate }: BattlePageProps) {
     const { viewRoom, sendBattleEnd } = useSocket();
 
-    // hack: Making can still render properly during page transition
+    // hack: Making sure page can still render properly during page out transition
     const currentBattleStats = useBattleLogic(viewRoom?.viewGame);
     const battleStatsRef = useRef(currentBattleStats);
     if (currentBattleStats) battleStatsRef.current = currentBattleStats;
@@ -47,7 +47,7 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
     );
 
     useEffect(() => {
-        if (phase === "BATTLE_2_START") {
+        if (phase === "COLUMNS_2_START") {
             setActiveBattle(2);
         }
     }, [phase]);
@@ -66,19 +66,27 @@ export default function BattlePage({ onNavigate }: BattlePageProps) {
                     isOpponent={true}
                 />
                 <div className={styles.battleSectionWrapper}>
-                    <div className={`${styles.battleSection} ${isFading ? styles.fadeOut : ""}`}>
-                        <BattleField
-                            key={activeBattle === 1 ? "battle-1" : "battle-2"}
-                            yourBattle={
-                                activeBattle === 1 ? battleStats.isYouFirst : !battleStats.isYouFirst
-                            }
-                            battleStats={battleStats}
-                            isWipingIn={isWipingIn}
-                            onFinished={() =>
-                                setPhase(activeBattle === 1 ? "BATTLE_1_END" : "BATTLE_2_END")
-                            }
+                    {phase === "WAITING" ? null : phase !== "SHOW_CURRENT_ROUND" ? (
+                        <div className={`${styles.battleSection} ${isFading ? styles.fadeOut : ""}`}>
+                            <BattleField
+                                key={activeBattle === 1 ? "battle-1" : "battle-2"}
+                                yourBattle={
+                                    activeBattle === 1 ? battleStats.isYouFirst : !battleStats.isYouFirst
+                                }
+                                battleStats={battleStats}
+                                isWipingIn={isWipingIn}
+                                onFinished={() =>
+                                    setPhase(activeBattle === 1 ? "COLUMNS_1_END" : "COLUMNS_2_END")
+                                }
+                            />
+                        </div>
+                    ) : (
+                        <img
+                            src={`/round-${viewRoom?.viewGame?.currentRound}.png`}
+                            alt="Round ?"
+                            className={styles.showCurrentRoundImg}
                         />
-                    </div>
+                    )}
                 </div>
                 <PokemonDisplay
                     pokemonName={battleStats.yourPokemon.name}

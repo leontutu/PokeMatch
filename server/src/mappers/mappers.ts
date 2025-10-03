@@ -31,6 +31,7 @@ function mapGameToViewGame(game: Game, uuid: string): ViewGame {
         lockedStats: game.lockedStats,
         winner: game.winner ? game.winner : null,
         firstMove: game.firstMove,
+        currentRound: game.currentRound,
         you: mapPlayerToViewPlayer(
             you,
             opponent.selectedStat == null ? undefined : opponent.selectedStat!.name
