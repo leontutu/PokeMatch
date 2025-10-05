@@ -77,7 +77,7 @@ export default function BattlePage() {
                         </div>
                     ) : (
                         <img
-                            src={`/round-${viewRoom?.viewGame?.currentRound}.png`}
+                            src={`/graphics/game/round-${viewRoom?.viewGame?.currentRound}.png`}
                             alt="Round ?"
                             className={styles.showCurrentRoundImg}
                         />

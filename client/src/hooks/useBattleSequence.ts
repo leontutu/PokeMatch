@@ -56,7 +56,7 @@ export const useBattleSequence = (
     const [playOppCry] = useSound(
         `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.opponentPokemon.id}.ogg`
     );
-    const [playNormalEffective] = useSound("/normal-effective.mp3");
+    const [playNormalEffective] = useSound("/audio/sounds/normal-effective.mp3");
 
     const playBattleAnims = (isPlayerWinner: boolean) => {
         if (isPlayerWinner) {

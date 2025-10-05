@@ -20,10 +20,10 @@ export function useNavigate() {
     const [currentPage, setCurrentPage] = useState(Pages.HOME);
     const { setIsWipingIn, setIsWipingOut } = useUIInfoContext();
 
-    const [playPageTurn1] = useSound(`/pageTurn1.mp3`, {
+    const [playPageTurn1] = useSound(`/audio/sounds/pageTurn1.mp3`, {
         volume: 0.6,
     });
-    const [playPageTurn2] = useSound(`/pageTurn2.mp3`, {
+    const [playPageTurn2] = useSound(`/audio/sounds/pageTurn2.mp3`, {
         volume: 0.3,
     });
 

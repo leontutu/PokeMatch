@@ -33,12 +33,12 @@ export default function PokemonRevealPage() {
     const soundUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`;
     const [playCry] = useSound(soundUrl, { volume: 1 });
 
-    const [playWiggle, { stop: stopWiggle }] = useSound(`/pobeballWiggle.mp3`, {
+    const [playWiggle, { stop: stopWiggle }] = useSound(`/audio/sounds/pokeballWiggle.mp3`, {
         volume: 0.5,
         loop: true,
     });
 
-    const [playPoof] = useSound(`/pokeballPoof.wav`, {
+    const [playPoof] = useSound(`/audio/sounds/pokeballPoof.wav`, {
         volume: 1,
     });
 
@@ -89,7 +89,7 @@ export default function PokemonRevealPage() {
                     ${countDownFinished ? styles.hidden : ""}
                     ${!isWipingIn && !countDownFinished ? styles.wiggle : ""}
                     `}
-                    src={"/pokeball.png"}
+                    src={"/graphics/game/pokeball.png"}
                     alt={"pokeball"}
                 />
                 <img

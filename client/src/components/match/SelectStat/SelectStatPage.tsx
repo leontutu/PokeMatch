@@ -27,11 +27,11 @@ export default function SelectStatPage() {
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
 
-    const [playSelect] = useSound(`/select.mp3`, {
+    const [playSelect] = useSound(`/audio/sounds/select.mp3`, {
         volume: 1,
     });
 
-    const [playConfirm] = useSound(`/confirm.mp3`, {
+    const [playConfirm] = useSound(`/audio/sounds/confirm.mp3`, {
         volume: 1,
     });
 

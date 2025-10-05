@@ -18,7 +18,7 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
     return (
         <div className={styles.homeLayout}>
             <img
-                src="/logo_erase_bg_cropped.png"
+                src="/graphics/logo/logo_erase_bg_cropped.png"
                 alt="PokéMatch logo"
                 className={styles.logo}
             />
