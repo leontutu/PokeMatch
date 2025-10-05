@@ -66,7 +66,8 @@ export const useAssetPreload = (enabled: boolean) => {
     useEffect(() => {
         if (!enabled) return;
         let isCancelled = false;
-        console.log("Preloading assets...");
+        const startLoading = Date.now();
+        console.log(`Preloading assets... ${startLoading}`);
         const preloadAssets = async () => {
             const imagePromises = images.map((src) => preloadImage(src));
             const audioPromises = sounds.map((src) => preloadAudio(src));
@@ -75,6 +76,8 @@ export const useAssetPreload = (enabled: boolean) => {
                 await Promise.all([...imagePromises, ...audioPromises]);
                 if (!isCancelled) {
                     setAssetsLoaded(true);
+                    const endLoading = Date.now();
+                    console.log(`All assets preloaded in ${endLoading - startLoading} ms`);
                 }
             } catch (error) {
                 console.error("Failed to preload assets", error);
