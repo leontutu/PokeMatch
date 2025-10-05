@@ -17,11 +17,7 @@ type HomeLayoutProps = {
 export default function HomeLayout({ children }: HomeLayoutProps) {
     return (
         <div className={styles.homeLayout}>
-            <img
-                src="/graphics/logo/logo_erase_bg_cropped.png"
-                alt="PokéMatch logo"
-                className={styles.logo}
-            />
+            <img src="/graphics/logo/logo-home.png" alt="PokéMatch logo" className={styles.logo} />
             <div className={styles.contentArea}>{children}</div>
         </div>
     );
