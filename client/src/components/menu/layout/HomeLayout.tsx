@@ -1,5 +1,6 @@
 import styles from "./HomeLayout.module.css";
 import React from "react";
+import logoHome from "../../../assets/graphics/logo/logo-home.png";
 
 type HomeLayoutProps = {
     children: React.ReactNode;
@@ -17,7 +18,7 @@ type HomeLayoutProps = {
 export default function HomeLayout({ children }: HomeLayoutProps) {
     return (
         <div className={styles.homeLayout}>
-            <img src="/graphics/logo/logo-home.png" alt="PokéMatch logo" className={styles.logo} />
+            <img src={logoHome} alt="PokéMatch logo" className={styles.logo} />
             <div className={styles.contentArea}>{children}</div>
         </div>
     );

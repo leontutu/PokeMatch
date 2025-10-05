@@ -5,6 +5,8 @@ import { Pages } from "../constants/constants";
 import { NavigationHandler } from "../types";
 import { useUIInfoContext } from "../contexts/UIInfoContext";
 import { useSound } from "use-sound";
+import pageTurn1 from "../assets/audio/sounds/page-turn1.mp3";
+import pageTurn2 from "../assets/audio/sounds/page-turn2.mp3";
 
 /**
  * @file Navigation hook for the app.
@@ -20,10 +22,10 @@ export function useNavigate() {
     const [currentPage, setCurrentPage] = useState(Pages.HOME);
     const { setIsWipingIn, setIsWipingOut } = useUIInfoContext();
 
-    const [playPageTurn1] = useSound(`/audio/sounds/page-turn1.mp3`, {
+    const [playPageTurn1] = useSound(pageTurn1, {
         volume: 0.6,
     });
-    const [playPageTurn2] = useSound(`/audio/sounds/page-turn2.mp3`, {
+    const [playPageTurn2] = useSound(pageTurn2, {
         volume: 0.3,
     });
 

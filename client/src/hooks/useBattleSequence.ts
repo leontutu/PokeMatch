@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
 import { useSocket } from "../contexts/SocketContext";
+import normalEffective from "../assets/audio/sounds/normal-effective.mp3";
 
 /**
  * Manages the state and timing for the entire battle sequence.
@@ -56,7 +57,7 @@ export const useBattleSequence = (
     const [playOppCry] = useSound(
         `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.opponentPokemon.id}.ogg`
     );
-    const [playNormalEffective] = useSound("/audio/sounds/normal-effective.mp3");
+    const [playNormalEffective] = useSound(normalEffective);
 
     const playBattleAnims = (isPlayerWinner: boolean) => {
         if (isPlayerWinner) {
