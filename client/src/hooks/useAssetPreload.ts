@@ -21,7 +21,54 @@ import { useState, useEffect } from "react";
  * renders fine and all other assets can be preloaded in the background.
  * note: The assetsLoaded state variable is not currently used, but could be useful
  * in the future
+ * @param enabled boolean to enable the preload
+ * @returns assetsLoaded state variable indicating if all assets are loaded.
  */
+export const useAssetPreload = (enabled: boolean) => {
+    const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+    useEffect(() => {
+        if (!enabled || hasPreloadBeenTriggered) return;
+        hasPreloadBeenTriggered = true;
+        let isCancelled = false;
+        const preloadAssets = async () => {
+            const imagePromises = images.map((src) => preloadImage(src));
+            const audioPromises = sounds.map((src) => preloadAudio(src));
+
+            try {
+                await Promise.all([...imagePromises, ...audioPromises]);
+                if (!isCancelled) {
+                    setAssetsLoaded(true);
+                }
+            } catch (error) {
+                console.error("Failed to preload assets", error);
+            }
+        };
+
+        preloadAssets();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [enabled]);
+
+    return assetsLoaded;
+};
+
+const images = [chatBubbleImg, pokeballImg, round1Img, round2Img, round3Img];
+
+const sounds = [
+    pokeballWiggleAudio,
+    pokeballPoofAudio,
+    confirmAudio,
+    selectAudio,
+    pageTurn1Audio,
+    pageTurn2Audio,
+    normalEffectiveAudio,
+    veryEffectiveAudio,
+];
+
+let hasPreloadBeenTriggered = false;
 
 const preloadImage = (src: string) => {
     return new Promise((resolve, reject) => {
@@ -39,56 +86,4 @@ const preloadAudio = (src: string) => {
         audio.onerror = () => reject(src);
         audio.src = src;
     });
-};
-
-const images = [chatBubbleImg, pokeballImg, round1Img, round2Img, round3Img];
-
-const sounds = [
-    pokeballWiggleAudio,
-    pokeballPoofAudio,
-    confirmAudio,
-    selectAudio,
-    pageTurn1Audio,
-    pageTurn2Audio,
-    normalEffectiveAudio,
-    veryEffectiveAudio,
-];
-
-/**
- * Custom hook to preload assets (images and audio).
- * @param enabled boolean to enable the preload
- * @returns assetsLoaded state variable indicating if all assets are loaded.
- */
-export const useAssetPreload = (enabled: boolean) => {
-    const [assetsLoaded, setAssetsLoaded] = useState(false);
-
-    useEffect(() => {
-        if (!enabled) return;
-        let isCancelled = false;
-        const startLoading = Date.now();
-        console.log(`Preloading assets... ${startLoading}`);
-        const preloadAssets = async () => {
-            const imagePromises = images.map((src) => preloadImage(src));
-            const audioPromises = sounds.map((src) => preloadAudio(src));
-
-            try {
-                await Promise.all([...imagePromises, ...audioPromises]);
-                if (!isCancelled) {
-                    setAssetsLoaded(true);
-                    const endLoading = Date.now();
-                    console.log(`All assets preloaded in ${endLoading - startLoading} ms`);
-                }
-            } catch (error) {
-                console.error("Failed to preload assets", error);
-            }
-        };
-
-        preloadAssets();
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [enabled]);
-
-    return assetsLoaded;
 };
