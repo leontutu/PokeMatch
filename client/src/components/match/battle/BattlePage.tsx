@@ -7,6 +7,9 @@ import BattleField from "./BattleField";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import { useBattleSequence } from "../../../hooks/useBattleSequence";
 import { useEffect, useState, useRef } from "react";
+import round1 from "../../../assets/graphics/game/round-1.png";
+import round2 from "../../../assets/graphics/game/round-2.png";
+import round3 from "../../../assets/graphics/game/round-3.png";
 
 /**
  * Orchestrates the entire battle phase of a match.
@@ -34,6 +37,7 @@ export default function BattlePage() {
 
     const { isWipingIn } = useUIInfoContext();
     const [activeBattle, setActiveBattle] = useState<1 | 2>(1);
+    const roundImages = [round1, round2, round3];
 
     const { phase, setPhase, pokemonAnimation, isFading } = useBattleSequence(
         battleStats,
@@ -77,8 +81,8 @@ export default function BattlePage() {
                         </div>
                     ) : (
                         <img
-                            src={`/round-${viewRoom?.viewGame?.currentRound}.png`}
-                            alt="Round ?"
+                            src={roundImages[(viewRoom?.viewGame?.currentRound ?? 1) - 1]}
+                            alt={`Round ${viewRoom?.viewGame?.currentRound}`}
                             className={styles.showCurrentRoundImg}
                         />
                     )}

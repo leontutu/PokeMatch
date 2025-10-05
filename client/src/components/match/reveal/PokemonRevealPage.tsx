@@ -5,6 +5,9 @@ import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.css";
 import { useSound } from "use-sound";
+import pokeballWiggle from "../../../assets/audio/sounds/pokeball-wiggle.mp3";
+import pokeballPoof from "../../../assets/audio/sounds/pokeball-poof.mp3";
+import pokeballImage from "../../../assets/graphics/game/pokeball.png";
 
 /**
  * Renders the Pokémon reveal animation sequence.
@@ -33,12 +36,12 @@ export default function PokemonRevealPage() {
     const soundUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`;
     const [playCry] = useSound(soundUrl, { volume: 1 });
 
-    const [playWiggle, { stop: stopWiggle }] = useSound(`/pobeballWiggle.mp3`, {
+    const [playWiggle, { stop: stopWiggle }] = useSound(pokeballWiggle, {
         volume: 0.5,
         loop: true,
     });
 
-    const [playPoof] = useSound(`/pokeballPoof.wav`, {
+    const [playPoof] = useSound(pokeballPoof, {
         volume: 1,
     });
 
@@ -89,7 +92,7 @@ export default function PokemonRevealPage() {
                     ${countDownFinished ? styles.hidden : ""}
                     ${!isWipingIn && !countDownFinished ? styles.wiggle : ""}
                     `}
-                    src={"/pokeball.png"}
+                    src={pokeballImage}
                     alt={"pokeball"}
                 />
                 <img

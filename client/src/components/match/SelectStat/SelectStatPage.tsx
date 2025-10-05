@@ -8,6 +8,8 @@ import CardWrapper from "./CardWrapper";
 import { DisplayToStat } from "../../../constants/constants";
 import { StatNames } from "../../../../../shared/constants/constants";
 import { useSound } from "use-sound";
+import selectSound from "../../../assets/audio/sounds/select.mp3";
+import confirmSound from "../../../assets/audio/sounds/confirm.mp3";
 
 /**
  * Renders the stat selection screen for the match.
@@ -27,11 +29,11 @@ export default function SelectStatPage() {
     const [buttonState, setButtonState] = useState(false);
     const [lockedIn, setLockedIn] = useState(false);
 
-    const [playSelect] = useSound(`/select.mp3`, {
+    const [playSelect] = useSound(selectSound, {
         volume: 1,
     });
 
-    const [playConfirm] = useSound(`/confirm.mp3`, {
+    const [playConfirm] = useSound(confirmSound, {
         volume: 1,
     });
 
