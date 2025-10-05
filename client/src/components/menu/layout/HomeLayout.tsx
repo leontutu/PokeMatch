@@ -1,6 +1,5 @@
 import styles from "./HomeLayout.module.css";
 import React, { useState } from "react";
-import logoHome from "../../../assets/graphics/logo/logo-home.png";
 import { useAssetPreload } from "../../../hooks/useAssetPreload";
 
 type HomeLayoutProps = {
@@ -25,7 +24,7 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
     return (
         <div className={styles.homeLayout}>
             <img
-                src={logoHome}
+                src={"logo-home.png"} // note: can't import as it's also referenced in index.html
                 alt="PokéMatch logo"
                 className={styles.logo}
                 onLoad={() => setIsLogoLoaded(true)}

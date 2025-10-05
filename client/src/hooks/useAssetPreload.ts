@@ -3,7 +3,6 @@ import pokeballImg from "../assets/graphics/game/pokeball.png";
 import round1Img from "../assets/graphics/game/round-1.png";
 import round2Img from "../assets/graphics/game/round-2.png";
 import round3Img from "../assets/graphics/game/round-3.png";
-import logoHomeImg from "../assets/graphics/logo/logo-home.png";
 
 import pokeballWiggleAudio from "../assets/audio/sounds/pokeball-wiggle.mp3";
 import pokeballPoofAudio from "../assets/audio/sounds/pokeball-poof.mp3";
@@ -42,7 +41,7 @@ const preloadAudio = (src: string) => {
     });
 };
 
-const images = [chatBubbleImg, pokeballImg, round1Img, round2Img, round3Img, logoHomeImg];
+const images = [chatBubbleImg, pokeballImg, round1Img, round2Img, round3Img];
 
 const sounds = [
     pokeballWiggleAudio,
