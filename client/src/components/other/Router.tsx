@@ -1,4 +1,5 @@
 import { Pages } from "../../constants/constants";
+import InstructionPage from "../howToPlay/InstructionPage";
 import BattlePage from "../match/battle/BattlePage";
 import PokemonRevealPage from "../match/reveal/PokemonRevealPage";
 import SelectStatPage from "../match/SelectStat/SelectStatPage";
@@ -34,6 +35,8 @@ export default function Router({ page }: RouterProps) {
             return <VictoryPage />;
         case Pages.POKEMON_REVEAL:
             return <PokemonRevealPage />;
+        case Pages.INSTRUCTIONS:
+            return <InstructionPage />;
         default:
             return <HomePage />;
     }

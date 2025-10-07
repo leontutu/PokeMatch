@@ -1,0 +1,36 @@
+.outerContainer {
+    background-color: #333;
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.headerSection {
+    width: 100%;
+    display: flex;
+    flex: 1.1;
+    justify-content: center;
+    align-items: center;
+    background-color: #29b144;
+}
+
+.imageSection {
+    width: 100%;
+    display: flex;
+    flex: 3.8;
+    justify-content: center;
+    align-items: center;
+    background-color: #9f0303;
+}
+
+.instructionsSection {
+    width: 100%;
+    display: flex;
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+}
