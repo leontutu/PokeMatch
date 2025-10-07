@@ -4,10 +4,13 @@ import InstructionItem from "./InstructionItem";
 import styles from "./InstructionPage.module.css";
 import { useState, useEffect, useCallback } from "react";
 import CarouselDots from "./CarouselDots";
+import { Pages } from "../../constants/constants";
+import { useNavigationContext } from "../../contexts/NavigationContext";
 
 export default function InstructionPage() {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const { handleNavigate } = useNavigationContext();
 
     const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
 
@@ -21,6 +24,10 @@ export default function InstructionPage() {
         emblaApi.on("select", onSelect);
         emblaApi.on("reInit", onSelect);
     }, [emblaApi, onSelect]);
+
+    const handleBackToHomeClick = () => {
+        handleNavigate(Pages.HOME, true);
+    };
 
     return (
         <div className={styles.outerContainer}>
@@ -39,7 +46,10 @@ export default function InstructionPage() {
             </div>
             <div className={styles.footer}>
                 <CarouselDots count={3} selectedIndex={selectedIndex} onDotClick={scrollTo} />
-                <button className={`${styles.backButton} ${selectedIndex === 2 ? styles.glow : ""}`}>
+                <button
+                    className={`${styles.backButton} ${selectedIndex === 2 ? styles.glow : ""}`}
+                    onClick={handleBackToHomeClick}
+                >
                     Back to Home
                 </button>
             </div>

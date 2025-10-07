@@ -1,6 +1,5 @@
 export enum Pages {
     HOME = "homePage",
-    POKEVIEWER = "pokeViewerPage",
     ENTER_NAME = "enterNamePage",
     ROOM = "roomPage",
     SELECT_STAT = "selectStatPage",

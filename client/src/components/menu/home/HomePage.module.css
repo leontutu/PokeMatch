@@ -38,14 +38,6 @@
     background: linear-gradient(135deg, #ff6f61, #de4f65);
 }
 
-.randomPokemonBtn {
-    background: rgba(128, 128, 128, 0.301);
-}
-
-.randomPokemonBtn span {
-    color: rgba(167, 166, 166, 0.342);
-}
-
-.randomPokemonBtn:hover {
-    cursor: not-allowed;
+.howToPlayBtn {
+    background: linear-gradient(135deg, #a777e3, #6643ae);
 }
