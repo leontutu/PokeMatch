@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "cross-env": "^10.0.0",
+    "embla-carousel-react": "^8.6.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "socket.io-client": "^4.8.1",

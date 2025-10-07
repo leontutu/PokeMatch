@@ -23,12 +23,12 @@ export const instructionData = [
         ],
     },
     {
-        instructionHeader: "BATTLE",
+        instructionHeader: "TO BATTLE",
         instructionImage: instruction3,
         instructions: [
             "Sit back and watch the Battle unfold!",
             "A won battle awards points equal to the current round",
-            "So you likely don't want to immediately use your best stats right away",
+            "So you don't want to use your best stats right away",
             "Reach 20 Points to win the game!",
         ],
     },
