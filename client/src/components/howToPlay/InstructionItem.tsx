@@ -1,22 +1,33 @@
 import styles from "./InstructionItem.module.css";
-import instruction2 from "../../assets/graphics/instruction/instruction-2.png";
 
-export default function InstructionItem() {
+type InstructionItemProps = {
+    instructionHeader: string;
+    instructionImage: string;
+    instructions: string[];
+};
+
+export default function InstructionItem({
+    instructionHeader,
+    instructionImage,
+    instructions,
+}: InstructionItemProps) {
     return (
         <div className={styles.outerContainer}>
             <div className={styles.headerSection}>
-                <h1 className={styles.instructionHeader}>GET POKEMON</h1>
+                <h1 className={styles.instructionHeader}>{instructionHeader}</h1>
             </div>
             <div className={styles.imageSection}>
-                <img className={styles.instructionImage} src={instruction2} alt="Instruction 2" />
+                <img
+                    className={styles.instructionImage}
+                    src={instructionImage}
+                    alt="Instruction Image"
+                />
             </div>
             <div className={styles.instructionsSection}>
                 <ul className={styles.instructionsList}>
-                    <li>
-                        Which of your Stats is likely to be higher than the same stat of your opponent?
-                    </li>
-                    <li>Stats selected by either you or your opponent previously are locked</li>
-                    <li>Select your Stat and lock it in by pressing the Choose! Button</li>
+                    {instructions.map((instruction, index) => (
+                        <li key={index}>{instruction}</li>
+                    ))}
                 </ul>
             </div>
         </div>

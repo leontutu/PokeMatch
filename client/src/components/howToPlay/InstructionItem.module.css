@@ -5,7 +5,6 @@
     flex: 1 1 auto;
     min-height: 0;
     box-sizing: border-box;
-    /* background: radial-gradient(circle, rgba(63, 94, 251, 0.1) 0%, rgba(70, 252, 240, 0.1) 100%); */
 }
 
 .headerSection,
@@ -46,7 +45,7 @@
     max-height: 95%;
     width: auto;
     height: auto;
-    border: 0.5rem solid black;
+    border: 0.6rem solid black;
     border-radius: 1rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 40px 80px rgba(0, 0, 0, 0.15),
         0 8px 16px rgba(0, 0, 0, 0.1);
