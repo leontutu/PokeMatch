@@ -20,10 +20,8 @@ export default function HomePage() {
         handleNavigate(Pages.ENTER_NAME, false);
     };
 
-    const handlePokemonClick = () => {
-        // note: disabled in current version (0.1)
-        return;
-        // handleNavigate(PAGES.POKEVIEWER, true);
+    const handleHowToPlayClick = () => {
+        handleNavigate(Pages.INSTRUCTIONS, true);
     };
 
     return (
@@ -35,8 +33,8 @@ export default function HomePage() {
                     </button>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button onClick={handlePokemonClick} className={styles.randomPokemonBtn}>
-                        <span>PokéViewer</span>
+                    <button onClick={handleHowToPlayClick} className={styles.howToPlayBtn}>
+                        <span>How To Play</span>
                     </button>
                 </div>
             </div>

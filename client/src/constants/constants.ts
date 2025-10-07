@@ -1,12 +1,12 @@
 export enum Pages {
     HOME = "homePage",
-    POKEVIEWER = "pokeViewerPage",
     ENTER_NAME = "enterNamePage",
     ROOM = "roomPage",
     SELECT_STAT = "selectStatPage",
     BATTLE = "battlePage",
     VICTORY = "victoryPage",
     POKEMON_REVEAL = "pokemonRevealPage",
+    INSTRUCTIONS = "instructions",
 }
 
 export const DisplayToStat = new Map([
@@ -20,6 +20,4 @@ export const DisplayToStat = new Map([
     ["📏 HEIGHT", "height"],
 ]);
 
-export const StatToDisplay = new Map(
-    [...DisplayToStat.entries()].map(([key, value]) => [value, key])
-);
+export const StatToDisplay = new Map([...DisplayToStat.entries()].map(([key, value]) => [value, key]));
