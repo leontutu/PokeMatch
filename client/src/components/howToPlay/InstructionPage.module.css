@@ -28,18 +28,18 @@
 .footer {
     position: relative;
     display: flex;
-    height: 8rem;
+    height: 5rem;
     width: 100%;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     flex-shrink: 0;
 }
 
 .backButton {
     position: absolute;
+    right: 1rem;
     font-family: jura;
     font-weight: 600;
-    right: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     font-size: 1.2rem;
@@ -51,8 +51,11 @@
 }
 
 .embla__dots {
-    display: flex;
+    position: absolute;
+    left: 3rem;
+    /* display: flex; */
     gap: 0.5rem;
+    display: hidden;
 }
 
 .embla__dot {
