@@ -29,11 +29,18 @@ export default async function startBotClient(roomId: number) {
 }
 
 function connectSocket(roomId: number) {
-    const socket = io("http://localhost:3001", {
-        auth: {
-            uuid: "BOT-" + roomId.toString(),
-        },
-    });
+    const socket =
+        process.env.NODE_ENV === "development"
+            ? io("http://localhost:3001", {
+                  auth: {
+                      uuid: "BOT-" + roomId.toString(),
+                  },
+              })
+            : io({
+                  auth: {
+                      uuid: "BOT-" + roomId.toString(),
+                  },
+              });
     socket.on("connect_error", (err: any) => {
         console.error(`[BOTCLIENT-${roomId}] Connection failed:`, err.message);
     });
@@ -46,15 +53,3 @@ function getRandomAvailableStat(lockedStats: StatNames[]) {
     const randomIndex = Math.floor(Math.random() * availableStats.length);
     return availableStats[randomIndex];
 }
-
-// const socket = import.meta.env.DEV
-//     ? io("http://localhost:3001", {
-//           auth: {
-//               uuid: getOrCreateUUID(),
-//           },
-//       })
-//     : io({
-//           auth: {
-//           uuid: getOrCreateUUID(),
-//       },
-//   });
