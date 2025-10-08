@@ -7,6 +7,9 @@
  */
 export enum Events {
     // Client to Server events
+    CREATE_ROOM = "createRoom", // Client requests to create a new room
+    JOIN_ROOM = "joinRoom", // Client requests to join a room (with room ID as payload)
+    PLAY_VS_AI = "playVsAI", // Client requests to play against AI
     NAME_ENTER = "nameEnter", // Client submits their name
     TOGGLE_READY = "ready", // Client waiting in Room is ready to start a game
     GAME_COMMAND = "gameCommand", // Client sends a game command (the payload being of type GAME_COMMANDS)
@@ -18,6 +21,7 @@ export enum Events {
     UPDATE = "update", // With payload of updated room/game state
     ROOM_CRASH = "roomCrash", // Room crashed or was deleted
     NAME_ERROR = "nameError", // Name validation failed
+    NAME_VALID = "nameValid", // Name was accepted
     SELECT_STAT_ERROR = "selectStatError", // Stat selection was invalid
 }
 

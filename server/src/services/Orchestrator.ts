@@ -123,11 +123,11 @@ export default class Orchestrator {
 
         client.setName(name);
         logger.debug(`[Orchestrator] Name entered: ${name}`);
-        const roomId = this.#assignClientToRoom(client);
-
-        this.#handleRoomErrors(() => {
-            this.#updateAllRoomClients(roomId);
-        }, socket);
+        this.socketService.emitNameValid(socket);
+        // const roomId = this.#assignClientToRoom(client);
+        // this.#handleRoomErrors(() => {
+        //     this.#updateAllRoomClients(roomId);
+        // }, socket);
     }
 
     /**

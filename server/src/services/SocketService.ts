@@ -99,6 +99,11 @@ export default class SocketService {
         socket.emit(Events.ROOM_CRASH);
     }
 
+    // Notifies a client that their name was accepted.
+    emitNameValid(socket: Socket) {
+        socket.emit(Events.NAME_VALID);
+    }
+
     // Notifies a client of a name validation error.
     emitNameError(socket: Socket) {
         socket.emit(Events.NAME_ERROR);
