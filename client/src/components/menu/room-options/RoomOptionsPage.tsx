@@ -14,7 +14,7 @@ export default function RoomOptionsPage() {
     };
 
     const handleJoinRoomClick = () => {
-        // navigate to another page?
+        handleNavigate(Pages.ENTER_ROOM_ID, false);
     };
 
     const handlePlayVsBotClick = () => {

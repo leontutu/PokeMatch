@@ -174,11 +174,14 @@ export default class Orchestrator {
             client,
             `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
         );
+        roomId = parseInt(String(roomId), 10);
 
         this.#handleRoomErrors(() => {
             this.roomManager.addClientToRoom(roomId, client);
             client.setRoomId(roomId);
+            this.#updateAllRoomClients(roomId);
         }, socket);
+        logger.debug(`[Orchestrator] ${client.name} joined room ${roomId}`);
     }
 
     /**
