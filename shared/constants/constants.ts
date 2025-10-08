@@ -23,6 +23,7 @@ export enum Events {
     NAME_ERROR = "nameError", // Name validation failed
     NAME_VALID = "nameValid", // Name was accepted
     SELECT_STAT_ERROR = "selectStatError", // Stat selection was invalid
+    ROOM_ID_NOT_FOUND = "roomIdNotFound", // Entered room ID was not found
 }
 
 /**

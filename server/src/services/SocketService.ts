@@ -70,8 +70,8 @@ export default class SocketService {
                 this.orchestrator.onCreateRoom(socket);
             });
 
-            socket.on(Events.JOIN_ROOM, (roomId: number) => {
-                this.orchestrator.onJoinRoom(socket, roomId);
+            socket.on(Events.JOIN_ROOM, (roomIdAsString: string) => {
+                this.orchestrator.onJoinRoom(socket, roomIdAsString);
             });
 
             socket.on(Events.PLAY_VS_BOT, () => {
@@ -119,6 +119,11 @@ export default class SocketService {
     // Notifies a client of a name validation error.
     emitNameError(socket: Socket) {
         socket.emit(Events.NAME_ERROR);
+    }
+
+    // Notifies a client that the entered room ID was not found.
+    emitRoomIdNotFound(socket: Socket) {
+        socket.emit(Events.ROOM_ID_NOT_FOUND);
     }
 
     // Notifies a client of an invalid select stat action.

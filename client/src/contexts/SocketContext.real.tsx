@@ -18,9 +18,11 @@ type SocketContextType = {
     roomCrashSignal: boolean;
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
+    roomIdNotFoundSignal: boolean;
     setHasPassedValidNameCheck: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
+    setRoomIdNotFoundSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
     sendCreateRoom: () => void;
     sendJoinRoom: (roomId: string) => void;
@@ -50,6 +52,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     const [viewRoom, setViewRoom] = useState<ViewRoom | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
+    const [roomIdNotFoundSignal, setRoomIdNotFoundSignal] = useState(false);
     const [hasPassedValidNameCheck, setHasPassedValidNameCheck] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
     useEffect(() => {
@@ -94,6 +97,10 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
 
         socket.on(Events.SELECT_STAT_ERROR, () => {
             setSelectStatErrorSignal(true);
+        });
+
+        socket.on(Events.ROOM_ID_NOT_FOUND, () => {
+            setRoomIdNotFoundSignal(true);
         });
 
         return () => {
@@ -162,7 +169,9 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
+        roomIdNotFoundSignal,
         hasPassedValidNameCheck,
+        setRoomIdNotFoundSignal,
         setHasPassedValidNameCheck,
         setSelectStatErrorSignal,
         setNameErrorSignal,

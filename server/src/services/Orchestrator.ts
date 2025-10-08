@@ -8,7 +8,7 @@ import RoomManager from "../managers/RoomManager.js";
 import ClientManager from "../managers/ClientManager.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
 import { assertIsDefined, delay } from "../utils/utils.js";
-import { isValidName } from "../../../shared/utils/validation.js";
+import { isValidName, isValidRoomId } from "../../../shared/utils/validation.js";
 import SocketService from "./SocketService.js";
 import { Socket } from "socket.io";
 import Client from "../models/Client.js";
@@ -168,13 +168,20 @@ export default class Orchestrator {
      * @param socket The client's socket instance.
      * @param roomId The ID of the room to join.
      */
-    onJoinRoom(socket: Socket, roomId: number) {
+    onJoinRoom(socket: Socket, roomIdAsString: string) {
         const client = this.clientManager.getClient(socket);
         assertIsDefined(
             client,
             `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
         );
-        roomId = parseInt(String(roomId), 10);
+
+        if (!isValidRoomId(roomIdAsString) || !this.roomManager.hasRoom(parseInt(roomIdAsString, 10))) {
+            logger.warn(`[Orchestrator] Invalid roomId entered: ${roomIdAsString}`);
+            this.socketService.emitRoomIdNotFound(socket);
+            return;
+        }
+
+        const roomId = parseInt(roomIdAsString, 10);
 
         this.#handleRoomErrors(() => {
             this.roomManager.addClientToRoom(roomId, client);
