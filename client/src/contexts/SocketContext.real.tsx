@@ -18,11 +18,11 @@ type SocketContextType = {
     roomCrashSignal: boolean;
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
-    roomIdNotFoundSignal: boolean;
+    badRoomIdSignal: boolean;
     setHasPassedValidNameCheck: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
-    setRoomIdNotFoundSignal: React.Dispatch<React.SetStateAction<boolean>>;
+    setBadRoomIdSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
     sendCreateRoom: () => void;
     sendJoinRoom: (roomId: string) => void;
@@ -52,7 +52,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     const [viewRoom, setViewRoom] = useState<ViewRoom | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
-    const [roomIdNotFoundSignal, setRoomIdNotFoundSignal] = useState(false);
+    const [badRoomIdSignal, setBadRoomIdSignal] = useState(false);
     const [hasPassedValidNameCheck, setHasPassedValidNameCheck] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
     useEffect(() => {
@@ -99,8 +99,8 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
             setSelectStatErrorSignal(true);
         });
 
-        socket.on(Events.ROOM_ID_NOT_FOUND, () => {
-            setRoomIdNotFoundSignal(true);
+        socket.on(Events.BAD_ROOM_ID, () => {
+            setBadRoomIdSignal(true);
         });
 
         return () => {
@@ -169,9 +169,9 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
-        roomIdNotFoundSignal,
+        badRoomIdSignal,
         hasPassedValidNameCheck,
-        setRoomIdNotFoundSignal,
+        setBadRoomIdSignal,
         setHasPassedValidNameCheck,
         setSelectStatErrorSignal,
         setNameErrorSignal,

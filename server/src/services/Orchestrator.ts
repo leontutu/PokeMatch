@@ -175,13 +175,16 @@ export default class Orchestrator {
             `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
         );
 
-        if (!isValidRoomId(roomIdAsString) || !this.roomManager.hasRoom(parseInt(roomIdAsString, 10))) {
-            logger.warn(`[Orchestrator] Invalid roomId entered: ${roomIdAsString}`);
-            this.socketService.emitRoomIdNotFound(socket);
+        const roomId = parseInt(roomIdAsString, 10);
+        if (
+            !isValidRoomId(roomIdAsString) ||
+            !this.roomManager.hasRoom(roomId) ||
+            this.roomManager.isRoomFull(roomId)
+        ) {
+            logger.warn(`[Orchestrator] Bad roomId entered: ${roomIdAsString}`);
+            this.socketService.emitBadRoomId(socket);
             return;
         }
-
-        const roomId = parseInt(roomIdAsString, 10);
 
         this.#handleRoomErrors(() => {
             this.roomManager.addClientToRoom(roomId, client);

@@ -20,18 +20,18 @@ import { useNavigationContext } from "../../../contexts/NavigationContext";
  * <EnterRoomIdPage />
  */
 export default function EnterRoomIdPage() {
-    const { sendJoinRoom, viewRoom, roomIdNotFoundSignal, setRoomIdNotFoundSignal } = useSocket();
+    const { sendJoinRoom, viewRoom, badRoomIdSignal, setBadRoomIdSignal } = useSocket();
     const { handleNavigate } = useNavigationContext();
     const [roomId, setRoomId] = useState("");
     const [isRoomIdValid, setIsRoomIdValid] = useState(false);
 
     useEffect(() => {
-        if (roomIdNotFoundSignal) {
+        if (badRoomIdSignal) {
             handleNavigate(Pages.ROOM_OPTIONS, false);
-            setRoomIdNotFoundSignal(false);
-            alert("No Room with ID " + roomId + " found or invalid Room ID.");
+            setBadRoomIdSignal(false);
+            alert("Room with ID " + roomId + " is either full or doesn't exist.");
         }
-    }, [roomIdNotFoundSignal, handleNavigate, setRoomIdNotFoundSignal]);
+    }, [badRoomIdSignal, handleNavigate, setBadRoomIdSignal]);
 
     useEffect(() => {
         if (viewRoom) {

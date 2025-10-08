@@ -122,8 +122,8 @@ export default class SocketService {
     }
 
     // Notifies a client that the entered room ID was not found.
-    emitRoomIdNotFound(socket: Socket) {
-        socket.emit(Events.ROOM_ID_NOT_FOUND);
+    emitBadRoomId(socket: Socket) {
+        socket.emit(Events.BAD_ROOM_ID);
     }
 
     // Notifies a client of an invalid select stat action.
