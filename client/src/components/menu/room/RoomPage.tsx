@@ -22,6 +22,7 @@ import styles from "./RoomPage.module.css";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
+import { addBotToRoom } from "../../../services/apiService";
 
 /**
  * Renders the UI for a game room where players wait before a match starts.
@@ -44,10 +45,7 @@ export default function RoomPage() {
     const handleVsBotClick = () => {
         if (!viewRoom || vsBotClicked || viewRoom.viewClientRecords.length > 1) return;
         setVsBotClicked(true);
-        const roomId = viewRoom.id;
-        fetch(`/api/bot/${roomId}`, {
-            method: "POST",
-        });
+        addBotToRoom(viewRoom.id);
     };
 
     if (!viewRoom) {
