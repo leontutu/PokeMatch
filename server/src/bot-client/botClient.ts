@@ -5,6 +5,17 @@ import { ViewRoom } from "../../../shared/types/types.js";
 
 const MAX_IDLE_TIME = 1200000; // 20 minutes
 
+/**
+ * Launches a bot client that connects to a specified game room.
+ *
+ * The bot automatically readies up and participates in the game by selecting
+ * a random available stat when prompted. It includes an idle timer to
+ * disconnect itself after a period of inactivity to free up server resources.
+ * The function is called through clients requesting to play vs a bot through the API.
+ *
+ * @param PORT The port on which the server is running.
+ * @param roomId The ID of the room for the bot to join.
+ */
 export default async function startBotClient(PORT: string, roomId: number) {
     console.log("[BOTCLIENT] Started bot client with room ID:", roomId);
 
