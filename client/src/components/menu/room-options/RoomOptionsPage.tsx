@@ -1,18 +1,31 @@
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./RoomOptionsPage.module.css";
+import { useSocket } from "../../../contexts/SocketContext.real";
+import { useEffect } from "react";
+import { Pages } from "../../../constants/constants";
+import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 export default function RoomOptionsPage() {
+    const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocket();
+    const { handleNavigate } = useNavigationContext();
+
     const handleCreateRoomClick = () => {
-        // handleNavigate(Pages.ENTER_NAME, false);
+        sendCreateRoom();
     };
 
     const handleJoinRoomClick = () => {
-        // handleNavigate(Pages.ENTER_ROOM_ID, false);
+        // navigate to another page?
     };
 
     const handlePlayVsBotClick = () => {
-        // handleNavigate(Pages.ENTER_NAME, false);
+        sendPlayVsBot();
     };
+
+    useEffect(() => {
+        if (viewRoom) {
+            handleNavigate(Pages.ROOM, false);
+        }
+    }, [viewRoom, handleNavigate]);
 
     return (
         <HomeLayout>

@@ -22,7 +22,7 @@ const orchestrator = new Orchestrator(roomManager, clientManager, pokeAPIClient)
 const socketService = new SocketService(server, orchestrator);
 orchestrator.setSocketService(socketService);
 
-const PORT = process.env.PORT || `3001`;
+export const PORT = process.env.PORT || `3001`;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

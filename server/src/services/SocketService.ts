@@ -66,6 +66,18 @@ export default class SocketService {
                 this.orchestrator.onNameEnter(socket, payload);
             });
 
+            socket.on(Events.CREATE_ROOM, () => {
+                this.orchestrator.onCreateRoom(socket);
+            });
+
+            socket.on(Events.JOIN_ROOM, (roomId: number) => {
+                this.orchestrator.onJoinRoom(socket, roomId);
+            });
+
+            socket.on(Events.PLAY_VS_BOT, () => {
+                this.orchestrator.onPlayVsBot(socket);
+            });
+
             socket.on(Events.TOGGLE_READY, () => {
                 this.orchestrator.onToggleReady(socket);
             });

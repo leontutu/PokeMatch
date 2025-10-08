@@ -24,7 +24,7 @@ type SocketContextType = {
     sendName: (name: string) => void;
     sendCreateRoom: () => void;
     sendJoinRoom: (roomId: string) => void;
-    sendPlayVsAI: () => void;
+    sendPlayVsBot: () => void;
     toggleReady: () => void;
     sendSelectStat: (stat: StatNames) => void;
     sendBattleEnd: () => void;
@@ -115,9 +115,9 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         }
     };
 
-    const sendPlayVsAI = () => {
+    const sendPlayVsBot = () => {
         if (socket) {
-            socket.emit(Events.PLAY_VS_AI);
+            socket.emit(Events.PLAY_VS_BOT);
         }
     };
 
@@ -169,7 +169,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         sendName,
         sendCreateRoom,
         sendJoinRoom,
-        sendPlayVsAI,
+        sendPlayVsBot,
         toggleReady,
         sendSelectStat,
         sendBattleEnd,

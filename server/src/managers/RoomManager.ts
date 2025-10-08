@@ -34,7 +34,7 @@ export default class RoomManager extends EventEmitter {
      * @returns The ID of the room the client was assigned to.
      * @throws {RoomNotFoundError} If the newly created room is not found, which indicates an internal error.
      */
-    assignClientToRoom(client: Client): number {
+    assignClientToPublicRoom(client: Client): number {
         let roomId;
         if (this.rooms.size === 0) {
             roomId = this.#createNewRoom();
@@ -51,14 +51,26 @@ export default class RoomManager extends EventEmitter {
     }
 
     /**
+     * Assigns a client to a new room.
+     * @param client The client to assign to a new room.
+     * @returns The ID of the newly created room.
+     */
+    assignClientToNewRoom(client: Client): number {
+        const roomId = this.#createNewRoom();
+        this.addClientToRoom(roomId, client);
+        return roomId;
+    }
+
+    /**
      * Adds a client to a specific room.
      * @param roomId The ID of the room.
      * @param client The client to add.
+     * @returns True if the client was added successfully, false otherwise.
      * @throws {RoomNotFoundError}
      */
-    addClientToRoom(roomId: number, client: Client) {
+    addClientToRoom(roomId: number, client: Client): boolean {
         const room = this.getRoom(roomId);
-        room.addClient(client);
+        return room.addClient(client);
     }
 
     /**
