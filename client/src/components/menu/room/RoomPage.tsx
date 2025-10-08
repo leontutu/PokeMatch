@@ -34,10 +34,21 @@ import StatusText from "./StatusText";
 export default function RoomPage() {
     const { viewRoom, toggleReady: sendReady } = useSocket();
     const [amIReady, setAmIReady] = useState(false);
+    const [vsBotClicked, setVsBotClicked] = useState(false); //FIXME: Remove this when private rooms are implemented
 
     const handleReadyClick = () => {
         setAmIReady(!amIReady);
         sendReady();
+    };
+
+    // FIXME: TEMPORARILY HERE UNTIL PRIVATE ROOMS ARE IMPLEMENTED
+    const handleVsBotClick = () => {
+        if (vsBotClicked) return;
+        setVsBotClicked(true);
+        const roomId = viewRoom?.id;
+        fetch(`/api/bot/${roomId}`, {
+            method: "POST",
+        });
     };
 
     if (!viewRoom) {
@@ -53,6 +64,26 @@ export default function RoomPage() {
                 </div>
 
                 <div className={styles.footer}>
+                    {/* FIXME:BOT BUTTON TEMPORARILY HERE UNTIL PRIVATE ROOMS ARE IMPLEMENTED */}
+                    <button
+                        style={{
+                            fontSize: "2.2rem",
+                            fontFamily: "Jura",
+                            fontWeight: "700",
+                            width: "78%",
+                            padding: "1rem 2rem",
+                            color: "white",
+                            backgroundColor: "#4654cfff",
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            marginRight: "1rem",
+                        }}
+                        onClick={handleVsBotClick}
+                    >
+                        PLAY VS BOT
+                    </button>
+                    {/* FIXME: BOT BUTTON TEMPORARILY HERE UNTIL PRIVATE ROOMS ARE IMPLEMENTED */}
                     <ReadyButton amIReady={amIReady} handleReadyClick={handleReadyClick} />
                     <StatusText amIReady={amIReady} isGameStarted={viewRoom.viewGame !== null} />
                 </div>
