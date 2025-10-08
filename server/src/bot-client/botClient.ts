@@ -3,10 +3,10 @@ import { Events, GameCommands, GamePhases, StatNames } from "../../../shared/con
 import { delay } from "../utils/utils.js";
 import { ViewRoom } from "../../../shared/types/types.js";
 
-export default async function startBotClient(roomId: number) {
+export default async function startBotClient(PORT: string, roomId: number) {
     console.log("[BOTCLIENT] Started bot client with room ID:", roomId);
 
-    const socket = connectSocket(roomId);
+    const socket = connectSocket(PORT, roomId);
     if (!socket) return;
 
     socket.emit(Events.NAME_ENTER, "MrRobot");
@@ -28,19 +28,12 @@ export default async function startBotClient(roomId: number) {
     });
 }
 
-function connectSocket(roomId: number) {
-    const socket =
-        process.env.NODE_ENV === "development"
-            ? io("http://localhost:3001", {
-                  auth: {
-                      uuid: "BOT-" + roomId.toString(),
-                  },
-              })
-            : io({
-                  auth: {
-                      uuid: "BOT-" + roomId.toString(),
-                  },
-              });
+function connectSocket(PORT: string, roomId: number) {
+    const socket = io(`http://localhost:${PORT}`, {
+        auth: {
+            uuid: "BOT-" + roomId.toString(),
+        },
+    });
     socket.on("connect_error", (err: any) => {
         console.error(`[BOTCLIENT-${roomId}] Connection failed:`, err.message);
     });
