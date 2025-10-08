@@ -9,6 +9,7 @@ import RoomManager from "./managers/RoomManager.js";
 import ClientManager from "./managers/ClientManager.js";
 import PokeApiClient from "./clients/PokeAPIClient.js";
 import logger from "./utils/Logger.js";
+import startBotClient from "./bot-client/botClient.js";
 
 const app = express();
 const server = createServer(app);
@@ -41,7 +42,8 @@ app.post("/api/bot/:roomId", (req, res) => {
             error: "Invalid Room ID format. Expected a positive integer.",
         });
     }
-    console.log(roomId);
+    startBotClient(roomId);
+    res.status(200).json({ message: "Bot client started" });
 });
 
 app.get("/{*any}", (req, res) => {
