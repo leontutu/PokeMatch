@@ -17,11 +17,7 @@ const server = createServer(app);
 const roomManager = new RoomManager();
 const clientManager = new ClientManager();
 const pokeAPIClient = new PokeApiClient();
-const orchestrator = new Orchestrator(
-    roomManager,
-    clientManager,
-    pokeAPIClient
-);
+const orchestrator = new Orchestrator(roomManager, clientManager, pokeAPIClient);
 const socketService = new SocketService(server, orchestrator);
 orchestrator.setSocketService(socketService);
 
@@ -33,8 +29,20 @@ const __dirname = path.dirname(__filename);
 const clientBuildPath = path.join(__dirname, "../../../../client/dist");
 
 app.use(express.static(clientBuildPath));
+app.use(express.json());
 
 socketService.init();
+
+app.post("/api/bot/:roomId", (req, res) => {
+    const roomId = parseInt(req.params.roomId, 10);
+    if (isNaN(roomId) || roomId <= 0) {
+        console.error(`Error: Invalid roomId format received: ${req.params.roomId}`);
+        return res.status(400).json({
+            error: "Invalid Room ID format. Expected a positive integer.",
+        });
+    }
+    console.log(roomId);
+});
 
 app.get("/{*any}", (req, res) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
