@@ -6,6 +6,7 @@ import SelectStatPage from "../match/SelectStat/SelectStatPage";
 import VictoryPage from "../match/victory/VictoryPage";
 import EnterNamePage from "../menu/enterName/EnterNamePage";
 import HomePage from "../menu/home/HomePage";
+import RoomOptionsPage from "../menu/room-options/RoomOptionsPage";
 import RoomPage from "../menu/room/RoomPage";
 
 /**
@@ -37,6 +38,8 @@ export default function Router({ page }: RouterProps) {
             return <PokemonRevealPage />;
         case Pages.INSTRUCTIONS:
             return <InstructionPage />;
+        case Pages.ROOM_OPTIONS:
+            return <RoomOptionsPage />;
         default:
             return <HomePage />;
     }

@@ -7,6 +7,7 @@ export enum Pages {
     VICTORY = "victoryPage",
     POKEMON_REVEAL = "pokemonRevealPage",
     INSTRUCTIONS = "instructions",
+    ROOM_OPTIONS = "roomOptionsPage",
 }
 
 export const DisplayToStat = new Map([
