@@ -5,6 +5,16 @@ import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 
+/**
+ * Renders the room options page where users can choose to create a room,
+ * join an existing room, or play against a bot.
+ *
+ * This component provides the primary navigation choices for starting a game.
+ * It handles the UI for these options and triggers the corresponding actions,
+ * such as creating a room on the server or navigating to the "Enter Room ID" page.
+ *
+ * @returns {JSX.Element} The rendered room options page.
+ */
 export default function RoomOptionsPage() {
     const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocket();
     const { handleNavigate } = useNavigationContext();
