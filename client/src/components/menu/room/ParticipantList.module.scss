@@ -36,10 +36,10 @@
     color: v.$color-text-muted;
     background-color: v.$color-surface-primary;
     transition: all 0.3s ease;
-}
 
-.statusIndicator.ready {
-    color: v.$color-white;
-    background-color: v.$color-success;
-    animation: pulseReady 0.6s ease-in-out;
+    &.ready {
+        color: v.$color-white;
+        background-color: v.$color-success;
+        animation: pulseReady 0.6s ease-in-out;
+    }
 }

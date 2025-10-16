@@ -16,19 +16,19 @@
     text-shadow: 1px 1px 4px v.$shadow-md;
     background-color: v.$color-success;
     box-shadow: 0 5px 0 v.$color-success-dark;
-}
 
-.readyBtn:hover:not(:disabled) {
-    filter: brightness(1.1);
-}
+    &:hover:not(:disabled) {
+        filter: brightness(1.1);
+    }
 
-.readyBtn:active:not(:disabled) {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 v.$color-success-dark;
-}
+    &:active:not(:disabled) {
+        transform: translateY(3px);
+        box-shadow: 0 2px 0 v.$color-success-dark;
+    }
 
-.readyBtn.pressed {
-    background-color: v.$color-text-muted-strong;
-    box-shadow: 0 5px 0 v.$color-surface-primary;
-    filter: brightness(0.8);
+    &.pressed {
+        background-color: v.$color-text-muted-strong;
+        box-shadow: 0 5px 0 v.$color-surface-primary;
+        filter: brightness(0.8);
+    }
 }

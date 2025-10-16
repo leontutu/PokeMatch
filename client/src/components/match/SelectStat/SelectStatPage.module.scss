@@ -169,29 +169,29 @@
     border: none;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 4px 0 v.$color-surface-primary;
-}
 
-.lockInBtn.active {
-    background-color: v.$color-success;
-    color: v.$color-white;
-    cursor: pointer;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 v.$color-success-dark;
-}
+    &.active {
+        background-color: v.$color-success;
+        color: v.$color-white;
+        cursor: pointer;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 v.$color-success-dark;
+    }
 
-.lockInBtn.disabled {
-    color: v.$color-disabled;
-    cursor: not-allowed;
-}
+    &.disabled {
+        color: v.$color-disabled;
+        cursor: not-allowed;
+    }
 
-.lockInBtn.locked {
-    background: linear-gradient(135deg, rgb(185, 13, 13), rgb(155, 10, 10));
-    box-shadow: inset 10px 10px 10px rgba(252, 252, 252, 0.1);
-    filter: brightness(0.8);
-    border: 5px dashed v.$color-black;
-    pointer-events: none;
-    cursor: default;
-    animation: none;
+    &.locked {
+        background: linear-gradient(135deg, rgb(185, 13, 13), rgb(155, 10, 10));
+        box-shadow: inset 10px 10px 10px rgba(252, 252, 252, 0.1);
+        filter: brightness(0.8);
+        border: 5px dashed v.$color-black;
+        pointer-events: none;
+        cursor: default;
+        animation: none;
+    }
 }
 
 @keyframes spin {

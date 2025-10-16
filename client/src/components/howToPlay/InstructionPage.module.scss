@@ -14,10 +14,12 @@
     overflow: hidden;
     flex-grow: 1;
 }
+
 .embla__container {
     display: flex;
     height: 100%;
 }
+
 .embla__slide {
     flex: 0 0 100%;
     min-width: 0;
@@ -48,6 +50,10 @@
     padding: 0.75rem 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &.glow {
+        animation: glow-animation 1.5s infinite alternate;
+    }
 }
 
 .embla__dots {
@@ -67,28 +73,24 @@
     border: 0;
     width: 1.5rem;
     height: 1.5rem;
-}
 
-.embla__dot:after {
-    background-color: white;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s;
-}
+    &:after {
+        background-color: white;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s, height 0.2s;
+    }
 
-.embla__dot--selected:after {
-    width: 0.8rem;
-    height: 0.8rem;
-}
-
-.glow {
-    animation: glow-animation 1.5s infinite alternate;
+    &--selected:after {
+        width: 0.8rem;
+        height: 0.8rem;
+    }
 }
 
 @keyframes glow-animation {

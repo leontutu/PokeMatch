@@ -9,18 +9,18 @@
     animation-fill-mode: forwards;
     z-index: 10;
     top: -100vh;
-}
 
-.wipeOutActive {
-    animation-name: wipe-out-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-in;
-}
+    &.wipeOutActive {
+        animation-name: wipe-out-animation;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-in;
+    }
 
-.wipeInActive {
-    animation-name: wipe-in-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-out;
+    &.wipeInActive {
+        animation-name: wipe-in-animation;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-out;
+    }
 }
 
 @keyframes wipe-out-animation {

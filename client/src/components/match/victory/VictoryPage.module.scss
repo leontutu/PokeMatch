@@ -73,15 +73,15 @@
     transition: all 0.2s ease-in-out;
     box-shadow: 0 5px 0 v.$color-success-dark;
     letter-spacing: 1.5px;
-}
 
-.menuButton:hover {
-    filter: brightness(1.1);
-}
+    &:hover {
+        filter: brightness(1.1);
+    }
 
-.menuButton:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 v.$color-success-dark;
+    &:active {
+        transform: translateY(3px);
+        box-shadow: 0 2px 0 v.$color-success-dark;
+    }
 }
 
 @keyframes zoomIn {

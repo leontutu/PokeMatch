@@ -15,58 +15,56 @@
     height: 4.5rem;
     cursor: pointer;
     font-family: v.$font-family-primary;
+
+    &.locked {
+        background-color: v.$color-black;
+        cursor: not-allowed;
+        opacity: 0.3;
+        background-image: linear-gradient(
+                32deg,
+                transparent 25%,
+                rgba(185, 13, 13, 0.75) 47.5%,
+                rgba(185, 13, 13, 0.75) 52.5%,
+                transparent 52.5%
+            ),
+            linear-gradient(
+                -32deg,
+                transparent 25%,
+                rgba(185, 13, 13, 0.75) 47.5%,
+                rgba(185, 13, 13, 0.75) 52.5%,
+                transparent 52.5%
+            );
+    }
+
+    &.highlight {
+        background-color: v.$color-accent-gold;
+        color: v.$color-surface-darker;
+        transform: scale(1.1);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.6);
+        border-color: #f6e05e;
+    }
+
+    @media (min-width: 600px) and (min-height: 700px) {
+        width: 7rem;
+        height: 4rem;
+    }
 }
 
 .statName {
     font-size: 1rem;
     font-weight: 600;
+
+    @media (min-width: 600px) and (min-height: 700px) {
+        font-size: 0.8rem;
+    }
 }
 
 .statValue {
     font-size: v.$font-size-base;
     font-weight: bold;
-}
 
-.locked {
-    background-color: v.$color-black;
-    cursor: not-allowed;
-    opacity: 0.3;
-    background-image: linear-gradient(
-            32deg,
-            transparent 25%,
-            rgba(185, 13, 13, 0.75) 47.5%,
-            rgba(185, 13, 13, 0.75) 52.5%,
-            transparent 52.5%
-        ),
-        linear-gradient(
-            -32deg,
-            transparent 25%,
-            rgba(185, 13, 13, 0.75) 47.5%,
-            rgba(185, 13, 13, 0.75) 52.5%,
-            transparent 52.5%
-        );
-}
-
-.highlight {
-    background-color: v.$color-accent-gold;
-    color: v.$color-surface-darker;
-    transform: scale(1.1);
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.6);
-    border-color: #f6e05e;
-}
-
-@media (min-width: 600px) and (min-height: 700px) {
-    .statCard {
-        width: 7rem;
-        height: 4rem;
-    }
-
-    .statName {
-        font-size: 0.8rem;
-    }
-
-    .statValue {
+    @media (min-width: 600px) and (min-height: 700px) {
         font-size: v.$font-size-base;
     }
 }

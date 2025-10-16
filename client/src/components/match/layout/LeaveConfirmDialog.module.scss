@@ -52,20 +52,20 @@
     background-color: v.$color-danger;
     color: v.$color-white;
     box-shadow: 0 4px 0 v.$color-danger-dark;
-}
 
-.yesButton:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 v.$color-danger-dark;
+    &:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 v.$color-danger-dark;
+    }
 }
 
 .noButton {
     background-color: v.$color-text-muted-strong;
     color: v.$color-white;
     box-shadow: 0 4px 0 v.$color-surface-primary;
-}
 
-.noButton:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 v.$color-surface-primary;
+    &:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 v.$color-surface-primary;
+    }
 }

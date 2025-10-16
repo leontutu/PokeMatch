@@ -7,94 +7,94 @@
     align-items: center;
     justify-content: center;
     letter-spacing: 0.5px;
-}
 
-.typeCard.normal {
-    background: linear-gradient(90deg, #d3d3d3 60%, #b0b0b0 100%);
-    color: #4f4f4f;
-}
+    &.normal {
+        background: linear-gradient(90deg, #d3d3d3 60%, #b0b0b0 100%);
+        color: #4f4f4f;
+    }
 
-.typeCard.fire {
-    background: linear-gradient(90deg, #ff7e75 60%, #ff5247 100%);
-    color: #9c3029;
-}
+    &.fire {
+        background: linear-gradient(90deg, #ff7e75 60%, #ff5247 100%);
+        color: #9c3029;
+    }
 
-.typeCard.water {
-    background: linear-gradient(90deg, #81b7ff 60%, #589bff 100%);
-    color: #2e5b9c;
-}
+    &.water {
+        background: linear-gradient(90deg, #81b7ff 60%, #589bff 100%);
+        color: #2e5b9c;
+    }
 
-.typeCard.grass {
-    background: linear-gradient(90deg, #a8e090 60%, #8ac576 100%);
-    color: #4b6b3e;
-}
+    &.grass {
+        background: linear-gradient(90deg, #a8e090 60%, #8ac576 100%);
+        color: #4b6b3e;
+    }
 
-.typeCard.electric {
-    background: linear-gradient(90deg, #ffe066 60%, #ffd700 100%);
-    color: #7c5e10;
-}
+    &.electric {
+        background: linear-gradient(90deg, #ffe066 60%, #ffd700 100%);
+        color: #7c5e10;
+    }
 
-.typeCard.ice {
-    background: linear-gradient(90deg, #b0e0e6 60%, #87ceeb 100%);
-    color: #3b6b7a;
-}
+    &.ice {
+        background: linear-gradient(90deg, #b0e0e6 60%, #87ceeb 100%);
+        color: #3b6b7a;
+    }
 
-.typeCard.fighting {
-    background: linear-gradient(90deg, #cc9e7d 60%, #a07d5c 100%);
-    color: #5d452a;
-}
+    &.fighting {
+        background: linear-gradient(90deg, #cc9e7d 60%, #a07d5c 100%);
+        color: #5d452a;
+    }
 
-.typeCard.poison {
-    background: linear-gradient(90deg, #d8bfd8 60%, #c482c4 100%);
-    color: #6a346a;
-}
+    &.poison {
+        background: linear-gradient(90deg, #d8bfd8 60%, #c482c4 100%);
+        color: #6a346a;
+    }
 
-.typeCard.ground {
-    background: linear-gradient(90deg, #e3c4a2 60%, #d8a071 100%);
-    color: #7d5b3c;
-}
+    &.ground {
+        background: linear-gradient(90deg, #e3c4a2 60%, #d8a071 100%);
+        color: #7d5b3c;
+    }
 
-.typeCard.flying {
-    background: linear-gradient(90deg, #e0ffff 60%, #a8d6e3 100%);
-    color: #557c8d;
-}
+    &.flying {
+        background: linear-gradient(90deg, #e0ffff 60%, #a8d6e3 100%);
+        color: #557c8d;
+    }
 
-.typeCard.psychic {
-    background: linear-gradient(90deg, #ffc0cb 60%, #ff98b0 100%);
-    color: #9c4566;
-}
+    &.psychic {
+        background: linear-gradient(90deg, #ffc0cb 60%, #ff98b0 100%);
+        color: #9c4566;
+    }
 
-.typeCard.bug {
-    background: linear-gradient(90deg, #b5c477 60%, #8d9c57 100%);
-    color: #525a32;
-}
+    &.bug {
+        background: linear-gradient(90deg, #b5c477 60%, #8d9c57 100%);
+        color: #525a32;
+    }
 
-.typeCard.rock {
-    background: linear-gradient(90deg, #a89a80 60%, #8b7d60 100%);
-    color: #554a3a;
-}
+    &.rock {
+        background: linear-gradient(90deg, #a89a80 60%, #8b7d60 100%);
+        color: #554a3a;
+    }
 
-.typeCard.ghost {
-    background: linear-gradient(90deg, #b8a6d6 60%, #8e78a3 100%);
-    color: #4b3d5b;
-}
+    &.ghost {
+        background: linear-gradient(90deg, #b8a6d6 60%, #8e78a3 100%);
+        color: #4b3d5b;
+    }
 
-.typeCard.dragon {
-    background: linear-gradient(90deg, #a491e0 60%, #7664b3 100%);
-    color: #3f315a;
-}
+    &.dragon {
+        background: linear-gradient(90deg, #a491e0 60%, #7664b3 100%);
+        color: #3f315a;
+    }
 
-.typeCard.steel {
-    background: linear-gradient(90deg, #c0c0c0 60%, #a9a9a9 100%);
-    color: #5a5a5a;
-}
+    &.steel {
+        background: linear-gradient(90deg, #c0c0c0 60%, #a9a9a9 100%);
+        color: #5a5a5a;
+    }
 
-.typeCard.dark {
-    background: linear-gradient(90deg, #a9a9a9 60%, #7d7d7d 100%);
-    color: #2e2e2e;
-}
+    &.dark {
+        background: linear-gradient(90deg, #a9a9a9 60%, #7d7d7d 100%);
+        color: #2e2e2e;
+    }
 
-.typeCard.fairy {
-    background: linear-gradient(90deg, #ffb6c1 60%, #ff8a9f 100%);
-    color: #9c3c4f;
+    &.fairy {
+        background: linear-gradient(90deg, #ffb6c1 60%, #ff8a9f 100%);
+        color: #9c3c4f;
+    }
 }

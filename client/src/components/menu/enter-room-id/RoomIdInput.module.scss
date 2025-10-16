@@ -39,17 +39,21 @@
     box-shadow: inset 0 2px 4px v.$shadow-md;
     transition: all 0.2s ease;
     text-align: center;
-}
 
-.nameInput::placeholder {
-    color: v.$color-text-muted;
-    opacity: 0.8;
-}
+    &::placeholder {
+        color: v.$color-text-muted;
+        opacity: 0.8;
+    }
 
-.nameInput:focus {
-    outline: none;
-    border-color: v.$color-success;
-    box-shadow: inset 0 2px 4px v.$shadow-md, 0 0 10px v.$color-success;
+    &:focus {
+        outline: none;
+        border-color: v.$color-success;
+        box-shadow: inset 0 2px 4px v.$shadow-md, 0 0 10px v.$color-success;
+    }
+
+    &.shake {
+        animation: shake 0.5s ease-in-out;
+    }
 }
 
 .validationText {
@@ -57,14 +61,10 @@
     font-size: v.$font-size-base;
     height: 1rem;
     transition: color 0.3s;
-}
 
-.validationText.valid {
-    color: v.$color-success;
-}
-
-.shake {
-    animation: shake 0.5s ease-in-out;
+    &.valid {
+        color: v.$color-success;
+    }
 }
 
 @keyframes shake {

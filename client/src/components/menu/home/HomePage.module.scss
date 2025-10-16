@@ -18,22 +18,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
 
-.buttonContainer button {
-    width: 100%;
-    color: v.$color-text-light;
-    border: none;
-    border-radius: v.$radius-lg;
-    padding: 20px 0;
-    font-size: v.$font-size-xl;
-    font-weight: 700;
-    font-family: v.$font-family-primary;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
-    letter-spacing: 1.5px;
-    text-shadow: 1px 1px 4px v.$shadow-sm;
+    button {
+        width: 100%;
+        color: v.$color-text-light;
+        border: none;
+        border-radius: v.$radius-lg;
+        padding: 20px 0;
+        font-size: v.$font-size-xl;
+        font-weight: 700;
+        font-family: v.$font-family-primary;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+        letter-spacing: 1.5px;
+        text-shadow: 1px 1px 4px v.$shadow-sm;
+    }
 }
 
 .matchBtn {
