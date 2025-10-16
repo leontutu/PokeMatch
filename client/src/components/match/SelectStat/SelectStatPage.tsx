@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
-import styles from "./SelectStatPage.module.css";
+import styles from "./SelectStatPage.module.scss";
 import MatchLayout from "../layout/MatchLayout";
 import TypeCard from "./TypeCard";
 import cardScaffold from "../../../scaffolds/cardScaffold";

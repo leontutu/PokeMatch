@@ -18,7 +18,7 @@
 import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import HomeLayout from "../layout/HomeLayout";
-import styles from "./RoomPage.module.css";
+import styles from "./RoomPage.module.scss";
 import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";

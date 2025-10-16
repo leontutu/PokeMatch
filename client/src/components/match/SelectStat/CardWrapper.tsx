@@ -1,17 +1,9 @@
 import { memo } from "react";
-import styles from "./SelectStatPage.module.css";
+import styles from "./SelectStatPage.module.scss";
 import StatCard from "../shared/StatCard";
 
 const CardWrapper = memo(
-    ({
-        index,
-        statName,
-        baseStat,
-        rotation,
-        isSelected,
-        onCardClick,
-        isLocked,
-    }: any) => {
+    ({ index, statName, baseStat, rotation, isSelected, onCardClick, isLocked }: any) => {
         return (
             <div
                 className={styles.circleCard}

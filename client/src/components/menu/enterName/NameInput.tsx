@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import styles from "./NameInput.module.css";
+import styles from "./NameInput.module.scss";
 import { isValidName } from "../../../../../shared/utils/validation";
 
 type NameInputProps = {
@@ -15,12 +15,7 @@ type NameInputProps = {
  * Automatically scrolls the input into view on focus to improve user experience
  * on mobile devices where a virtual keyboard may cover the input.
  */
-export default function NameInput({
-    name,
-    setName,
-    isNameValid,
-    setIsNameValid,
-}: NameInputProps) {
+export default function NameInput({ name, setName, isNameValid, setIsNameValid }: NameInputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     // Function to scroll the input into view when the keyboard is open
@@ -43,9 +38,7 @@ export default function NameInput({
 
     let validationMessage = " ";
     if (name.length > 0) {
-        validationMessage = isNameValid
-            ? "Looks good!"
-            : "3-9 chars | A-Z & 0-9";
+        validationMessage = isNameValid ? "Looks good!" : "3-9 chars | A-Z & 0-9";
     }
 
     return (
@@ -65,11 +58,7 @@ export default function NameInput({
                     placeholder="Your name here"
                     maxLength={9}
                 />
-                <span
-                    className={`${styles.validationText} ${
-                        isNameValid ? styles.valid : ""
-                    }`}
-                >
+                <span className={`${styles.validationText} ${isNameValid ? styles.valid : ""}`}>
                     {validationMessage}
                 </span>
             </div>

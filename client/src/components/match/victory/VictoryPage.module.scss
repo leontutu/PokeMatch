@@ -1,0 +1,72 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.victoryContainer {
+    @include m.flex-column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: v.$color-text-light;
+    font-family: v.$font-family-primary;
+    padding: 2rem 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.mainContent {
+    @include m.flex-column-center;
+    gap: 3rem;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.winnerMessage {
+    max-width: 95%;
+    font-size: v.$font-size-4xl;
+    font-weight: 700;
+    color: v.$color-winner;
+    @include m.text-shadow-glow(v.$color-winner);
+    margin: 0;
+    animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.scoresContainer {
+    @include m.card(1.5rem, v.$radius-sm);
+    width: 90%;
+    max-width: 400px;
+}
+
+.score {
+    font-size: v.$font-size-base;
+    margin: 0.5rem 0;
+    font-weight: 600;
+    color: v.$color-text-light;
+}
+
+.footer {
+    width: 100%;
+    @include m.flex-center;
+}
+
+.menuButton {
+    width: 80%;
+    max-width: 340px;
+    padding: 20px 0;
+    font-size: v.$font-size-lg;
+    color: v.$color-white;
+    letter-spacing: 1.5px;
+    @include m.button-base;
+    @include m.button-3d(v.$color-confirm, v.$color-confirm-dark);
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

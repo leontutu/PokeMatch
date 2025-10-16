@@ -1,0 +1,27 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.buttonContainer {
+    width: 100%;
+    @include m.flex-center;
+}
+
+.submitBtn {
+    width: 80%;
+    max-width: 340px;
+    color: v.$color-white;
+    padding: 20px 0;
+    font-size: v.$font-size-xl;
+    letter-spacing: 1.5px;
+    @include m.button-base;
+    @include m.button-3d(v.$color-text-muted-strong, v.$color-surface-primary);
+
+    &.active {
+        background-color: v.$color-confirm;
+        box-shadow: 0 5px 0 v.$color-confirm-dark;
+    }
+
+    &:active:not(:disabled) {
+        box-shadow: 0 2px 0 v.$color-confirm-dark;
+    }
+}

@@ -1,4 +1,4 @@
-import styles from "./SubmitButton.module.css";
+import styles from "./SubmitButton.module.scss";
 
 type SubmitButtonProps = {
     isNameValid: boolean;
@@ -10,16 +10,11 @@ type SubmitButtonProps = {
  * The button's `disabled` state and active styling are controlled by the `isNameValid` prop.
  * It calls the `handleSubmit` function when clicked.
  */
-export default function SubmitButton({
-    isNameValid,
-    handleSubmit,
-}: SubmitButtonProps) {
+export default function SubmitButton({ isNameValid, handleSubmit }: SubmitButtonProps) {
     return (
         <div className={styles.buttonContainer}>
             <button
-                className={`${styles.submitBtn} ${
-                    isNameValid ? styles.active : ""
-                }`}
+                className={`${styles.submitBtn} ${isNameValid ? styles.active : ""}`}
                 onClick={handleSubmit}
                 disabled={!isNameValid}
             >

@@ -1,4 +1,4 @@
-import styles from "./HomeLayout.module.css";
+import styles from "./HomeLayout.module.scss";
 import React, { useState } from "react";
 import { useAssetPreload } from "../../../hooks/useAssetPreload";
 

@@ -1,5 +1,5 @@
 import { useUIInfoContext } from "../../contexts/UIInfoContext.js";
-import styles from "./ScreenWipeOverlay.module.css";
+import styles from "./ScreenWipeOverlay.module.scss";
 
 /**
  * @file Screen wipe overlay.

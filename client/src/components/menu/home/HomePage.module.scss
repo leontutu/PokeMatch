@@ -1,0 +1,43 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.buttonColumn {
+    width: 100%;
+    background: v.$color-surface-dark;
+    border-radius: v.$radius-xl;
+    box-shadow: 0 8px 32px v.$shadow-sm;
+    padding: 2.5rem 1.5rem;
+    @include m.flex-column;
+    align-items: center;
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+.buttonContainer {
+    width: 100%;
+    @include m.flex-center;
+
+    button {
+        width: 100%;
+        color: v.$color-text-light;
+        border: none;
+        border-radius: v.$radius-lg;
+        padding: 20px 0;
+        font-size: v.$font-size-xl;
+        font-weight: 700;
+        font-family: v.$font-family-primary;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+        letter-spacing: 1.5px;
+        @include m.text-shadow-button;
+    }
+}
+
+.matchBtn {
+    background: linear-gradient(135deg, #ff6f61, #de4f65);
+}
+
+.howToPlayBtn {
+    background: linear-gradient(135deg, #a777e3, #6643ae);
+}

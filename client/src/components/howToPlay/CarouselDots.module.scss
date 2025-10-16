@@ -1,0 +1,36 @@
+@use '../../styles/_mixins' as m;
+
+.dotsContainer {
+    @include m.flex-row;
+    gap: 0.5rem;
+    margin-right: 10rem;
+}
+
+.dot {
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+
+    &:after {
+        background-color: #ef833a;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s, height 0.2s;
+    }
+
+    &.dotSelected:after {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+}

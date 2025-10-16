@@ -1,16 +1,18 @@
+@use '../../../styles/_variables' as v;
+
 .outerContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
     flex-grow: 1;
     min-height: 0;
-    font-family: "Jura", Arial, sans-serif;
+    font-family: v.$font-family-primary;
 }
 
 .battleSection {
     width: 100%;
     height: 100%;
-    background-color: #2d3748;
+    background-color: v.$color-surface-dark;
     justify-content: center;
     align-items: center;
     position: relative;
@@ -19,10 +21,10 @@
 
 .battleSectionWrapper {
     z-index: 1;
-    border-bottom: 1px solid #4a5568;
-    border-top: 1px solid #4a5568;
+    border-bottom: 1px solid v.$color-surface-primary;
+    border-top: 1px solid v.$color-surface-primary;
     flex: 2;
-    background-color: #2d3748;
+    background-color: v.$color-surface-dark;
     position: relative;
 }
 

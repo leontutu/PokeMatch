@@ -1,14 +1,16 @@
+@use '../../../styles/_variables' as v;
+
 .pokemonLabel {
     background-color: grey;
-    border-radius: 8px;
+    border-radius: v.$radius-sm;
     padding: 5px 10px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    font-size: 1.5rem;
-    font-family: Jura;
+    font-size: v.$font-size-base;
+    font-family: v.$font-family-primary;
     font-weight: 700;
 
     width: 8rem;

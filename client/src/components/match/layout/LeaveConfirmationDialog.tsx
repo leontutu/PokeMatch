@@ -1,4 +1,4 @@
-import styles from "./LeaveConfirmDialog.module.css";
+import styles from "./LeaveConfirmDialog.module.scss";
 
 type LeaveConfirmationDialogProps = {
     isOpen: boolean;
@@ -31,20 +31,12 @@ export default function LeaveConfirmationDialog({
     return (
         <div className={styles.overlay}>
             <div className={styles.dialog}>
-                <p className={styles.message}>
-                    Leave room and return to main menu?
-                </p>
+                <p className={styles.message}>Leave room and return to main menu?</p>
                 <div className={styles.buttonGroup}>
-                    <button
-                        onClick={onConfirm}
-                        className={`${styles.button} ${styles.yesButton}`}
-                    >
+                    <button onClick={onConfirm} className={`${styles.button} ${styles.yesButton}`}>
                         Yes
                     </button>
-                    <button
-                        onClick={onCancel}
-                        className={`${styles.button} ${styles.noButton}`}
-                    >
+                    <button onClick={onCancel} className={`${styles.button} ${styles.noButton}`}>
                         No
                     </button>
                 </div>

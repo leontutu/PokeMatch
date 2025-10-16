@@ -1,0 +1,61 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.nameLabel {
+    color: v.$color-text-light;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-2xl;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+    @include m.text-shadow-label;
+}
+
+.inputWrapper {
+    width: 90%;
+    max-width: 400px;
+    @include m.flex-column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.inputFieldContainer {
+    width: 90%;
+    @include m.flex-center;
+    max-width: 400px;
+}
+
+.nameInput {
+    @include m.input-field;
+    text-align: center;
+
+    &.shake {
+        animation: shake 0.5s ease-in-out;
+    }
+}
+
+.validationText {
+    color: #c43939;
+    font-size: v.$font-size-base;
+    height: 1rem;
+    transition: color 0.3s;
+
+    &.valid {
+        color: v.$color-confirm;
+    }
+}
+
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    20%,
+    60% {
+        transform: translateX(-10px);
+    }
+    40%,
+    80% {
+        transform: translateX(10px);
+    }
+}

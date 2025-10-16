@@ -1,0 +1,19 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.readyBtn {
+    width: 80%;
+    max-width: 340px;
+    color: v.$color-white;
+    padding: 20px 0;
+    font-size: v.$font-size-xl;
+    letter-spacing: 1.5px;
+    @include m.button-base;
+    @include m.button-3d(v.$color-confirm, v.$color-confirm-dark);
+
+    &.pressed {
+        background-color: v.$color-text-muted-strong;
+        box-shadow: 0 5px 0 v.$color-surface-primary;
+        filter: brightness(0.8);
+    }
+}

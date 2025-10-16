@@ -1,6 +1,6 @@
 import BattleColumns from "./BattleColumns";
 import StatBubble from "./StatBubble";
-import styles from "./BattleField.module.css";
+import styles from "./BattleField.module.scss";
 import { BattleStats } from "../../../types";
 import { StatToDisplay } from "../../../constants/constants";
 import { useEffect, useState } from "react";

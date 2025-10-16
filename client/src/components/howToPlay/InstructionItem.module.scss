@@ -1,6 +1,8 @@
+@use '../../styles/_variables' as v;
+@use '../../styles/_mixins' as m;
+
 .outerContainer {
-    display: flex;
-    flex-direction: column;
+    @include m.flex-column;
     width: 100%;
     flex: 1 1 auto;
     min-height: 0;
@@ -11,9 +13,7 @@
 .imageSection,
 .instructionsSection {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include m.flex-center;
     min-height: 0;
     min-width: 0;
     /* overflow: hidden; */
@@ -34,9 +34,9 @@
 }
 
 .instructionHeader {
-    font-family: jura;
-    font-size: 3.5rem;
-    color: white;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-3xl;
+    color: v.$color-white;
     text-shadow: 0 0 2px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5);
     text-wrap: nowrap;
 }
@@ -46,21 +46,20 @@
     max-height: 95%;
     width: auto;
     height: auto;
-    border: 0.6rem solid black;
-    border-radius: 1rem;
+    border: 0.6rem solid v.$color-black;
+    border-radius: v.$radius-lg;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 40px 80px rgba(0, 0, 0, 0.15),
         0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .instructionsList {
-    font-family: jura;
+    font-family: v.$font-family-primary;
     font-weight: 300;
     letter-spacing: 0.25px;
-    display: flex;
-    flex-direction: column;
+    @include m.flex-column;
     gap: 0.5rem;
     font-size: 1.5rem;
-    color: white;
+    color: v.$color-white;
     text-align: left;
     padding-left: 3.5rem;
     padding-right: 2rem;

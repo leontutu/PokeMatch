@@ -1,19 +1,19 @@
-@import "../../../styles/animations.css";
+@use '../../../styles/_variables' as v;
 
 .outerContainer {
     display: flex;
     flex-direction: column;
     height: 100%;
     margin: 0px;
-    font-family: "Jura", Arial, sans-serif;
-    background-color: #4a5568;
+    font-family: v.$font-family-primary;
+    background-color: v.$color-surface-primary;
 }
 
 .yourPokemonSection {
     position: relative;
     flex: 1;
     width: 100%;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    background: v.$color-bg-gradient;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -22,7 +22,8 @@
 .statSelectSection {
     flex: 1;
     width: 100%;
-    background-color: #2d3748;
+    background-color: v.$color-surface-dark;
+    border-top: 1px solid v.$color-surface-primary;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,11 +45,11 @@
 .lockInSection {
     height: 6rem;
     width: 100%;
-    background-color: #1a202c;
+    background-color: v.$color-surface-darker;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid #4a5568;
+    border-top: 1px solid v.$color-surface-primary;
 }
 
 .pokemonTitle {
@@ -56,12 +57,12 @@
     line-height: 1;
     padding-top: 1rem;
 
-    font-family: "Martel Sans", Arial, sans-serif;
+    font-family: v.$font-family-body;
     font-weight: 800;
-    font-size: 4rem;
+    font-size: v.$font-size-4xl;
     letter-spacing: -0.05em;
     text-align: center;
-    color: #e2e8f0;
+    color: v.$color-text-light;
     z-index: 2;
 }
 
@@ -83,10 +84,9 @@
     top: 10%;
     width: 20rem;
     height: 40rem;
-    background-color: #2d374880;
+    background-color: v.$color-surface-dark-80;
     border-radius: 999px;
     rotate: -40deg;
-    z-index: 2;
 }
 
 .yourPokemonSection img {
@@ -97,24 +97,6 @@
     z-index: 2;
     animation: horizontalFloat 6s ease-in-out infinite alternate;
     filter: drop-shadow(0 0 1rem rgba(237, 242, 247, 0.2));
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes counter-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(-360deg);
-    }
 }
 
 .cardsContainer {
@@ -144,13 +126,13 @@
     position: relative;
     width: 6rem;
     height: 6rem;
-    background-color: #2d3748;
-    border-radius: 50%;
-    border: 2px solid #718096;
+    background-color: v.$color-surface-dark;
+    border-radius: v.$radius-pill;
+    border: 2px solid v.$color-text-muted-strong;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px v.$shadow-md;
 }
 
 .vsTag {
@@ -159,8 +141,8 @@
     left: 50%;
     transform: translateX(-50%);
     font-weight: 800;
-    font-size: 1.2rem;
-    color: #a0aec0;
+    font-size: v.$font-size-sm;
+    color: v.$color-text-muted;
 }
 
 .opponentPokemon {
@@ -177,37 +159,64 @@
     align-items: center;
     justify-content: center;
 
-    font-family: "Jura", Arial, sans-serif;
-    font-size: 2.5rem;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-2xl;
     font-weight: bold;
     letter-spacing: 0.05em;
     border-radius: 5px;
-    background-color: #718096;
-    color: #e2e8f0;
+    background-color: v.$color-text-muted-strong;
+    color: v.$color-text-light;
     border: none;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 4px 0 #4a5568;
+    box-shadow: 0 4px 0 v.$color-surface-primary;
+
+    &.active {
+        background-color: v.$color-confirm;
+        color: v.$color-white;
+        cursor: pointer;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 v.$color-confirm-dark;
+    }
+
+    &.disabled {
+        color: v.$color-disabled;
+        cursor: not-allowed;
+    }
+
+    &.locked {
+        background: linear-gradient(135deg, rgb(185, 13, 13), rgb(155, 10, 10));
+        box-shadow: inset 10px 10px 10px rgba(252, 252, 252, 0.1);
+        filter: brightness(0.8);
+        border: 5px dashed v.$color-black;
+        pointer-events: none;
+        cursor: default;
+        animation: none;
+    }
 }
 
-.lockInBtn.active {
-    background-color: #38a169;
-    color: white;
-    cursor: pointer;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 #2f855a;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.lockInBtn.disabled {
-    color: #808080;
-    cursor: not-allowed;
+@keyframes counter-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
 }
 
-.lockInBtn.locked {
-    background: linear-gradient(135deg, rgb(185, 13, 13), rgb(155, 10, 10));
-    box-shadow: inset 10px 10px 10px rgba(252, 252, 252, 0.1);
-    filter: brightness(0.8);
-    border: 5px dashed #000000;
-    pointer-events: none;
-    cursor: default;
-    animation: none;
+@keyframes horizontalFloat {
+    from {
+        transform: translateX(-10px) rotate(-3deg);
+    }
+    to {
+        transform: translateX(10px) rotate(3deg);
+    }
 }

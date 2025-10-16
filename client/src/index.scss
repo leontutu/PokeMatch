@@ -1,0 +1,23 @@
+@use './styles/_mixins' as m;
+@use './styles/_variables' as v;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: v.$font-size-base-mobile;
+
+    @include m.desktop {
+        font-size: v.$font-size-base-desktop;
+    }
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: v.$font-family-primary;
+    overflow: hidden;
+}

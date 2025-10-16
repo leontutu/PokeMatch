@@ -1,0 +1,32 @@
+@use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
+
+.homeLayout {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    @include m.flex-column-center;
+    background: v.$color-bg-gradient;
+    font-family: v.$font-family-primary;
+    box-shadow: 0 0 32px 0 v.$shadow-sm;
+}
+
+.logo {
+    width: 90%;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 2rem rgba(237, 242, 247, 0.25));
+}
+
+.contentArea {
+    width: 100%;
+    flex: 1;
+    @include m.flex-column-center;
+}
+
+.homeLayout {
+    @include m.desktop {
+        border-radius: 24px;
+    }
+}

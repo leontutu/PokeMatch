@@ -1,4 +1,4 @@
-import styles from "./CarouselDots.module.css";
+import styles from "./CarouselDots.module.scss";
 
 type CarouselDotsProps = {
     count: number;

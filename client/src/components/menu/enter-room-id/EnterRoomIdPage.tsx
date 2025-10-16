@@ -5,7 +5,7 @@ import { isValidRoomId } from "../../../../../shared/utils/validation";
 import HomeLayout from "../layout/HomeLayout";
 import RoomIdInput from "./RoomIdInput";
 import SubmitButton from "./SubmitButton";
-import styles from "./EnterRoomIdPage.module.css";
+import styles from "./EnterRoomIdPage.module.scss";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 /**

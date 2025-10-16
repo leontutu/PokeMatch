@@ -1,34 +1,34 @@
+@use './styles/_variables' as v;
+@use './styles/_mixins' as m;
+
 #root {
     width: 100%;
     height: 100%;
-    background: #222;
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
+    @include m.flex-column;
+    background: v.$color-bg-gradient;
 
-.desktop-only-message {
-    display: none; /* Hidden by default on mobile */
-    color: #a0aec0;
-    font-family: "Jura", Arial, sans-serif;
-    font-size: 1.25rem;
-    line-height: 1.6;
-    max-width: 300px;
-}
-
-@media (min-width: 600px) and (min-height: 700px) {
-    #root {
+    @include m.desktop {
         max-height: calc(100vh - 80px);
         aspect-ratio: 10 / 18;
         max-width: 430px;
         width: auto;
-        height: auto;
-        border-radius: 24px;
+        height: 100%;
+        border-radius: v.$radius-xl;
         box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.18);
     }
+}
 
-    .desktop-only-message {
+.desktop-only-message {
+    display: none; // hidden by default on mobile
+    color: v.$color-text-muted;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-xl;
+    line-height: 1.6;
+    max-width: 300px;
+
+    @include m.desktop {
         display: block;
         position: absolute;
         top: 50%;
@@ -43,16 +43,14 @@ html {
     height: 100dvh;
     margin: 0;
     padding: 0;
-    background: #222;
+    background: v.$color-surface-darker;
     overflow: hidden;
 }
 
 .app-container {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include m.flex-center;
 }
 
 .page-wrapper {

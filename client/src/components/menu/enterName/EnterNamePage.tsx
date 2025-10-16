@@ -5,7 +5,7 @@ import { isValidName } from "../../../../../shared/utils/validation";
 import HomeLayout from "../layout/HomeLayout";
 import NameInput from "./NameInput";
 import SubmitButton from "./SubmitButton";
-import styles from "./EnterNamePage.module.css";
+import styles from "./EnterNamePage.module.scss";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 
 /**

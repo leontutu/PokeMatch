@@ -1,23 +1,26 @@
+@use '../../styles/_variables' as v;
+
 .screenWipeContainer {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    background: v.$color-bg-gradient;
+    background-attachment: fixed;
     transform-origin: top left;
     animation-fill-mode: forwards;
     z-index: 10;
     top: -100vh;
-}
 
-.wipeOutActive {
-    animation-name: wipe-out-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-in;
-}
+    &.wipeOutActive {
+        animation-name: wipe-out-animation;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-in;
+    }
 
-.wipeInActive {
-    animation-name: wipe-in-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-out;
+    &.wipeInActive {
+        animation-name: wipe-in-animation;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-out;
+    }
 }
 
 @keyframes wipe-out-animation {
