@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSocket } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
-import styles from "./MatchLayout.module.css";
+import styles from "./MatchLayout.module.scss";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
 import React from "react";
 import { useNavigationContext } from "../../../contexts/NavigationContext";

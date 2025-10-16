@@ -1,7 +1,7 @@
 import { instructionData } from "../../constants/instructionData";
 import useEmblaCarousel from "embla-carousel-react";
 import InstructionItem from "./InstructionItem";
-import styles from "./InstructionPage.module.css";
+import styles from "./InstructionPage.module.scss";
 import { useState, useEffect, useCallback } from "react";
 import CarouselDots from "./CarouselDots";
 import { Pages } from "../../constants/constants";

@@ -1,4 +1,4 @@
-import styles from "./SelectStatPage.module.css";
+import styles from "./SelectStatPage.module.scss";
 
 export default function CardBody({
     statName,
@@ -15,7 +15,7 @@ export default function CardBody({
                 ${isLocked ? styles.lockedCard : ""}
                 ${isSelected ? styles.highlight : ""}
                 `}
-            style={{ "--animation-delay": animationDelay } as React.CSSProperties}
+            style={{ "--animation-delay": animationDelay } as React.scssProperties}
             onClick={() => {
                 onCardClick(index);
             }}

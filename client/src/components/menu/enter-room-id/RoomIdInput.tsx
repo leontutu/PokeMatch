@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import styles from "./RoomIdInput.module.css";
+import styles from "./RoomIdInput.module.scss";
 import { isValidRoomId } from "../../../../../shared/utils/validation";
 
 type RoomIdInputProps = {

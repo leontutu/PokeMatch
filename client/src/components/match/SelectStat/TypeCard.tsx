@@ -1,4 +1,4 @@
-import styles from "./TypeCard.module.css";
+import styles from "./TypeCard.module.scss";
 
 type TypeCardProps = {
     typeName: string;

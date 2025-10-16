@@ -1,4 +1,4 @@
-import styles from "./PokemonDisplay.module.css";
+import styles from "./PokemonDisplay.module.scss";
 import PokemonLabel from "./PokemonLabel";
 
 type PokemonDisplayProps = {

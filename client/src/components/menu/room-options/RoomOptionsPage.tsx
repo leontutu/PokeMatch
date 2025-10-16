@@ -1,5 +1,5 @@
 import HomeLayout from "../layout/HomeLayout";
-import styles from "./RoomOptionsPage.module.css";
+import styles from "./RoomOptionsPage.module.scss";
 import { useSocket } from "../../../contexts/SocketContext.real";
 import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";

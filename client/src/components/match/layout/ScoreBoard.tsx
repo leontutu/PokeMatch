@@ -1,4 +1,4 @@
-import styles from "./ScoreBoard.module.css";
+import styles from "./ScoreBoard.module.scss";
 import { ViewGame } from "../../../../../shared/types/types";
 
 type ScoreBoardProps = {

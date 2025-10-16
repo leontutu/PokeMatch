@@ -3,7 +3,7 @@ import { Pokemon } from "../../../../../shared/types/types";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import MatchLayout from "../layout/MatchLayout";
-import styles from "./PokemonRevealPage.module.css";
+import styles from "./PokemonRevealPage.module.scss";
 import { useSound } from "use-sound";
 import pokeballWiggle from "../../../assets/audio/sounds/pokeball-wiggle.mp3";
 import pokeballPoof from "../../../assets/audio/sounds/pokeball-poof.mp3";

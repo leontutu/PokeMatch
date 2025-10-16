@@ -1,4 +1,4 @@
-import styles from "./VictoryPage.module.css";
+import styles from "./VictoryPage.module.scss";
 import { useSocket } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";

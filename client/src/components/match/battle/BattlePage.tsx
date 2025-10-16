@@ -1,4 +1,4 @@
-import styles from "./BattlePage.module.css";
+import styles from "./BattlePage.module.scss";
 import MatchLayout from "../layout/MatchLayout";
 import { useSocket } from "../../../contexts/SocketContext";
 import { useBattleLogic } from "../../../hooks/useBattleLogic";

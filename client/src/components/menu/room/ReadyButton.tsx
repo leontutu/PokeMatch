@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./ReadyButton.module.css";
+import styles from "./ReadyButton.module.scss";
 
 type ReadyButtonProps = {
     amIReady: boolean;

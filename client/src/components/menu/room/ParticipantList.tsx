@@ -1,4 +1,4 @@
-import styles from "./ParticipantList.module.css";
+import styles from "./ParticipantList.module.scss";
 import { ViewClientRecord } from "../../../../../shared/types/types";
 
 type ParticipantListProps = {

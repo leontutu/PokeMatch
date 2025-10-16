@@ -1,4 +1,4 @@
-import styles from "./StatBubble.module.css";
+import styles from "./StatBubble.module.scss";
 import chatBubble from "../../../assets/graphics/game/chat-bubble.png";
 
 type StatBubbleProps = {

@@ -1,7 +1,7 @@
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 import HomeLayout from "../layout/HomeLayout";
-import styles from "./HomePage.module.css";
+import styles from "./HomePage.module.scss";
 
 /**
  * Renders the application's main menu screen, providing navigation options.

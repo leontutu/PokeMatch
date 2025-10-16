@@ -1,7 +1,7 @@
 import { useNavigationContext } from "./contexts/NavigationContext.js";
 import ScreenWipeOverlay from "./components/other/ScreenWipeOverlay.js";
 import Router from "./components/other/Router.js";
-import "./App.css";
+import "./App.scss";
 
 function App() {
     const { currentPage } = useNavigationContext();

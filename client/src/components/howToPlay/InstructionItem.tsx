@@ -1,4 +1,4 @@
-import styles from "./InstructionItem.module.css";
+import styles from "./InstructionItem.module.scss";
 
 type InstructionItemProps = {
     instructionHeader: string;

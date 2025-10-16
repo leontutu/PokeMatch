@@ -1,4 +1,4 @@
-import styles from "./PokemonLabel.module.css";
+import styles from "./PokemonLabel.module.scss";
 import { useRef, useEffect } from "react";
 
 type PokemonLabelProps = {
