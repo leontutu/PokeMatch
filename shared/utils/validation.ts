@@ -15,3 +15,16 @@ export function isValidName(name: string): boolean {
         name.length <= 10
     );
 }
+
+/**
+ * Validates a room ID based on several criteria.
+ * - Must be a string that can be converted to a positive integer.
+ * - Must be greater than 0.
+ *
+ * @param roomId The room ID to validate.
+ * @returns True if the room ID is valid, false otherwise.
+ */
+export function isValidRoomId(roomId: string): boolean {
+    const roomIdNumber = parseInt(roomId);
+    return !isNaN(roomIdNumber) && roomIdNumber > 0;
+}

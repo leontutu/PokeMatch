@@ -8,12 +8,14 @@ import RoomManager from "../managers/RoomManager.js";
 import ClientManager from "../managers/ClientManager.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
 import { assertIsDefined, delay } from "../utils/utils.js";
-import { isValidName } from "../../../shared/utils/validation.js";
+import { isValidName, isValidRoomId } from "../../../shared/utils/validation.js";
 import SocketService from "./SocketService.js";
 import { Socket } from "socket.io";
 import Client from "../models/Client.js";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import { mapRoomToViewRoom } from "../mappers/mappers.js";
+import startBotClient from "../bot-client/botClient.js";
+import { PORT } from "../index.js";
 
 /**
  * The central controller of the application.
@@ -107,7 +109,7 @@ export default class Orchestrator {
 
     /**
      * Handles a client submitting their name.
-     * Validates the name and assigns the client to an available room.
+     * Validates the name and emits an event to the client based on the result.
      * @param socket The client's socket instance.
      * @param payload The event payload containing the client's name.
      */
@@ -123,11 +125,73 @@ export default class Orchestrator {
 
         client.setName(name);
         logger.debug(`[Orchestrator] Name entered: ${name}`);
-        const roomId = this.#assignClientToRoom(client);
+        this.socketService.emitNameValid(socket);
+    }
+
+    /**
+     * Handles a client creating a new room.
+     * @param socket The client's socket instance.
+     */
+    onCreateRoom(socket: Socket) {
+        const client = this.clientManager.getClient(socket);
+        assertIsDefined(
+            client,
+            `[Orchestrator] onCreateRoom called for socket ${socket.id} which is not associated with a client.`
+        );
+
+        const roomId = this.#assignClientToNewRoom(client);
 
         this.#handleRoomErrors(() => {
             this.#updateAllRoomClients(roomId);
         }, socket);
+    }
+
+    /**
+     * Handles a client requesting to play against an bot opponent.
+     * @param socket The client's socket instance.
+     */
+    onPlayVsBot(socket: Socket) {
+        const client = this.clientManager.getClient(socket);
+        assertIsDefined(
+            client,
+            `[Orchestrator] onPlayVsAI called for socket ${socket.id} which is not associated with a client.`
+        );
+        const roomId = this.#assignClientToNewRoomWithBot(client);
+
+        this.#handleRoomErrors(() => {
+            this.#updateAllRoomClients(roomId);
+        }, socket);
+    }
+
+    /**
+     * Handles a client joining a room.
+     * @param socket The client's socket instance.
+     * @param roomId The ID of the room to join.
+     */
+    onJoinRoom(socket: Socket, roomIdAsString: string) {
+        const client = this.clientManager.getClient(socket);
+        assertIsDefined(
+            client,
+            `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
+        );
+
+        const roomId = parseInt(roomIdAsString, 10);
+        if (
+            !isValidRoomId(roomIdAsString) ||
+            !this.roomManager.hasRoom(roomId) ||
+            this.roomManager.isRoomFull(roomId)
+        ) {
+            logger.warn(`[Orchestrator] Bad roomId entered: ${roomIdAsString}`);
+            this.socketService.emitBadRoomId(socket);
+            return;
+        }
+
+        this.#handleRoomErrors(() => {
+            this.roomManager.addClientToRoom(roomId, client);
+            client.setRoomId(roomId);
+            this.#updateAllRoomClients(roomId);
+        }, socket);
+        logger.debug(`[Orchestrator] ${client.name} joined room ${roomId}`);
     }
 
     /**
@@ -357,9 +421,22 @@ export default class Orchestrator {
     // Private Helpers
     //================================================================
 
-    #assignClientToRoom(client: Client): number {
-        const roomId = this.roomManager.assignClientToRoom(client);
+    #assignClientToPublicRoom(client: Client): number {
+        const roomId = this.roomManager.assignClientToPublicRoom(client);
         client.setRoomId(roomId);
+        return roomId;
+    }
+
+    #assignClientToNewRoom(client: Client): number {
+        const roomId = this.roomManager.assignClientToNewRoom(client);
+        client.setRoomId(roomId);
+        return roomId;
+    }
+
+    #assignClientToNewRoomWithBot(client: Client): number {
+        const roomId = this.roomManager.assignClientToNewRoom(client);
+        client.setRoomId(roomId);
+        startBotClient(PORT, roomId);
         return roomId;
     }
 

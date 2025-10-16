@@ -14,12 +14,19 @@ import { ViewRoom } from "../../../shared/types/types.js";
 type SocketContextType = {
     socket: Socket | null;
     viewRoom: ViewRoom | null;
+    hasPassedValidNameCheck: boolean;
     roomCrashSignal: boolean;
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
+    badRoomIdSignal: boolean;
+    setHasPassedValidNameCheck: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
+    setBadRoomIdSignal: React.Dispatch<React.SetStateAction<boolean>>;
     sendName: (name: string) => void;
+    sendCreateRoom: () => void;
+    sendJoinRoom: (roomId: string) => void;
+    sendPlayVsBot: () => void;
     toggleReady: () => void;
     sendSelectStat: (stat: StatNames) => void;
     sendBattleEnd: () => void;
@@ -45,6 +52,8 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     const [viewRoom, setViewRoom] = useState<ViewRoom | null>(null);
     const [roomCrashSignal, setRoomCrashSignal] = useState(false);
     const [nameErrorSignal, setNameErrorSignal] = useState(false);
+    const [badRoomIdSignal, setBadRoomIdSignal] = useState(false);
+    const [hasPassedValidNameCheck, setHasPassedValidNameCheck] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
     useEffect(() => {
         const socket = import.meta.env.DEV
@@ -78,6 +87,10 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
             }, 500);
         });
 
+        socket.on(Events.NAME_VALID, () => {
+            setHasPassedValidNameCheck(true);
+        });
+
         socket.on(Events.NAME_ERROR, () => {
             setNameErrorSignal(true);
         });
@@ -86,12 +99,34 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
             setSelectStatErrorSignal(true);
         });
 
+        socket.on(Events.BAD_ROOM_ID, () => {
+            setBadRoomIdSignal(true);
+        });
+
         return () => {
             if (socket) {
                 socket.disconnect();
             }
         };
     }, [roomCrashSignal, nameErrorSignal, selectStatErrorSignal]);
+
+    const sendCreateRoom = () => {
+        if (socket) {
+            socket.emit(Events.CREATE_ROOM);
+        }
+    };
+
+    const sendJoinRoom = (roomId: string) => {
+        if (socket) {
+            socket.emit(Events.JOIN_ROOM, roomId);
+        }
+    };
+
+    const sendPlayVsBot = () => {
+        if (socket) {
+            socket.emit(Events.PLAY_VS_BOT);
+        }
+    };
 
     const sendName = (name: string) => {
         if (socket) {
@@ -134,10 +169,17 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         roomCrashSignal,
         nameErrorSignal,
         selectStatErrorSignal,
+        badRoomIdSignal,
+        hasPassedValidNameCheck,
+        setBadRoomIdSignal,
+        setHasPassedValidNameCheck,
         setSelectStatErrorSignal,
         setNameErrorSignal,
         sendName,
-        toggleReady: toggleReady,
+        sendCreateRoom,
+        sendJoinRoom,
+        sendPlayVsBot,
+        toggleReady,
         sendSelectStat,
         sendBattleEnd,
         sendLeaveRoom,

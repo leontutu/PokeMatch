@@ -66,6 +66,18 @@ export default class SocketService {
                 this.orchestrator.onNameEnter(socket, payload);
             });
 
+            socket.on(Events.CREATE_ROOM, () => {
+                this.orchestrator.onCreateRoom(socket);
+            });
+
+            socket.on(Events.JOIN_ROOM, (roomIdAsString: string) => {
+                this.orchestrator.onJoinRoom(socket, roomIdAsString);
+            });
+
+            socket.on(Events.PLAY_VS_BOT, () => {
+                this.orchestrator.onPlayVsBot(socket);
+            });
+
             socket.on(Events.TOGGLE_READY, () => {
                 this.orchestrator.onToggleReady(socket);
             });
@@ -99,9 +111,19 @@ export default class SocketService {
         socket.emit(Events.ROOM_CRASH);
     }
 
+    // Notifies a client that their name was accepted.
+    emitNameValid(socket: Socket) {
+        socket.emit(Events.NAME_VALID);
+    }
+
     // Notifies a client of a name validation error.
     emitNameError(socket: Socket) {
         socket.emit(Events.NAME_ERROR);
+    }
+
+    // Notifies a client that the entered room ID was not found.
+    emitBadRoomId(socket: Socket) {
+        socket.emit(Events.BAD_ROOM_ID);
     }
 
     // Notifies a client of an invalid select stat action.

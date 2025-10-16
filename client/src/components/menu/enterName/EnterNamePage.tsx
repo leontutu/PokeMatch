@@ -20,7 +20,13 @@ import { useNavigationContext } from "../../../contexts/NavigationContext";
  * <EnterNamePage />
  */
 export default function EnterNamePage() {
-    const { sendName, viewRoom, nameErrorSignal, setNameErrorSignal } = useSocket();
+    const {
+        sendName,
+        hasPassedValidNameCheck,
+        setHasPassedValidNameCheck,
+        nameErrorSignal,
+        setNameErrorSignal,
+    } = useSocket();
     const { handleNavigate } = useNavigationContext();
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
@@ -35,10 +41,11 @@ export default function EnterNamePage() {
     }, [nameErrorSignal, handleNavigate, setNameErrorSignal]);
 
     useEffect(() => {
-        if (viewRoom) {
-            handleNavigate(Pages.ROOM, false);
+        if (hasPassedValidNameCheck) {
+            handleNavigate(Pages.ROOM_OPTIONS, false);
+            setHasPassedValidNameCheck(false);
         }
-    }, [viewRoom, handleNavigate]);
+    }, [hasPassedValidNameCheck, handleNavigate]);
 
     function handleSubmit() {
         if (!isValidName(name)) {

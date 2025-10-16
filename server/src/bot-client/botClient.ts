@@ -25,6 +25,8 @@ export default async function startBotClient(PORT: string, roomId: number) {
     socket.on("connect", async () => {
         socket.emit(Events.NAME_ENTER, "MrRobot");
         await delay(500);
+        socket.emit(Events.JOIN_ROOM, roomId);
+        await delay(1000);
         socket.emit(Events.TOGGLE_READY);
     });
 
