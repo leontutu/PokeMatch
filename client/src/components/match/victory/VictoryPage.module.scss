@@ -1,3 +1,5 @@
+@use '../../../styles/_variables' as v;
+
 .victoryContainer {
     display: flex;
     flex-direction: column;
@@ -5,9 +7,9 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-    color: #e2e8f0;
-    font-family: "Jura", sans-serif;
+    background: v.$color-bg-gradient;
+    color: v.$color-text-light;
+    font-family: v.$font-family-primary;
     padding: 2rem 0;
     box-sizing: border-box;
     text-align: center;
@@ -25,29 +27,29 @@
 
 .winnerMessage {
     max-width: 95%;
-    font-size: 4rem;
+    font-size: v.$font-size-4xl;
     font-weight: 700;
-    color: #fbbf24;
-    text-shadow: 0 0 15px #fbbf24, 0 0 5px rgba(0, 0, 0, 0.5);
+    color: v.$color-warning;
+    text-shadow: 0 0 15px v.$color-warning, 0 0 5px v.$shadow-xl;
     margin: 0;
     animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .scoresContainer {
-    background-color: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 8px;
+    background-color: v.$color-surface-dark;
+    border: 1px solid v.$color-surface-primary;
+    border-radius: v.$radius-sm;
     padding: 1.5rem;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px v.$shadow-md;
 }
 
 .score {
-    font-size: 1.5rem;
+    font-size: v.$font-size-base;
     margin: 0.5rem 0;
     font-weight: 600;
-    color: #e2e8f0;
+    color: v.$color-text-light;
 }
 
 .footer {
@@ -61,16 +63,16 @@
     width: 80%;
     max-width: 340px;
     padding: 20px 0;
-    font-size: 2rem;
-    font-family: "Jura", sans-serif;
+    font-size: v.$font-size-lg;
+    font-family: v.$font-family-primary;
     font-weight: 700;
-    color: white;
-    background-color: #38a169;
+    color: v.$color-white;
+    background-color: v.$color-success;
     border: none;
-    border-radius: 8px;
+    border-radius: v.$radius-sm;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 5px 0 #2f855a;
+    box-shadow: 0 5px 0 v.$color-success-dark;
     letter-spacing: 1.5px;
 }
 
@@ -80,7 +82,7 @@
 
 .menuButton:active {
     transform: translateY(3px);
-    box-shadow: 0 2px 0 #2f855a;
+    box-shadow: 0 2px 0 v.$color-success-dark;
 }
 
 @keyframes zoomIn {

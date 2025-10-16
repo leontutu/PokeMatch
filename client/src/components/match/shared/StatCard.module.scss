@@ -1,10 +1,12 @@
+@use '../../../styles/_variables' as v;
+
 .statCard {
-    background-color: #a0aec0;
-    color: #000000;
-    border-radius: 8px;
+    background-color: v.$color-text-muted;
+    color: v.$color-black;
+    border-radius: v.$radius-sm;
     gap: 0.4rem;
     border: 1px solid #cbd5e0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 8px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 15px v.$shadow-md, 0 8px 10px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,7 +14,7 @@
     width: 7rem;
     height: 4.5rem;
     cursor: pointer;
-    font-family: "Jura", Arial, sans-serif;
+    font-family: v.$font-family-primary;
 }
 
 .statName {
@@ -21,12 +23,12 @@
 }
 
 .statValue {
-    font-size: 1.5rem;
+    font-size: v.$font-size-base;
     font-weight: bold;
 }
 
 .locked {
-    background-color: black;
+    background-color: v.$color-black;
     cursor: not-allowed;
     opacity: 0.3;
     background-image: linear-gradient(
@@ -46,8 +48,8 @@
 }
 
 .highlight {
-    background-color: #ffd700;
-    color: #1a202c;
+    background-color: v.$color-accent-gold;
+    color: v.$color-surface-darker;
     transform: scale(1.1);
     transition: all 0.2s ease-in-out;
     box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.6);
@@ -65,6 +67,6 @@
     }
 
     .statValue {
-        font-size: 1.5rem;
+        font-size: v.$font-size-base;
     }
 }

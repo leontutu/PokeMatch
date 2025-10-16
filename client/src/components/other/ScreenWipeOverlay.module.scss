@@ -1,7 +1,9 @@
+@use '../../styles/_variables' as v;
+
 .screenWipeContainer {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    background: v.$color-bg-gradient;
     transform-origin: top left;
     animation-fill-mode: forwards;
     z-index: 10;

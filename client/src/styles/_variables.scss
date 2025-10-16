@@ -1,0 +1,82 @@
+// ----------------------------------------------------------------------------
+// COLORS
+// ----------------------------------------------------------------------------
+
+// Base color palette (descriptive names)
+$color-slate-600: #4a5568;
+$color-slate-700: #718096;
+$color-slate-800: #2d3748;
+$color-slate-900: #1a202c;
+$color-gray-300: #e2e8f0;
+$color-gray-400: #a0aec0;
+$color-gray-500: #808080;
+$color-green-600: #38a169;
+$color-green-700: #2f855a;
+$color-red-600: #c53030;
+$color-red-700: #9b2c2c;
+$color-yellow-400: #fbbf24;
+$color-yellow-500: #ffd700;
+$color-white: #ffffff;
+$color-black: #000000;
+$color-dark-bg: #1e1e1e;
+
+// Semantic aliases (purpose-based names)
+$color-primary: $color-slate-600;
+$color-primary-dark: $color-slate-800;
+$color-success: $color-green-600;
+$color-success-dark: $color-green-700;
+$color-danger: $color-red-600;
+$color-danger-dark: $color-red-700;
+$color-warning: $color-yellow-400;
+$color-accent-gold: $color-yellow-500;
+$color-text-light: $color-gray-300;
+$color-text-muted: $color-gray-400;
+$color-text-muted-strong: $color-slate-700;
+$color-disabled: $color-gray-500;
+
+// Backgrounds & surfaces
+$color-bg-gradient: linear-gradient(180deg, $color-slate-600 0%, $color-slate-800 100%);
+$color-surface-primary: $color-slate-600;
+$color-surface-dark: $color-slate-800;
+$color-surface-darker: $color-slate-900;
+
+// Transparency variants
+$color-surface-dark-50: rgba(45, 55, 72, 0.5);
+$color-surface-dark-80: rgba(45, 55, 72, 0.8);
+$color-surface-dark-65: rgba(45, 55, 72, 0.65);
+
+// Shadow colors
+$shadow-sm: rgba(0, 0, 0, 0.18);
+$shadow-md: rgba(0, 0, 0, 0.2);
+$shadow-lg: rgba(0, 0, 0, 0.3);
+$shadow-xl: rgba(0, 0, 0, 0.5);
+
+// ----------------------------------------------------------------------------
+// TYPOGRAPHY
+// ----------------------------------------------------------------------------
+
+// Font families
+$font-family-primary: "Jura", sans-serif;
+$font-family-body: "Martel Sans", sans-serif;
+$font-family-mono: "JetBrains Mono", monospace;
+
+// Font sizes
+$font-size-xs: 1rem;
+$font-size-sm: 1.2rem;
+$font-size-base: 1.5rem;
+$font-size-lg: 2rem;
+$font-size-xl: 2.2rem;
+$font-size-2xl: 2.5rem;
+$font-size-3xl: 3.5rem;
+$font-size-4xl: 4rem;
+
+// ----------------------------------------------------------------------------
+// SPACING & SIZING
+// ----------------------------------------------------------------------------
+
+// Border radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 24px;
+$radius-pill: 50%;

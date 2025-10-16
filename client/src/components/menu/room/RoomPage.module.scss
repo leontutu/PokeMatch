@@ -1,3 +1,5 @@
+@use '../../../styles/_variables' as v;
+
 .roomPage {
     height: 100%;
     width: 100%;
@@ -6,7 +8,7 @@
     align-items: center;
     justify-content: space-between;
     text-align: center;
-    font-family: "Jura", Arial, sans-serif;
+    font-family: v.$font-family-primary;
     padding: 2rem 0;
     box-sizing: border-box;
 }
@@ -21,14 +23,14 @@
 
 .addBotButton {
     font-size: 1rem;
-    font-family: "Jura";
+    font-family: v.$font-family-primary;
     font-weight: 700;
     width: 20%;
     padding: 0.75rem 0rem;
-    color: white;
+    color: v.$color-white;
     background-color: #4654cfff;
     border: none;
-    border-radius: 8px;
+    border-radius: v.$radius-sm;
     margin-left: auto;
     margin-right: 6%;
 }
@@ -38,9 +40,9 @@
 }
 
 .roomTitle {
-    font-size: 1.5rem;
+    font-size: v.$font-size-base;
     font-weight: 600;
-    color: #a0aec0;
+    color: v.$color-text-muted;
     letter-spacing: 1px;
 }
 

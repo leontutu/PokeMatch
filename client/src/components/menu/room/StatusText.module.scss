@@ -1,6 +1,8 @@
+@use '../../../styles/_variables' as v;
+
 .statusText {
-    color: #a0aec0;
-    font-size: 1.5rem;
+    color: v.$color-text-muted;
+    font-size: v.$font-size-base;
     height: 1rem;
 }
 

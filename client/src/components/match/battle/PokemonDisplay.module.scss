@@ -1,9 +1,11 @@
+@use '../../../styles/_variables' as v;
+
 .opponentPokemonSection,
 .yourPokemonSection {
     height: 27.5%;
     position: relative;
     overflow: visible;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    background: v.$color-bg-gradient;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,14 +13,12 @@
 }
 
 .yourPokemonSection {
-    background: linear-gradient(0deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(0deg, v.$color-slate-600 0%, v.$color-slate-800 100%);
     position: relative;
 }
 
 .opponentPokemonImg,
 .yourPokemonImg {
-    /* max-width: 100%;
-    max-height: 100%; */
     object-fit: contain;
     filter: drop-shadow(0 0 1rem rgba(237, 242, 247, 0.2));
     z-index: 3;
@@ -39,8 +39,8 @@
 
 .opponentPokemonLabel {
     position: absolute;
-    left: -0.25rem;
     top: 15%;
+    left: -0.25rem;
     z-index: 2;
 }
 

@@ -1,10 +1,12 @@
+@use '../../../styles/_variables' as v;
+
 .nameLabel {
-    color: #e2e8f0;
-    font-family: "Jura", Arial, sans-serif;
-    font-size: 2.5rem;
+    color: v.$color-text-light;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-2xl;
     font-weight: 700;
     text-align: center;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 3px v.$shadow-md;
     letter-spacing: 1px;
 }
 
@@ -27,38 +29,38 @@
 
 .nameInput {
     width: 100%;
-    color: white;
-    background-color: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 8px;
+    color: v.$color-white;
+    background-color: v.$color-surface-dark;
+    border: 1px solid v.$color-surface-primary;
+    border-radius: v.$radius-sm;
     padding: 16px 24px;
-    font-size: 1.5rem;
-    font-family: "Jura", Arial, sans-serif;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: v.$font-size-base;
+    font-family: v.$font-family-primary;
+    box-shadow: inset 0 2px 4px v.$shadow-md;
     transition: all 0.2s ease;
     text-align: center;
 }
 
 .nameInput::placeholder {
-    color: #a0aec0;
+    color: v.$color-text-muted;
     opacity: 0.8;
 }
 
 .nameInput:focus {
     outline: none;
-    border-color: #38a169;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px #38a169;
+    border-color: v.$color-success;
+    box-shadow: inset 0 2px 4px v.$shadow-md, 0 0 10px v.$color-success;
 }
 
 .validationText {
     color: #c43939;
-    font-size: 1.5rem;
+    font-size: v.$font-size-base;
     height: 1rem;
     transition: color 0.3s;
 }
 
 .validationText.valid {
-    color: #38a169;
+    color: v.$color-success;
 }
 
 .shake {

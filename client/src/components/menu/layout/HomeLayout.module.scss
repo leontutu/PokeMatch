@@ -1,3 +1,5 @@
+@use '../../../styles/_variables' as v;
+
 .homeLayout {
     height: 100%;
     width: 100%;
@@ -7,9 +9,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-    font-family: "Jura", Arial, sans-serif;
-    box-shadow: 0 0 32px 0 rgba(0, 0, 0, 0.18);
+    background: v.$color-bg-gradient;
+    font-family: v.$font-family-primary;
+    box-shadow: 0 0 32px 0 v.$shadow-sm;
 }
 
 .logo {

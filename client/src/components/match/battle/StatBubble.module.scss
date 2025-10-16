@@ -1,3 +1,5 @@
+@use '../../../styles/_variables' as v;
+
 .outerWrapper {
     width: 9rem;
     height: 7rem;
@@ -18,8 +20,8 @@
 }
 
 .label {
-    font-family: "Jura", sans-serif;
-    font-size: 1.2rem;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-sm;
     font-weight: 1000;
     color: #333;
 }

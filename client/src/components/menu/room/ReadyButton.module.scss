@@ -1,19 +1,21 @@
+@use '../../../styles/_variables' as v;
+
 .readyBtn {
     width: 80%;
     max-width: 340px;
-    color: white;
+    color: v.$color-white;
     border: none;
-    border-radius: 8px;
+    border-radius: v.$radius-sm;
     padding: 20px 0;
-    font-size: 2.2rem;
+    font-size: v.$font-size-xl;
     font-weight: 700;
-    font-family: "Jura", Arial, sans-serif;
+    font-family: v.$font-family-primary;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     letter-spacing: 1.5px;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-    background-color: #38a169;
-    box-shadow: 0 5px 0 #2f855a;
+    text-shadow: 1px 1px 4px v.$shadow-md;
+    background-color: v.$color-success;
+    box-shadow: 0 5px 0 v.$color-success-dark;
 }
 
 .readyBtn:hover:not(:disabled) {
@@ -22,11 +24,11 @@
 
 .readyBtn:active:not(:disabled) {
     transform: translateY(3px);
-    box-shadow: 0 2px 0 #2f855a;
+    box-shadow: 0 2px 0 v.$color-success-dark;
 }
 
 .readyBtn.pressed {
-    background-color: #718096;
-    box-shadow: 0 5px 0 #4a5568;
+    background-color: v.$color-text-muted-strong;
+    box-shadow: 0 5px 0 v.$color-surface-primary;
     filter: brightness(0.8);
 }
