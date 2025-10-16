@@ -1,4 +1,5 @@
 @use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
 
 .outerContainer {
     width: 100%;
@@ -12,8 +13,7 @@
     background: v.$color-surface-dark-65;
     box-shadow: 0 8px 32px v.$shadow-sm;
     padding: 2.5rem 1.5rem;
-    display: flex;
-    flex-direction: column;
+    @include m.flex-column;
     align-items: center;
     gap: 2.5rem;
     margin-bottom: 5rem;
@@ -21,9 +21,7 @@
 
 .buttonContainer {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include m.flex-center;
 
     button {
         width: 100%;
@@ -38,7 +36,7 @@
         transition: all 0.2s;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
         letter-spacing: 1.5px;
-        text-shadow: 1px 1px 4px v.$shadow-sm;
+        @include m.text-shadow-button;
     }
 }
 

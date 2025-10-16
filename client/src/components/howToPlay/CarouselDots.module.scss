@@ -1,5 +1,7 @@
+@use '../../styles/_mixins' as m;
+
 .dotsContainer {
-    display: flex;
+    @include m.flex-row;
     gap: 0.5rem;
     margin-right: 10rem;
 }

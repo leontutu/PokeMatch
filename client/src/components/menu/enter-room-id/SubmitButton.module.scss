@@ -1,47 +1,27 @@
 @use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
 
 .buttonContainer {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include m.flex-center;
 }
 
 .submitBtn {
     width: 80%;
     max-width: 340px;
     color: v.$color-white;
-    border: none;
-    border-radius: v.$radius-sm;
     padding: 20px 0;
     font-size: v.$font-size-xl;
-    font-weight: 700;
-    font-family: v.$font-family-primary;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
     letter-spacing: 1.5px;
-    text-shadow: 1px 1px 4px v.$shadow-md;
-    background-color: v.$color-text-muted-strong;
-    box-shadow: 0 5px 0 v.$color-surface-primary;
+    @include m.button-base;
+    @include m.button-3d(v.$color-text-muted-strong, v.$color-surface-primary);
 
     &.active {
-        background-color: v.$color-success;
-        box-shadow: 0 5px 0 v.$color-success-dark;
-    }
-
-    &:hover:not(:disabled) {
-        filter: brightness(1.1);
+        background-color: v.$color-confirm;
+        box-shadow: 0 5px 0 v.$color-confirm-dark;
     }
 
     &:active:not(:disabled) {
-        transform: translateY(3px);
-        box-shadow: 0 2px 0 v.$color-success-dark;
-    }
-
-    &:disabled {
-        background-color: v.$color-text-muted-strong;
-        box-shadow: 0 5px 0 v.$color-surface-primary;
-        cursor: not-allowed;
-        filter: brightness(0.8);
+        box-shadow: 0 2px 0 v.$color-confirm-dark;
     }
 }

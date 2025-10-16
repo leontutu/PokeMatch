@@ -2,7 +2,6 @@
 // COLORS
 // ----------------------------------------------------------------------------
 
-// Base color palette (descriptive names)
 $color-slate-600: #4a5568;
 $color-slate-700: #718096;
 $color-slate-800: #2d3748;
@@ -20,14 +19,14 @@ $color-white: #ffffff;
 $color-black: #000000;
 $color-dark-bg: #1e1e1e;
 
-// Semantic aliases (purpose-based names)
+// semantic aliases for colors
 $color-primary: $color-slate-600;
 $color-primary-dark: $color-slate-800;
-$color-success: $color-green-600;
-$color-success-dark: $color-green-700;
+$color-confirm: $color-green-600;
+$color-confirm-dark: $color-green-700;
 $color-danger: $color-red-600;
 $color-danger-dark: $color-red-700;
-$color-warning: $color-yellow-400;
+$color-winner: $color-yellow-400;
 $color-accent-gold: $color-yellow-500;
 $color-text-light: $color-gray-300;
 $color-text-muted: $color-gray-400;
@@ -60,7 +59,11 @@ $font-family-primary: "Jura", sans-serif;
 $font-family-body: "Martel Sans", sans-serif;
 $font-family-mono: "JetBrains Mono", monospace;
 
-// Font sizes
+// Responsive font sizing
+$font-size-base-mobile: calc(3.38dvw - 0.1dvh);
+$font-size-base-desktop: 12px;
+
+// Font sizes (rem-based, scale relative to base font-size)
 $font-size-xs: 1rem;
 $font-size-sm: 1.2rem;
 $font-size-base: 1.5rem;

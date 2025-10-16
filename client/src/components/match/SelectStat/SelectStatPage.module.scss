@@ -171,11 +171,11 @@
     box-shadow: 0 4px 0 v.$color-surface-primary;
 
     &.active {
-        background-color: v.$color-success;
+        background-color: v.$color-confirm;
         color: v.$color-white;
         cursor: pointer;
         transform: translateY(-2px);
-        box-shadow: 0 6px 0 v.$color-success-dark;
+        box-shadow: 0 6px 0 v.$color-confirm-dark;
     }
 
     &.disabled {

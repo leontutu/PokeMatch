@@ -1,9 +1,11 @@
+@use '../../styles/_variables' as v;
+@use '../../styles/_mixins' as m;
+
 .outerContainer {
     width: 100%;
     height: 100%;
-    display: flex;
+    @include m.flex-column;
     align-items: center;
-    flex-direction: column;
     justify-content: space-between;
     background: linear-gradient(0deg, #362626 0%, #5c348d 100%);
 }
@@ -16,7 +18,7 @@
 }
 
 .embla__container {
-    display: flex;
+    @include m.flex-row;
     height: 100%;
 }
 
@@ -24,12 +26,12 @@
     flex: 0 0 100%;
     min-width: 0;
     height: 100%;
-    display: flex;
+    @include m.flex-row;
 }
 
 .footer {
     position: relative;
-    display: flex;
+    @include m.flex-row;
     height: 5rem;
     width: 100%;
     justify-content: space-evenly;
@@ -40,13 +42,13 @@
 .backButton {
     position: absolute;
     right: 1rem;
-    font-family: jura;
+    font-family: v.$font-family-primary;
     font-weight: 600;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    border-radius: v.$radius-md;
     font-size: 1.2rem;
     background-color: #ef833a;
-    color: white;
+    color: v.$color-white;
     padding: 0.75rem 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -75,7 +77,7 @@
     height: 1.5rem;
 
     &:after {
-        background-color: white;
+        background-color: v.$color-white;
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 50%;

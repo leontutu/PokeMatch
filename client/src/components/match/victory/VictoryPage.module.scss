@@ -1,8 +1,8 @@
 @use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
 
 .victoryContainer {
-    display: flex;
-    flex-direction: column;
+    @include m.flex-column;
     justify-content: space-between;
     align-items: center;
     height: 100%;
@@ -15,10 +15,7 @@
 }
 
 .mainContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include m.flex-column-center;
     gap: 3rem;
     width: 100%;
     flex-grow: 1;
@@ -28,20 +25,16 @@
     max-width: 95%;
     font-size: v.$font-size-4xl;
     font-weight: 700;
-    color: v.$color-warning;
-    text-shadow: 0 0 15px v.$color-warning, 0 0 5px v.$shadow-xl;
+    color: v.$color-winner;
+    @include m.text-shadow-glow(v.$color-winner);
     margin: 0;
     animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .scoresContainer {
-    background-color: v.$color-surface-dark;
-    border: 1px solid v.$color-surface-primary;
-    border-radius: v.$radius-sm;
-    padding: 1.5rem;
+    @include m.card(1.5rem, v.$radius-sm);
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 4px 10px v.$shadow-md;
 }
 
 .score {
@@ -53,9 +46,7 @@
 
 .footer {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include m.flex-center;
 }
 
 .menuButton {
@@ -63,25 +54,10 @@
     max-width: 340px;
     padding: 20px 0;
     font-size: v.$font-size-lg;
-    font-family: v.$font-family-primary;
-    font-weight: 700;
     color: v.$color-white;
-    background-color: v.$color-success;
-    border: none;
-    border-radius: v.$radius-sm;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 5px 0 v.$color-success-dark;
     letter-spacing: 1.5px;
-
-    &:hover {
-        filter: brightness(1.1);
-    }
-
-    &:active {
-        transform: translateY(3px);
-        box-shadow: 0 2px 0 v.$color-success-dark;
-    }
+    @include m.button-base;
+    @include m.button-3d(v.$color-confirm, v.$color-confirm-dark);
 }
 
 @keyframes zoomIn {

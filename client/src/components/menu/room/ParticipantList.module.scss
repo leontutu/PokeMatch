@@ -1,4 +1,5 @@
 @use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
 
 .participantsList {
     list-style-type: none;
@@ -6,8 +7,7 @@
     margin: 0;
     width: 90%;
     max-width: 400px;
-    display: flex;
-    flex-direction: column;
+    @include m.flex-column;
     gap: 0.75rem;
 }
 
@@ -18,7 +18,7 @@
     background-color: v.$color-surface-dark;
     border: 1px solid v.$color-surface-primary;
     border-radius: v.$radius-sm;
-    display: flex;
+    @include m.flex-row;
     justify-content: space-between;
     align-items: center;
     animation: slideIn 0.5s ease-out forwards;
@@ -39,7 +39,7 @@
 
     &.ready {
         color: v.$color-white;
-        background-color: v.$color-success;
+        background-color: v.$color-confirm;
         animation: pulseReady 0.6s ease-in-out;
     }
 }

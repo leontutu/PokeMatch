@@ -1,14 +1,12 @@
 @use '../../../styles/_variables' as v;
+@use '../../../styles/_mixins' as m;
 
 .homeLayout {
     height: 100%;
     width: 100%;
     margin: 0 auto;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include m.flex-column-center;
     background: v.$color-bg-gradient;
     font-family: v.$font-family-primary;
     box-shadow: 0 0 32px 0 v.$shadow-sm;
@@ -24,14 +22,11 @@
 .contentArea {
     width: 100%;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include m.flex-column-center;
 }
 
-@media (min-width: 600px) and (min-height: 700px) {
-    .homeLayout {
+.homeLayout {
+    @include m.desktop {
         border-radius: 24px;
     }
 }

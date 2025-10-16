@@ -1,3 +1,6 @@
+@use './styles/_mixins' as m;
+@use './styles/_variables' as v;
+
 * {
     margin: 0;
     padding: 0;
@@ -5,18 +8,16 @@
 }
 
 html {
-    font-size: calc(3.38dvw - 0.1dvh);
-}
+    font-size: v.$font-size-base-mobile;
 
-@media (min-width: 600px) and (min-height: 700px) {
-    html {
-        font-size: 12px;
+    @include m.desktop {
+        font-size: v.$font-size-base-desktop;
     }
 }
 
 body {
     width: 100vw;
     height: 100vh;
-    font-family: "jura", sans-serif;
+    font-family: v.$font-family-primary;
     overflow: hidden;
 }
