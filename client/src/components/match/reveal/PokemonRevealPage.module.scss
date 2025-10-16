@@ -7,7 +7,6 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    background: v.$color-bg-gradient;
     position: relative;
     overflow: hidden;
 }
@@ -48,6 +47,7 @@
     margin-top: 2rem;
     text-align: center;
     clip-path: inset(0 100% 0 0);
+    min-height: 0;
 
     /* transform: translateY(400rem); */
 }
@@ -66,7 +66,8 @@
     font-size: v.$font-size-lg;
     font-family: v.$font-family-primary;
     color: #d1d1d1;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.8);
+
     opacity: 0;
 }
 

@@ -23,6 +23,7 @@
     flex: 1;
     width: 100%;
     background-color: v.$color-surface-dark;
+    border-top: 1px solid v.$color-surface-primary;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,9 +85,8 @@
     width: 20rem;
     height: 40rem;
     background-color: v.$color-surface-dark-80;
-    border-radius: v.$radius-pill;
+    border-radius: 999px;
     rotate: -40deg;
-    z-index: 2;
 }
 
 .yourPokemonSection img {
@@ -209,5 +209,14 @@
     }
     to {
         transform: rotate(-360deg);
+    }
+}
+
+@keyframes horizontalFloat {
+    from {
+        transform: translateX(-10px) rotate(-3deg);
+    }
+    to {
+        transform: translateX(10px) rotate(3deg);
     }
 }

@@ -6,12 +6,13 @@
     align-items: center;
     gap: 1rem;
     height: 2.5rem;
+    background-color: v.$color-dark-bg;
 }
 
 .framedSpan {
     width: 11rem;
     height: 100%;
-    background-color: v.$color-dark-bg;
+    background-color: rgb(20, 20, 20);
     color: v.$color-white;
     padding: 3px 12px;
     border-radius: v.$radius-sm;
@@ -35,7 +36,8 @@
 .homeButton {
     height: 2.5rem;
     width: 2.5rem;
-    background-color: v.$color-dark-bg;
+    background-color: rgb(20, 20, 20);
+
     color: v.$color-white;
     border-radius: v.$radius-sm;
     border: none;
