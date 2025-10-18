@@ -1,37 +1,43 @@
 {
-  "name": "poke-match",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "dev:mocks": "cross-env VITE_USE_MOCKS=true vite",
-    "start": "node src/index.js",
-    "build": "npm install && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "cross-env": "^10.0.0",
-    "embla-carousel-react": "^8.6.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "socket.io-client": "^4.8.1",
-    "use-sound": "^5.0.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.32.0",
-    "@types/react": "^19.1.12",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^4.7.0",
-    "cross": "^1.0.0",
-    "env": "^0.0.2",
-    "eslint": "^9.32.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
-    "sass": "^1.93.0",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.0"
-  }
+    "name": "poke-match",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "dev:mocks": "cross-env VITE_USE_MOCKS=true vite",
+        "start": "node src/index.js",
+        "build": "npm install && vite build",
+        "lint": "eslint .",
+        "preview": "vite preview",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "cross-env": "^10.0.0",
+        "embla-carousel-react": "^8.6.0",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
+        "socket.io-client": "^4.8.1",
+        "use-sound": "^5.0.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.32.0",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.0",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/react": "^19.1.12",
+        "@types/react-dom": "^19.1.9",
+        "@vitejs/plugin-react": "^4.7.0",
+        "cross": "^1.0.0",
+        "env": "^0.0.2",
+        "eslint": "^9.32.0",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.20",
+        "globals": "^16.3.0",
+        "jsdom": "^27.0.1",
+        "sass": "^1.93.0",
+        "typescript": "^5.9.2",
+        "vite": "^7.1.0",
+        "vitest": "^3.2.4"
+    }
 }
