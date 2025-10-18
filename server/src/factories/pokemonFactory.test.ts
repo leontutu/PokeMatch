@@ -1,55 +1,59 @@
 import { createPokemonFromApiData } from "./pokemonFactory.js";
 import { StatNames } from "../../../shared/constants/constants.js";
-import { test, expect } from "vitest";
+import { test, expect, describe } from "vitest";
 
-test("createPokemonFromApiData maps basic pokemon properties correctly", () => {
-    const pokemon = createPokemonFromApiData(mockPokemonApiData);
-    expect(pokemon.id).toBe(mockPokemonApiData.id);
-    expect(pokemon.name).toBe(mockPokemonApiData.name);
-});
+describe("PokemonFactory", () => {
+    describe("createPokemonFromApiData", () => {
+        test("maps basic pokemon properties correctly", () => {
+            const pokemon = createPokemonFromApiData(mockPokemonApiData);
+            expect(pokemon.id).toBe(mockPokemonApiData.id);
+            expect(pokemon.name).toBe(mockPokemonApiData.name);
+        });
 
-test("createPokemonFromApiData maps single type correctly", () => {
-    const singleTypeMock = {
-        ...mockPokemonApiData,
-        types: [{ slot: 1, type: { name: "fire", url: "..." } }],
-    };
+        test("maps single type correctly", () => {
+            const singleTypeMock = {
+                ...mockPokemonApiData,
+                types: [{ slot: 1, type: { name: "fire", url: "..." } }],
+            };
 
-    const pokemon = createPokemonFromApiData(singleTypeMock);
+            const pokemon = createPokemonFromApiData(singleTypeMock);
 
-    expect(pokemon.types).toHaveLength(1);
-    expect(pokemon.types[0]).toBe(singleTypeMock.types[0].type.name);
-});
+            expect(pokemon.types).toHaveLength(1);
+            expect(pokemon.types[0]).toBe(singleTypeMock.types[0].type.name);
+        });
 
-test("createPokemonFromApiData maps dual types correctly", () => {
-    const pokemon = createPokemonFromApiData(mockPokemonApiData);
+        test("maps dual types correctly", () => {
+            const pokemon = createPokemonFromApiData(mockPokemonApiData);
 
-    expect(pokemon.types).toHaveLength(2);
-    expect(pokemon.types[0]).toBe(mockPokemonApiData.types[0].type.name);
-    expect(pokemon.types[1]).toBe(mockPokemonApiData.types[1].type.name);
-});
+            expect(pokemon.types).toHaveLength(2);
+            expect(pokemon.types[0]).toBe(mockPokemonApiData.types[0].type.name);
+            expect(pokemon.types[1]).toBe(mockPokemonApiData.types[1].type.name);
+        });
 
-test("createPokemonFromApiData maps stats correctly", () => {
-    const pokemon = createPokemonFromApiData(mockPokemonApiData);
-    expect(pokemon.stats.weight).toBe(mockPokemonApiData.weight);
-    expect(pokemon.stats.height).toBe(mockPokemonApiData.height);
-    for (const stat of mockPokemonApiData.stats) {
-        const value = stat.base_stat;
-        let name = stat.stat.name;
-        if (name === "special-defense") {
-            name = StatNames.SPECIAL_DEFENSE;
-        } else if (name === "special-attack") {
-            name = StatNames.SPECIAL_ATTACK;
-        }
-        expect(pokemon.stats[name as StatNames]).toBe(value);
-    }
-});
+        test("maps stats correctly", () => {
+            const pokemon = createPokemonFromApiData(mockPokemonApiData);
+            expect(pokemon.stats.weight).toBe(mockPokemonApiData.weight);
+            expect(pokemon.stats.height).toBe(mockPokemonApiData.height);
+            for (const stat of mockPokemonApiData.stats) {
+                const value = stat.base_stat;
+                let name = stat.stat.name;
+                if (name === "special-defense") {
+                    name = StatNames.SPECIAL_DEFENSE;
+                } else if (name === "special-attack") {
+                    name = StatNames.SPECIAL_ATTACK;
+                }
+                expect(pokemon.stats[name as StatNames]).toBe(value);
+            }
+        });
 
-test("createPokemonFromApiData maps sprite URLs correctly", () => {
-    const pokemon = createPokemonFromApiData(mockPokemonApiData);
-    expect(pokemon.sprites.back_default).toBe(mockPokemonApiData.sprites.back_default);
-    expect(pokemon.sprites.officialArtwork).toBe(
-        mockPokemonApiData.sprites.other["official-artwork"].front_default
-    );
+        test("maps sprite URLs correctly", () => {
+            const pokemon = createPokemonFromApiData(mockPokemonApiData);
+            expect(pokemon.sprites.back_default).toBe(mockPokemonApiData.sprites.back_default);
+            expect(pokemon.sprites.officialArtwork).toBe(
+                mockPokemonApiData.sprites.other["official-artwork"].front_default
+            );
+        });
+    });
 });
 
 const mockPokemonApiData = {

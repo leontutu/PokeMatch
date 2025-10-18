@@ -7,7 +7,7 @@ import MappingError from "../errors/MappingError.js";
 import { StatNames } from "../../../shared/constants/constants.js";
 import { createMockGame, createMockPlayer } from "../__test__/index.js";
 
-describe("mapRoomToViewRoom", () => {
+describe("mappers", () => {
     let room: Room;
     beforeEach(() => {
         room = new Room(1);
@@ -17,30 +17,32 @@ describe("mapRoomToViewRoom", () => {
         ];
     });
 
-    test("maps Room to ViewRoom correctly", () => {
-        const viewRoom = mapRoomToViewRoom(room, "uuid1");
-        expect(viewRoom.id).toBe(1);
-        expect(viewRoom.viewClientRecords.length).toBe(2);
-        expect(viewRoom.viewClientRecords[0].clientName).toBe("Alice");
-        expect(viewRoom.viewClientRecords[1].isReady).toBe(true);
-        expect(viewRoom.viewGame).toBeNull();
-    });
+    describe("mapRoomToViewRoom", () => {
+        test("maps Room to ViewRoom correctly", () => {
+            const viewRoom = mapRoomToViewRoom(room, "uuid1");
+            expect(viewRoom.id).toBe(1);
+            expect(viewRoom.viewClientRecords.length).toBe(2);
+            expect(viewRoom.viewClientRecords[0].clientName).toBe("Alice");
+            expect(viewRoom.viewClientRecords[1].isReady).toBe(true);
+            expect(viewRoom.viewGame).toBeNull();
+        });
 
-    test("includes ViewGame when Room has a Game", () => {
-        room.game = createMockGame();
+        test("includes ViewGame when Room has a Game", () => {
+            room.game = createMockGame();
 
-        const viewRoom = mapRoomToViewRoom(room, "uuid1");
+            const viewRoom = mapRoomToViewRoom(room, "uuid1");
 
-        expect(viewRoom.viewGame).not.toBeNull();
-        expect(viewRoom.viewGame!.phase).toBe(room.game.phase);
-        expect(viewRoom.viewGame!.you.name).toBe("Alice");
-        expect(viewRoom.viewGame!.opponent.name).toBe("Bob");
-    });
+            expect(viewRoom.viewGame).not.toBeNull();
+            expect(viewRoom.viewGame!.phase).toBe(room.game.phase);
+            expect(viewRoom.viewGame!.you.name).toBe("Alice");
+            expect(viewRoom.viewGame!.opponent.name).toBe("Bob");
+        });
 
-    test("throws MappingError on invalid game", () => {
-        // game with no pokemon assigned to players
-        room.game = new Game([new Player("uuid1", "Alice", 1), new Player("uuid2", "Bob", 2)]);
-        expect(() => mapRoomToViewRoom(room, "uuid1")).toThrow(MappingError);
+        test("throws MappingError on invalid game", () => {
+            // game with no pokemon assigned to players
+            room.game = new Game([new Player("uuid1", "Alice", 1), new Player("uuid2", "Bob", 2)]);
+            expect(() => mapRoomToViewRoom(room, "uuid1")).toThrow(MappingError);
+        });
     });
 
     describe("mapPlayerToViewPlayer", () => {
