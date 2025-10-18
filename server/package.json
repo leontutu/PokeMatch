@@ -5,6 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "vitest",
+        "test:unit": "vitest run src --exclude '**/Orchestrator.test.ts'",
+        "test:integration": "vitest run src/services/Orchestrator.test.ts",
+        "test:watch": "vitest src --exclude '**/Orchestrator.test.ts'",
         "debug": "tsx --inspect src/index.ts",
         "dev": "tsx src/index.ts",
         "build": "tsc",

@@ -15,7 +15,8 @@ import Client from "../models/Client.js";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import { mapRoomToViewRoom } from "../mappers/mappers.js";
 import startBotClient from "../bot-client/botClient.js";
-import { PORT } from "../index.js";
+
+const PORT = process.env.PORT || `3001`;
 
 /**
  * The central controller of the application.
