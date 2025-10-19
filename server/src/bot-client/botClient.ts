@@ -2,6 +2,7 @@ import { io, Socket } from "socket.io-client";
 import { Events, GameCommands, GamePhases, StatNames } from "../../../shared/constants/constants.js";
 import { delay } from "../utils/utils.js";
 import { ViewRoom } from "../../../shared/types/types.js";
+import logger from "../utils/Logger.js";
 
 const MAX_IDLE_TIME = 1200000; // 20 minutes
 
@@ -17,7 +18,7 @@ const MAX_IDLE_TIME = 1200000; // 20 minutes
  * @param roomId The ID of the room for the bot to join.
  */
 export default async function startBotClient(PORT: string, roomId: number) {
-    console.log("[BOTCLIENT] Started bot client with room ID:", roomId);
+    logger.log(`[BOTCLIENT] Started bot client with room ID: ${roomId}`);
 
     const socket = connectSocket(PORT, roomId);
     let idleTimer = setIdleTimer(socket);
@@ -59,7 +60,7 @@ function setIdleTimer(socket: Socket) {
     return setTimeout(() => {
         socket.emit(Events.LEAVE_ROOM);
         socket.disconnect();
-        console.log("[BOTCLIENT] Idle timeout reached. Disconnecting bot client.");
+        logger.log("[BOTCLIENT] Idle timeout reached. Disconnecting bot client.");
     }, MAX_IDLE_TIME);
 }
 
@@ -70,7 +71,7 @@ function connectSocket(PORT: string, roomId: number) {
         },
     });
     socket.on("connect_error", (err: any) => {
-        console.error(`[BOTCLIENT-${roomId}] Connection failed:`, err.message);
+        logger.error(`[BOTCLIENT-${roomId}] Connection failed: ${err.message}`);
     });
     return socket;
 }

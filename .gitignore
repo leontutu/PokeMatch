@@ -6,3 +6,5 @@
 /todo.md
 /gitignore
 /client/.vscode
+/shared/node_modules
+/node_modules

@@ -5,7 +5,7 @@ import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
 import BattleField from "./BattleField";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
-import { useBattleSequence } from "../../../hooks/useBattleSequence";
+import { useBattleSequence, BattlePhase } from "../../../hooks/useBattleSequence";
 import { useEffect, useState, useRef } from "react";
 import round1 from "../../../assets/graphics/game/round-1.png";
 import round2 from "../../../assets/graphics/game/round-2.png";
@@ -19,6 +19,15 @@ import round3 from "../../../assets/graphics/game/round-3.png";
  * to manage the complex flow of animations and state transitions. It renders the
  * player and opponent `PokemonDisplay` components and the central `BattleField`,
  * progressing from the first battle to the second until a winner is decided.
+ *
+ * NOTE:
+ * **Testing approach**: Rather than unit testing this presentation layer with its
+ * complex animation timing and ref management, I chose to:
+ * 1. Thoroughly test the underlying `hooks` (business logic separation)
+ * 2. Validate visual correctness through manual testing
+ * With the current race conditions, testing would be
+ * a) brittle
+ * b) of little ROI, since the animation breaking will not cause any major bugs
  *
  * @param onNavigate - A handler for navigating to other parts of the application.
  *
@@ -46,7 +55,7 @@ export default function BattlePage() {
     );
 
     useEffect(() => {
-        if (phase === "COLUMNS_2_START") {
+        if (phase === BattlePhase.COLUMNS_2_START) {
             setActiveBattle(2);
         }
     }, [phase]);
@@ -65,7 +74,7 @@ export default function BattlePage() {
                     isOpponent={true}
                 />
                 <div className={styles.battleSectionWrapper}>
-                    {phase === "WAITING" ? null : phase !== "SHOW_CURRENT_ROUND" ? (
+                    {phase === BattlePhase.WAITING ? null : phase !== BattlePhase.SHOW_CURRENT_ROUND ? (
                         <div className={`${styles.battleSection} ${isFading ? styles.fadeOut : ""}`}>
                             <BattleField
                                 key={activeBattle === 1 ? "battle-1" : "battle-2"}
@@ -75,7 +84,11 @@ export default function BattlePage() {
                                 battleStats={battleStats}
                                 isWipingIn={isWipingIn}
                                 onFinished={() =>
-                                    setPhase(activeBattle === 1 ? "COLUMNS_1_END" : "COLUMNS_2_END")
+                                    setPhase(
+                                        activeBattle === 1
+                                            ? BattlePhase.COLUMNS_1_END
+                                            : BattlePhase.COLUMNS_2_END
+                                    )
                                 }
                             />
                         </div>

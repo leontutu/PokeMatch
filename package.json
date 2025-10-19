@@ -1,0 +1,12 @@
+{
+    "name": "pokematch-monorepo",
+    "workspaces": [
+        "client",
+        "server",
+        "shared"
+    ],
+    "scripts": {
+        "test": "npm run test --workspaces",
+        "build": "npm run build --workspace=client && npm run build --workspace=server"
+    }
+}
