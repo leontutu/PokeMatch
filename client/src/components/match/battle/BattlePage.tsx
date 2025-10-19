@@ -20,6 +20,15 @@ import round3 from "../../../assets/graphics/game/round-3.png";
  * player and opponent `PokemonDisplay` components and the central `BattleField`,
  * progressing from the first battle to the second until a winner is decided.
  *
+ * NOTE:
+ * **Testing approach**: Rather than unit testing this presentation layer with its
+ * complex animation timing and ref management, I chose to:
+ * 1. Thoroughly test the underlying `hooks` (business logic separation)
+ * 2. Validate visual correctness through manual testing
+ * With the current race conditions, testing would be
+ * a) brittle
+ * b) of little ROI, since the animation breaking will not cause any major bugs
+ *
  * @param onNavigate - A handler for navigating to other parts of the application.
  *
  * @example

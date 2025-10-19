@@ -39,6 +39,7 @@ export default function StatCard({
                 ${isSelected ? styles.highlight : ""}
             `}
             onClick={onClick}
+            data-testid={`stat-card-${statName}`}
         >
             <span className={styles.statName}>{statName}</span>
             <span className={styles.statValue}>{statValue}</span>
