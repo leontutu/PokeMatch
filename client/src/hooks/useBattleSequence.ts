@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useSound from "use-sound";
+import { useSound } from "use-sound";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
 import { useSocket } from "../contexts/SocketContext";
 import normalEffective from "../assets/audio/sounds/normal-effective.mp3";
@@ -25,25 +25,26 @@ import normalEffective from "../assets/audio/sounds/normal-effective.mp3";
  * );
  */
 
-type BattlePhase =
-    | "WAITING"
-    | "SHOW_CURRENT_ROUND"
-    | "COLUMNS_1_START"
-    | "COLUMNS_1_END"
-    | "COLUMNS_2_START"
-    | "COLUMNS_2_END"
-    | "FINISHED";
-const ATTACK_ANIMATION_DURATION = 3000;
-const ATTACK_START_TO_IMPACT = 1150;
-const FADE_OUT_DURATION = 1400;
-const SHOW_CURRENT_ROUND_DURATION = 3000;
+export enum BattlePhase {
+    WAITING = "WAITING",
+    SHOW_CURRENT_ROUND = "SHOW_CURRENT_ROUND",
+    COLUMNS_1_START = "COLUMNS_1_START",
+    COLUMNS_1_END = "COLUMNS_1_END",
+    COLUMNS_2_START = "COLUMNS_2_START",
+    COLUMNS_2_END = "COLUMNS_2_END",
+    FINISHED = "FINISHED",
+}
+export const ATTACK_ANIMATION_DURATION = 3000;
+export const ATTACK_START_TO_IMPACT = 1150;
+export const FADE_OUT_DURATION = 1400;
+export const SHOW_CURRENT_ROUND_DURATION = 3000;
 
 export const useBattleSequence = (
     battleStats: BattleStats | null,
     onBattleEnd: () => void,
     isWipingIn: boolean
 ) => {
-    const [phase, setPhase] = useState<BattlePhase>("WAITING");
+    const [phase, setPhase] = useState<BattlePhase>(BattlePhase.WAITING);
     const [pokemonAnimation, setPokemonAnimation] = useState<BattlePokemonAnimationState>({
         you: "",
         opponent: "",
@@ -74,20 +75,20 @@ export const useBattleSequence = (
     };
 
     useEffect(() => {
-        if (!battleStats || isWipingIn || phase === "SHOW_CURRENT_ROUND") return;
+        if (!battleStats || isWipingIn || phase === BattlePhase.SHOW_CURRENT_ROUND) return;
 
-        if (phase === "WAITING") {
-            setPhase("SHOW_CURRENT_ROUND");
+        if (phase === BattlePhase.WAITING) {
+            setPhase(BattlePhase.SHOW_CURRENT_ROUND);
             setTimeout(() => {
-                setPhase("COLUMNS_1_START");
+                setPhase(BattlePhase.COLUMNS_1_START);
             }, SHOW_CURRENT_ROUND_DURATION);
         }
 
-        if (phase === "COLUMNS_1_END") {
+        if (phase === BattlePhase.COLUMNS_1_END) {
             if (battleStats.isChallenge1Tie) {
                 setIsFading(true);
                 setTimeout(() => {
-                    setPhase("COLUMNS_2_START");
+                    setPhase(BattlePhase.COLUMNS_2_START);
                     setIsFading(false);
                 }, FADE_OUT_DURATION);
             } else {
@@ -95,7 +96,7 @@ export const useBattleSequence = (
                 setTimeout(() => {
                     setIsFading(true);
                     setTimeout(() => {
-                        setPhase("COLUMNS_2_START");
+                        setPhase(BattlePhase.COLUMNS_2_START);
                         setIsFading(false);
                         setPokemonAnimation({ you: "", opponent: "" });
                     }, FADE_OUT_DURATION);
@@ -103,8 +104,8 @@ export const useBattleSequence = (
             }
         }
 
-        if (phase === "COLUMNS_2_END") {
-            setPhase("FINISHED");
+        if (phase === BattlePhase.COLUMNS_2_END) {
+            setPhase(BattlePhase.FINISHED);
             if (battleStats.isChallenge2Tie) {
                 onBattleEnd();
             } else {
@@ -125,13 +126,13 @@ export const useBattleSequence = (
         const { viewGame } = viewRoom;
         const { isChallenge1Tie, isChallenge1Win, isChallenge2Tie, isChallenge2Win } = battleStats;
 
-        if (phase === "COLUMNS_1_END") {
+        if (phase === BattlePhase.COLUMNS_1_END) {
             if (isChallenge1Win) {
                 viewGame.you.points += viewGame.currentRound;
             } else if (!isChallenge1Tie) {
                 viewGame.opponent.points += viewGame.currentRound;
             }
-        } else if (phase === "COLUMNS_2_END") {
+        } else if (phase === BattlePhase.COLUMNS_2_END) {
             if (isChallenge2Win) {
                 viewGame.you.points += viewGame.currentRound;
             } else if (!isChallenge2Tie) {

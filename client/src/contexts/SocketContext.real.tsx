@@ -11,7 +11,7 @@ import { ViewRoom } from "../../../shared/types/types.js";
  * various socket-driven signals and emit helpers to the app.
  */
 
-type SocketContextType = {
+export type SocketContextType = {
     socket: Socket | null;
     viewRoom: ViewRoom | null;
     hasPassedValidNameCheck: boolean;
