@@ -15,25 +15,32 @@ class Logger {
         return `[${level}] ${timestamp} - ${content}`;
     }
 
+    private isTest(): boolean {
+        return process.env.NODE_ENV === "test";
+    }
+
     log(message: string | object) {
+        if (this.isTest()) return;
         console.log(this.formatMessage("LOG", message));
     }
 
     info(message: string | object) {
+        if (this.isTest()) return;
         console.info(this.formatMessage("INFO", message));
     }
 
     warn(message: string | object) {
+        if (this.isTest()) return;
         console.warn(this.formatMessage("WARN", message));
     }
 
     debug(message: string | object) {
-        if (process.env.NODE_ENV !== "production") {
-            console.debug(this.formatMessage("DEBUG", message));
-        }
+        if (process.env.NODE_ENV === "production" || this.isTest()) return;
+        console.debug(this.formatMessage("DEBUG", message));
     }
 
     error(error: Error | unknown) {
+        if (this.isTest()) return;
         const timestamp = this.getTimestamp();
         if (error instanceof Error) {
             console.error(`[ERROR] ${timestamp} - ${error.stack || error.message}`);
