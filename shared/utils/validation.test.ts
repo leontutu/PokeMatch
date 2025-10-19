@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { isValidName, isValidRoomId } from "./validation";
+import { isValidName, isValidRoomId } from "./validation.js";
 
 describe("validation", () => {
     describe("isValidName", () => {
@@ -7,8 +7,8 @@ describe("validation", () => {
             expect(isValidName("Alice")).toBe(true);
             expect(isValidName("Bob123")).toBe(true);
             expect(isValidName("user_42")).toBe(true);
-            expect(isValidName("ABC")).toBe(true); // Minimum 3 chars
-            expect(isValidName("TenCharMax")).toBe(true); // Maximum 10 chars
+            expect(isValidName("ABC")).toBe(true);
+            expect(isValidName("TenCharMax")).toBe(true);
         });
 
         test("rejects names that are too short", () => {
@@ -23,18 +23,17 @@ describe("validation", () => {
         });
 
         test("rejects names with invalid characters", () => {
-            expect(isValidName("alice-bob")).toBe(false); // Dash not allowed
-            expect(isValidName("alice bob")).toBe(false); // Space not allowed
-            expect(isValidName("alice.bob")).toBe(false); // Period not allowed
-            expect(isValidName("alice@bob")).toBe(false); // Special chars not allowed
+            expect(isValidName("alice-bob")).toBe(false);
+            expect(isValidName("alice bob")).toBe(false);
+            expect(isValidName("alice.bob")).toBe(false);
+            expect(isValidName("alice@bob")).toBe(false);
             expect(isValidName("alice!")).toBe(false);
         });
 
         test("checks length after trimming but pattern on original", () => {
-            // The function checks trim().length for min length, but tests regex on original
-            expect(isValidName("  Alice  ")).toBe(false); // Fails regex (spaces)
-            expect(isValidName("  ab  ")).toBe(false); // Fails both trim length and regex
-            expect(isValidName("abc   ")).toBe(false); // Fails regex (trailing spaces)
+            expect(isValidName("  Alice  ")).toBe(false);
+            expect(isValidName("  ab  ")).toBe(false);
+            expect(isValidName("abc   ")).toBe(false);
         });
 
         test("rejects non-string values", () => {
@@ -66,16 +65,15 @@ describe("validation", () => {
         });
 
         test("parseInt behavior with mixed strings", () => {
-            // parseInt is lenient - parses leading digits
-            expect(isValidRoomId("12abc")).toBe(true); // parseInt("12abc") = 12
-            expect(isValidRoomId("42px")).toBe(true); // parseInt("42px") = 42
-            expect(isValidRoomId("1.5")).toBe(true); // parseInt("1.5") = 1
-            expect(isValidRoomId("42.0")).toBe(true); // parseInt("42.0") = 42
+            expect(isValidRoomId("12abc")).toBe(true);
+            expect(isValidRoomId("42px")).toBe(true);
+            expect(isValidRoomId("1.5")).toBe(true);
+            expect(isValidRoomId("42.0")).toBe(true);
         });
 
         test("handles whitespace in strings", () => {
-            expect(isValidRoomId(" 42 ")).toBe(true); // parseInt handles leading/trailing whitespace
-            expect(isValidRoomId("4 2")).toBe(true); // parseInt("4 2") = 4
+            expect(isValidRoomId(" 42 ")).toBe(true);
+            expect(isValidRoomId("4 2")).toBe(true);
         });
     });
 });

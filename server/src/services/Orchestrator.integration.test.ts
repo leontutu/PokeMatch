@@ -12,7 +12,14 @@ import SocketService from "./SocketService.js";
 vi.mock("./SocketService.js");
 
 describe("Orchestrator", () => {
-    describe("Integration tests", () => {
+    /**
+     * Integration tests for the server.
+     * Reach into all layers of the backend app, simulating from client connects
+     * to full game rounds.
+     * NOTE: Does NOT mock the external PokeAPI client. Tests
+     * MUST fail if the PokeAPI is unreachable or has changed.
+     */
+    describe("integration tests", () => {
         let orchestrator: Orchestrator;
         let roomManager: RoomManager;
         let clientManager: ClientManager;
@@ -55,13 +62,20 @@ describe("Orchestrator", () => {
             orchestrator.onToggleReady(mockSocket1);
             orchestrator.onToggleReady(mockSocket2);
 
-            // game starts
-            await delay(200); // wait for async pokemon fetch
+            await vi.waitFor(
+                () => {
+                    expect(room.game).toBeDefined();
+                },
+                {
+                    timeout: 5000,
+                    interval: 50,
+                }
+            );
 
             expect(room.game).toBeDefined();
             expect(room.game!.players[0].pokemon).toBeDefined();
             expect(room.game!.players[1].pokemon).toBeDefined();
-            expect(room.game!.phase).toBe(GamePhases.POKEMON_REVEAL);
+            expect(room.game!.phase).toBe(GamePhases.SELECT_STAT);
         });
 
         test("triggers room shutdown timer on player disconnect", () => {
@@ -94,6 +108,7 @@ describe("Orchestrator", () => {
             orchestrator.onCreateRoom(mockSocket1);
 
             const roomId = clientManager.getClient(mockSocket1)!.roomId!;
+            const room = roomManager.getRoom(roomId);
 
             orchestrator.onConnection(mockSocket2);
             orchestrator.onNameEnter(mockSocket2, "Bob");
@@ -102,10 +117,16 @@ describe("Orchestrator", () => {
             orchestrator.onToggleReady(mockSocket1);
             orchestrator.onToggleReady(mockSocket2);
 
-            await delay(200); // wait for async pokemon fetch
-
-            const room = roomManager.getRoom(roomId);
-            const game = room.game!;
+            // wait for async pokeAPI fetch
+            await vi.waitFor(
+                () => {
+                    expect(room.game?.players[0].pokemon?.stats.attack).toBeDefined();
+                },
+                {
+                    timeout: 5000,
+                    interval: 50,
+                }
+            );
 
             // both players select stats
             const command1 = OrchestratorToGameCommand.fromClient(
@@ -123,18 +144,18 @@ describe("Orchestrator", () => {
             orchestrator.onGameCommand(mockSocket2, command2);
 
             // game transitions to BATTLE phase
-            expect(game.phase).toBe(GamePhases.BATTLE);
+            expect(room.game!.phase).toBe(GamePhases.BATTLE);
 
             // both players finished watching the battle sequence
             orchestrator.onBattleEnd(mockSocket1);
             orchestrator.onBattleEnd(mockSocket2);
 
             // two points have been awarded
-            const totalPoints = game.players[0].points + game.players[1].points;
+            const totalPoints = room.game!.players[0].points + room.game!.players[1].points;
             expect(totalPoints).toBe(2);
 
             // game transitions back to SELECT_STAT phase
-            expect(game.phase).toBe(GamePhases.SELECT_STAT);
+            expect(room.game!.phase).toBe(GamePhases.SELECT_STAT);
         });
     });
 });

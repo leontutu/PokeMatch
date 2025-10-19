@@ -64,21 +64,22 @@ describe("useBattleSequence", () => {
         );
 
         expect(result.current.phase).toBe(BattlePhase.WAITING);
-        isWipingIn = false;
-        act(() => rerender());
+        act(() => (isWipingIn = false));
+        rerender();
         expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
-        vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION);
-        act(() => rerender());
+
+        act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
+        rerender();
         expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
-        result.current.setPhase(BattlePhase.COLUMNS_1_END);
-        act(() => rerender());
-        vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION);
-        act(() => rerender());
+
+        act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
+        act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+        rerender();
+
         expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
-        result.current.setPhase(BattlePhase.COLUMNS_2_END);
-        act(() => rerender());
-        vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION);
-        act(() => rerender());
+        act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
+        act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+        rerender();
         expect(result.current.phase).toBe(BattlePhase.FINISHED);
 
         expect(onBattleEnd).toHaveBeenCalled();
@@ -99,21 +100,23 @@ describe("useBattleSequence", () => {
             );
 
             expect(result.current.phase).toBe(BattlePhase.WAITING);
-            isWipingIn = false;
-            act(() => rerender());
+            expect(result.current.phase).toBe(BattlePhase.WAITING);
+            act(() => (isWipingIn = false));
+            rerender();
             expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
-            vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION);
-            act(() => rerender());
+
+            act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
+            rerender();
             expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
-            result.current.setPhase(BattlePhase.COLUMNS_1_END);
-            act(() => rerender());
-            vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION);
-            act(() => rerender());
+
+            act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
+            act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+            rerender();
+
             expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
-            result.current.setPhase(BattlePhase.COLUMNS_2_END);
-            act(() => rerender());
-            vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION);
-            act(() => rerender());
+            act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
+            act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+            rerender();
             expect(result.current.phase).toBe(BattlePhase.FINISHED);
 
             expect(onBattleEnd).toHaveBeenCalled();
