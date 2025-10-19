@@ -10,7 +10,8 @@
         "build": "npm install && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "dependencies": {
         "cross-env": "^10.0.0",
