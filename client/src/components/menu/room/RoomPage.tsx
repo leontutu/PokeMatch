@@ -50,7 +50,7 @@ export default function RoomPage() {
     };
 
     if (!viewRoom) {
-        return <p>{UI_TEXT.MESSAGES.LOADING}</p>;
+        return <p>{UI_TEXT.MESSAGES.LOADING_ROOM}</p>;
     }
 
     return (
