@@ -7,6 +7,7 @@ import RoomIdInput from "./RoomIdInput";
 import SubmitButton from "./SubmitButton";
 import styles from "./EnterRoomIdPage.module.scss";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the UI for entering a player's roomId before joining a room.
@@ -29,7 +30,7 @@ export default function EnterRoomIdPage() {
         if (badRoomIdSignal) {
             handleNavigate(Pages.ROOM_OPTIONS, false);
             setBadRoomIdSignal(false);
-            alert("Room with ID " + roomId + " is either full or doesn't exist.");
+            alert(UI_TEXT.ALERTS.ROOM_NOT_FOUND(roomId));
         }
     }, [badRoomIdSignal, handleNavigate, setBadRoomIdSignal]);
 

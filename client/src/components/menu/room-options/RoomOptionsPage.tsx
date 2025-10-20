@@ -4,6 +4,7 @@ import { useSocket } from "../../../contexts/SocketContext.real";
 import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the room options page where users can choose to create a room,
@@ -42,17 +43,17 @@ export default function RoomOptionsPage() {
             <div className={styles.buttonColumn}>
                 <div className={styles.buttonContainer}>
                     <button className={styles.createRoomBtn} onClick={handleCreateRoomClick}>
-                        <span>Create Room</span>
+                        <span>{UI_TEXT.BUTTONS.CREATE_ROOM}</span>
                     </button>
                 </div>
                 <div className={styles.buttonContainer}>
                     <button className={styles.joinRoomBtn} onClick={handleJoinRoomClick}>
-                        <span>Join Room</span>
+                        <span>{UI_TEXT.BUTTONS.JOIN_ROOM}</span>
                     </button>
                 </div>
                 <div className={styles.buttonContainer}>
                     <button className={styles.playVsBotBtn} onClick={handlePlayVsBotClick}>
-                        <span>Play vs Bot</span>
+                        <span>{UI_TEXT.BUTTONS.PLAY_VS_BOT}</span>
                     </button>
                 </div>
             </div>

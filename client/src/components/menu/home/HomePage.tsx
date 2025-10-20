@@ -2,6 +2,7 @@ import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./HomePage.module.scss";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the application's main menu screen, providing navigation options.
@@ -29,12 +30,12 @@ export default function HomePage() {
             <div className={styles.buttonColumn}>
                 <div className={styles.buttonContainer}>
                     <button className={styles.matchBtn} onClick={handleMatchClick}>
-                        <span>Match</span>
+                        <span>{UI_TEXT.BUTTONS.MATCH}</span>
                     </button>
                 </div>
                 <div className={styles.buttonContainer}>
                     <button onClick={handleHowToPlayClick} className={styles.howToPlayBtn}>
-                        <span>How To Play</span>
+                        <span>{UI_TEXT.BUTTONS.HOW_TO_PLAY}</span>
                     </button>
                 </div>
             </div>

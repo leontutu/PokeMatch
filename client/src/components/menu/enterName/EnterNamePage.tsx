@@ -7,6 +7,7 @@ import NameInput from "./NameInput";
 import SubmitButton from "./SubmitButton";
 import styles from "./EnterNamePage.module.scss";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the UI for entering a player's name before joining a room.
@@ -36,7 +37,7 @@ export default function EnterNamePage() {
         if (nameErrorSignal) {
             handleNavigate(Pages.HOME);
             setNameErrorSignal(false);
-            alert("Invalid name. Make sure your name is between 4 and 9 characters long");
+            alert(UI_TEXT.ALERTS.INVALID_NAME);
         }
     }, [nameErrorSignal, handleNavigate, setNameErrorSignal]);
 

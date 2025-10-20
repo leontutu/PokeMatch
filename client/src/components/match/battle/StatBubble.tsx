@@ -1,5 +1,6 @@
 import styles from "./StatBubble.module.scss";
 import chatBubble from "../../../assets/graphics/game/chat-bubble.png";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type StatBubbleProps = {
     label: string | undefined;
@@ -25,7 +26,7 @@ type StatBubbleProps = {
 export default function StatBubble({ label, className, flipped }: StatBubbleProps) {
     return (
         <div className={`${styles.outerWrapper} ${className} ${flipped ? styles.flipped : ""}`}>
-            <img className={styles.image} src={chatBubble} alt="Chat Bubble" />
+            <img className={styles.image} src={chatBubble} alt={UI_TEXT.ALT_TEXT.CHAT_BUBBLE} />
             <div className={styles.innerWrapper}>
                 <span className={`${styles.label} ${flipped ? styles.flipped : ""}`}>
                     {label?.slice(0, 2)}
