@@ -2,6 +2,7 @@ import styles from "./VictoryPage.module.scss";
 import { useSocket } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the victory screen after a match concludes.
@@ -28,7 +29,9 @@ export default function VictoryPage() {
     return (
         <div className={styles.victoryContainer}>
             <div className={styles.mainContent}>
-                <h1 className={styles.winnerMessage}>{`${viewRoom.viewGame.winner} won!`}</h1>
+                <h1 className={styles.winnerMessage}>
+                    {UI_TEXT.MESSAGES.WINNER_ANNOUNCEMENT(viewRoom.viewGame.winner)}
+                </h1>
 
                 <div className={styles.scoresContainer}>
                     <p className={styles.score}>
@@ -42,7 +45,7 @@ export default function VictoryPage() {
 
             <div className={styles.footer}>
                 <button className={styles.menuButton} onClick={handleMenuButtonClick}>
-                    Return to Menu
+                    {UI_TEXT.BUTTONS.RETURN_TO_MENU}
                 </button>
             </div>
         </div>

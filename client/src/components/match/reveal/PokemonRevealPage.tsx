@@ -8,6 +8,7 @@ import { useSound } from "use-sound";
 import pokeballWiggle from "../../../assets/audio/sounds/pokeball-wiggle.mp3";
 import pokeballPoof from "../../../assets/audio/sounds/pokeball-poof.mp3";
 import pokeballImage from "../../../assets/graphics/game/pokeball.png";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the Pokémon reveal animation sequence.
@@ -93,7 +94,7 @@ export default function PokemonRevealPage() {
                     ${!isWipingIn && !countDownFinished ? styles.wiggle : ""}
                     `}
                     src={pokeballImage}
-                    alt={"pokeball"}
+                    alt={UI_TEXT.ALT_TEXT.POKEBALL}
                 />
                 <img
                     className={`${styles.pokemonImage} 
@@ -117,7 +118,7 @@ export default function PokemonRevealPage() {
                         {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
                     </span>
                     <span className={`${styles.subText} ${countDownFinished ? styles.fadeIn : ""}`}>
-                        ...is ready to battle!
+                        {UI_TEXT.MESSAGES.READY_TO_BATTLE}
                     </span>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import styles from "./SubmitButton.module.scss";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type SubmitButtonProps = {
     isRoomIdValid: boolean;
@@ -18,7 +19,7 @@ export default function SubmitButton({ isRoomIdValid, handleSubmit }: SubmitButt
                 onClick={handleSubmit}
                 disabled={!isRoomIdValid}
             >
-                Submit
+                {UI_TEXT.BUTTONS.SUBMIT}
             </button>
         </div>
     );

@@ -6,6 +6,7 @@ import styles from "./MatchLayout.module.scss";
 import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
 import React from "react";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type MatchLayoutProps = {
     children: React.ReactNode;
@@ -46,7 +47,7 @@ export default function MatchLayout({ children }: MatchLayoutProps) {
     };
 
     if (!viewRoom.viewGame) {
-        return <p>Loading...</p>;
+        return <p>{UI_TEXT.MESSAGES.LOADING}</p>;
     }
 
     return (

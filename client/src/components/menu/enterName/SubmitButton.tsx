@@ -1,4 +1,5 @@
 import styles from "./SubmitButton.module.scss";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type SubmitButtonProps = {
     isNameValid: boolean;
@@ -18,7 +19,7 @@ export default function SubmitButton({ isNameValid, handleSubmit }: SubmitButton
                 onClick={handleSubmit}
                 disabled={!isNameValid}
             >
-                Submit
+                {UI_TEXT.BUTTONS.SUBMIT}
             </button>
         </div>
     );

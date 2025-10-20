@@ -23,6 +23,7 @@ import ParticipantList from "./ParticipantList";
 import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
 import { addBotToRoom } from "../../../services/apiService";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the UI for a game room where players wait before a match starts.
@@ -49,14 +50,14 @@ export default function RoomPage() {
     };
 
     if (!viewRoom) {
-        return <p>Loading room...</p>;
+        return <p>{UI_TEXT.MESSAGES.LOADING}</p>;
     }
 
     return (
         <HomeLayout>
             <div className={styles.roomPage}>
                 <div className={styles.mainContent}>
-                    <h1 className={styles.roomTitle}>Room ID: {viewRoom.id}</h1>
+                    <h1 className={styles.roomTitle}>{UI_TEXT.LABELS.ROOM_ID(viewRoom.id)}</h1>
                     <ParticipantList participants={viewRoom.viewClientRecords} />
                     <button
                         className={`
@@ -65,7 +66,7 @@ export default function RoomPage() {
                         `}
                         onClick={handleVsBotClick}
                     >
-                        ADD BOT
+                        {UI_TEXT.BUTTONS.ADD_BOT}
                     </button>
                 </div>
 
