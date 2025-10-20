@@ -7,6 +7,7 @@ import { createMockViewRoom } from "../../../__tests__/mocks/mockViewRoom";
 import { StatNames } from "../../../../../shared/constants/constants";
 import { Pages, StatToDisplay } from "../../../constants/constants";
 import { Pokemon, ViewGame } from "../../../../../shared/types/types";
+import { UI_TEXT } from "../../../constants/uiText";
 
 let mockSocketContext = createMockSocketContext();
 const mockNavigate = vi.fn();
@@ -85,7 +86,7 @@ describe("SelectStatPage", () => {
         const attackCard = screen.getByTestId(`stat-card-${displayName}`);
         await user.click(attackCard);
 
-        const chooseButton = screen.getByRole("button", { name: /CHOOSE!/i });
+        const chooseButton = screen.getByRole("button", { name: new RegExp(UI_TEXT.BUTTONS.CHOOSE) });
         await user.click(chooseButton);
 
         expect(mockSocketContext.sendSelectStat).toHaveBeenCalledWith(displayName);
@@ -105,7 +106,7 @@ describe("SelectStatPage", () => {
 
         expect(attackCard).not.toHaveClass(/highlight/);
 
-        const chooseButton = screen.getByRole("button", { name: /CHOOSE!/i });
+        const chooseButton = screen.getByRole("button", { name: new RegExp(UI_TEXT.BUTTONS.CHOOSE) });
         await user.click(chooseButton);
 
         expect(mockSocketContext.sendSelectStat).not.toHaveBeenCalled();
@@ -116,12 +117,12 @@ describe("SelectStatPage", () => {
         const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
         render(<SelectStatPage />);
         expect(alertSpy).toHaveBeenCalledTimes(1);
-        expect(alertSpy).toHaveBeenCalledWith("[Server]: You selected an already locked stat.");
+        expect(alertSpy).toHaveBeenCalledWith(UI_TEXT.ALERTS.STAT_ALREADY_LOCKED);
     });
 
     test("displays opponent pokemon image", () => {
         render(<SelectStatPage />);
-        const opponentImage = screen.getByRole("img", { name: "Opponent's Pokémon" });
+        const opponentImage = screen.getByRole("img", { name: UI_TEXT.ALT_TEXT.OPPONENT_POKEMON });
         expect(opponentImage).toBeDefined();
         expect(opponentImage).toHaveAttribute("src", "charmanderUrl");
     });

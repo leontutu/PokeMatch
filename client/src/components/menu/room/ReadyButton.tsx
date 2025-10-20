@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./ReadyButton.module.scss";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type ReadyButtonProps = {
     amIReady: boolean;
@@ -27,7 +28,7 @@ export default function ReadyButton({ amIReady, handleReadyClick }: ReadyButtonP
             className={`${styles.readyBtn} ${amIReady ? styles.pressed : ""}`}
             // disabled={amIReady}
         >
-            {amIReady ? "READY!" : "READY?"}
+            {amIReady ? UI_TEXT.BUTTONS.READY : UI_TEXT.BUTTONS.NOT_READY}
         </button>
     );
 }
