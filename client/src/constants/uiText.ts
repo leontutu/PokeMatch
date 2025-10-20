@@ -54,6 +54,7 @@ export const UI_TEXT = {
         READY_TO_BATTLE: "...is ready to battle!",
         WINNER_ANNOUNCEMENT: (name: string) => `${name} won!`,
         LOADING: "Loading...",
+        LOADING_ROOM: "Loading room...",
         LEAVE_CONFIRMATION: "Leave room and return to main menu?",
     },
 
