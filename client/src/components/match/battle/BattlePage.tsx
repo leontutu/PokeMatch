@@ -10,6 +10,7 @@ import { useEffect, useState, useRef } from "react";
 import round1 from "../../../assets/graphics/game/round-1.png";
 import round2 from "../../../assets/graphics/game/round-2.png";
 import round3 from "../../../assets/graphics/game/round-3.png";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Orchestrates the entire battle phase of a match.
@@ -61,7 +62,7 @@ export default function BattlePage() {
     }, [phase]);
 
     if (!battleStats) {
-        return <>Loading...</>;
+        return <>{UI_TEXT.MESSAGES.LOADING}</>;
     }
 
     return (
@@ -95,7 +96,7 @@ export default function BattlePage() {
                     ) : (
                         <img
                             src={roundImages[(viewRoom?.viewGame?.currentRound ?? 1) - 1]}
-                            alt={`Round ${viewRoom?.viewGame?.currentRound}`}
+                            alt={UI_TEXT.ALT_TEXT.ROUND_IMAGE(viewRoom?.viewGame?.currentRound ?? 1)}
                             className={styles.showCurrentRoundImg}
                         />
                     )}

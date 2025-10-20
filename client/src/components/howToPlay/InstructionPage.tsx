@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import CarouselDots from "./CarouselDots";
 import { Pages } from "../../constants/constants";
 import { useNavigationContext } from "../../contexts/NavigationContext";
+import { UI_TEXT } from "../../constants/uiText";
 
 export default function InstructionPage() {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
@@ -50,7 +51,7 @@ export default function InstructionPage() {
                     className={`${styles.backButton} ${selectedIndex === 2 ? styles.glow : ""}`}
                     onClick={handleBackToHomeClick}
                 >
-                    Back to Home
+                    {UI_TEXT.BUTTONS.BACK_TO_HOME}
                 </button>
             </div>
         </div>

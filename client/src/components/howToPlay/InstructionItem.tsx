@@ -1,3 +1,4 @@
+import { UI_TEXT } from "../../constants/uiText";
 import styles from "./InstructionItem.module.scss";
 
 type InstructionItemProps = {
@@ -20,7 +21,7 @@ export default function InstructionItem({
                 <img
                     className={styles.instructionImage}
                     src={instructionImage}
-                    alt="Instruction Image"
+                    alt={UI_TEXT.ALT_TEXT.INSTRUCTION_IMAGE}
                 />
             </div>
             <div className={styles.instructionsSection}>

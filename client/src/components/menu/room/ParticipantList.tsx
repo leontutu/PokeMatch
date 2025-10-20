@@ -1,5 +1,6 @@
 import styles from "./ParticipantList.module.scss";
 import { ViewClientRecord } from "../../../../../shared/types/types";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type ParticipantListProps = {
     participants: ViewClientRecord[];
@@ -19,7 +20,9 @@ export default function ParticipantList({ participants }: ParticipantListProps) 
                             viewClientRecord.isReady ? styles.ready : ""
                         }`}
                     >
-                        {viewClientRecord.isReady ? "Ready" : "Not Ready"}
+                        {viewClientRecord.isReady
+                            ? UI_TEXT.STATUS.CLIENT_READY
+                            : UI_TEXT.STATUS.CLIENT_NOT_READY}
                     </span>
                 </li>
             ))}

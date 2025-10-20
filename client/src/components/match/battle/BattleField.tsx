@@ -4,6 +4,7 @@ import styles from "./BattleField.module.scss";
 import { BattleStats } from "../../../types";
 import { StatToDisplay } from "../../../constants/constants";
 import { useEffect, useState } from "react";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type BattleFieldProps = {
     battleStats: BattleStats;
@@ -52,7 +53,7 @@ export default function BattleField({
         return () => clearTimeout(statBubbleAnimTimeout);
     }, [isWipingIn]);
 
-    if (!battleStats) return <>Loading...</>;
+    if (!battleStats) return <>{UI_TEXT.MESSAGES.LOADING}</>;
     return (
         <>
             <BattleColumns

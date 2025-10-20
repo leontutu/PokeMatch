@@ -10,6 +10,7 @@ import { StatNames } from "../../../../../shared/constants/constants";
 import { useSound } from "use-sound";
 import selectSound from "../../../assets/audio/sounds/select.mp3";
 import confirmSound from "../../../assets/audio/sounds/confirm.mp3";
+import { UI_TEXT } from "../../../constants/uiText";
 
 /**
  * Renders the stat selection screen for the match.
@@ -43,7 +44,7 @@ export default function SelectStatPage() {
 
     useEffect(() => {
         if (selectStatErrorSignal) {
-            alert("[Server]: You selected an already locked stat.");
+            alert(UI_TEXT.ALERTS.STAT_ALREADY_LOCKED);
             setButtonState(false);
             setLockedIn(false);
             setSelectedCardIndex(null);
@@ -103,15 +104,15 @@ export default function SelectStatPage() {
                             <TypeCard key={type} typeName={type} />
                         ))}
                     </div>
-                    <img src={yourPokemonImgUrl} alt="Your Pokemon" />
+                    <img src={yourPokemonImgUrl} alt={UI_TEXT.ALT_TEXT.YOUR_POKEMON} />
                 </div>
                 <div className={styles.statSelectSection}>
                     <div className={styles.opponentPokemonWrapper}>
-                        <span className={styles.vsTag}>vs</span>
+                        <span className={styles.vsTag}>{UI_TEXT.LABELS.VS}</span>
                         <img
                             className={styles.opponentPokemon}
                             src={opponentPokemonImgUrl}
-                            alt="Opponent's Pokémon"
+                            alt={UI_TEXT.ALT_TEXT.OPPONENT_POKEMON}
                         />
                     </div>
                     <div className={styles.cardsContainer}>
@@ -135,7 +136,9 @@ export default function SelectStatPage() {
                             );
                         })}
                     </div>
-                    <span className={styles.roundLabel}>Round {viewRoom.viewGame.currentRound}</span>
+                    <span className={styles.roundLabel}>
+                        {UI_TEXT.LABELS.ROUND(viewRoom.viewGame.currentRound)}
+                    </span>
                 </div>
                 <div className={styles.lockInSection}>
                     <button
@@ -144,7 +147,7 @@ export default function SelectStatPage() {
                         ${lockedIn ? styles.locked : ""}`}
                         onClick={handleButtonClick}
                     >
-                        {lockedIn ? "LOCKED IN!" : "CHOOSE!"}
+                        {lockedIn ? UI_TEXT.BUTTONS.LOCKED_IN : UI_TEXT.BUTTONS.CHOOSE}
                     </button>
                 </div>
             </div>

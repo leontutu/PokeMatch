@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import styles from "./NameInput.module.scss";
 import { isValidName } from "../../../../../shared/utils/validation";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type NameInputProps = {
     name: string;
@@ -38,13 +39,15 @@ export default function NameInput({ name, setName, isNameValid, setIsNameValid }
 
     let validationMessage = " ";
     if (name.length > 0) {
-        validationMessage = isNameValid ? "Looks good!" : "3-9 chars | A-Z & 0-9";
+        validationMessage = isNameValid
+            ? UI_TEXT.VALIDATION.LOOKS_GOOD
+            : UI_TEXT.VALIDATION.NAME_REQUIREMENTS;
     }
 
     return (
         <>
             <label htmlFor="name-input" className={styles.nameLabel}>
-                Enter Your Name
+                {UI_TEXT.LABELS.ENTER_YOUR_NAME}
             </label>
             <div className={`${styles.inputWrapper} `}>
                 <input
@@ -55,7 +58,7 @@ export default function NameInput({ name, setName, isNameValid, setIsNameValid }
                     type="text"
                     value={name}
                     onChange={handleNameChange}
-                    placeholder="Your name here"
+                    placeholder={UI_TEXT.PLACEHOLDERS.YOUR_NAME_HERE}
                     maxLength={9}
                 />
                 <span className={`${styles.validationText} ${isNameValid ? styles.valid : ""}`}>

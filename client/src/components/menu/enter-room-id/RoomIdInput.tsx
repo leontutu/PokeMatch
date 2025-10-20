@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import styles from "./RoomIdInput.module.scss";
 import { isValidRoomId } from "../../../../../shared/utils/validation";
+import { UI_TEXT } from "../../../constants/uiText";
 
 type RoomIdInputProps = {
     roomId: string;
@@ -43,13 +44,15 @@ export default function RoomIdInput({
 
     let validationMessage = " ";
     if (roomId.length > 0) {
-        validationMessage = isRoomIdValid ? "Looks good!" : "Must be a number greater than 0";
+        validationMessage = isRoomIdValid
+            ? UI_TEXT.VALIDATION.LOOKS_GOOD
+            : UI_TEXT.VALIDATION.ROOM_ID_REQUIREMENTS;
     }
 
     return (
         <>
             <label htmlFor="room-id-input" className={styles.nameLabel}>
-                Enter Room ID
+                {UI_TEXT.LABELS.ENTER_ROOM_ID}
             </label>
             <div className={`${styles.inputWrapper} `}>
                 <input
@@ -60,7 +63,7 @@ export default function RoomIdInput({
                     type="text"
                     value={roomId}
                     onChange={handleRoomIdChange}
-                    placeholder="Room ID here"
+                    placeholder={UI_TEXT.PLACEHOLDERS.ROOM_ID_HERE}
                     maxLength={9}
                 />
                 <span className={`${styles.validationText} ${isRoomIdValid ? styles.valid : ""}`}>

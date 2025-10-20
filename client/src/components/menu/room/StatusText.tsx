@@ -1,3 +1,4 @@
+import { UI_TEXT } from "../../../constants/uiText";
 import styles from "./StatusText.module.scss";
 
 type StatusTextProps = {
@@ -11,7 +12,11 @@ type StatusTextProps = {
 export default function StatusText({ amIReady, isGameStarted }: StatusTextProps) {
     return (
         <p className={`${styles.statusText} ${amIReady && !isGameStarted ? styles.waitingText : ""}`}>
-            {isGameStarted ? "Starting Game" : amIReady ? "Waiting for opponent" : "Are you ready?"}
+            {isGameStarted
+                ? UI_TEXT.STATUS.GAME_STARTING
+                : amIReady
+                ? UI_TEXT.STATUS.WAITING_FOR_OPPONENT
+                : UI_TEXT.STATUS.ARE_YOU_READY}
         </p>
     );
 }
