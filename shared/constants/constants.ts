@@ -24,6 +24,7 @@ export enum Events {
     NAME_VALID = "nameValid", // Name was accepted
     SELECT_STAT_ERROR = "selectStatError", // Stat selection was invalid
     BAD_ROOM_ID = "badRoomId", // No enterable room with room Id was found
+    DUPLICATE_UUID = "duplicateUUID", // Client with same UUID already exists on server
 }
 
 /**

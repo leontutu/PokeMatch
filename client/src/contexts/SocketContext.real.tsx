@@ -103,6 +103,13 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
             setBadRoomIdSignal(true);
         });
 
+        socket.on(Events.DUPLICATE_UUID, () => {
+            alert(
+                "A connection with your UUID already exists. If you have another tab or window open with PokeMatch, please close it and reload this page."
+            );
+            socket.disconnect();
+        });
+
         return () => {
             if (socket) {
                 socket.disconnect();
