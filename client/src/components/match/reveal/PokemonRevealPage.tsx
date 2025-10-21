@@ -27,15 +27,16 @@ export default function PokemonRevealPage() {
     const { viewRoom } = useSocket();
     const { isWipingIn } = useUIInfoContext();
 
-    if (viewRoom === null || viewRoom.viewGame === null) return null;
-    let pokemon: Pokemon = viewRoom.viewGame.you.pokemon;
+    const pokemon: Pokemon | undefined = viewRoom?.viewGame?.you.pokemon;
 
     const [countDownFinished, setCountDownFinished] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
     const [cryReady, setCryReady] = useState(false);
 
-    const soundUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`;
-    const [playCry] = useSound(soundUrl, { volume: 1 });
+    const soundUrl = pokemon
+        ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`
+        : "silence.ogg";
+    const [playCry] = useSound(soundUrl || "", { volume: 1 });
 
     const [playWiggle, { stop: stopWiggle }] = useSound(pokeballWiggle, {
         volume: 0.5,
@@ -52,9 +53,18 @@ export default function PokemonRevealPage() {
         const FLASH_DURATION = 200;
         const CRY_DELAY_AFTER_WIGGLE = 2000;
 
-        setTimeout(() => setFlashActive(true), WIGGLE_DURATION);
-        setTimeout(() => setCountDownFinished(true), WIGGLE_DURATION + FLASH_DURATION);
-        setTimeout(() => setCryReady(true), WIGGLE_DURATION + CRY_DELAY_AFTER_WIGGLE);
+        const flashTimer = setTimeout(() => setFlashActive(true), WIGGLE_DURATION);
+        const countdownTimer = setTimeout(
+            () => setCountDownFinished(true),
+            WIGGLE_DURATION + FLASH_DURATION
+        );
+        const cryTimer = setTimeout(() => setCryReady(true), WIGGLE_DURATION + CRY_DELAY_AFTER_WIGGLE);
+
+        return () => {
+            clearTimeout(flashTimer);
+            clearTimeout(countdownTimer);
+            clearTimeout(cryTimer);
+        };
     }, [isWipingIn]);
 
     useEffect(() => {
@@ -83,6 +93,9 @@ export default function PokemonRevealPage() {
         }
         return (36 / length).toString() + "rem";
     };
+
+    // Refer to #35 on why this is here
+    if (pokemon === undefined || viewRoom === null || viewRoom.viewGame === null) return null;
 
     return (
         <MatchLayout>
