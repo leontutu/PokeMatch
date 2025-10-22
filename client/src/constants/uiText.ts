@@ -58,6 +58,14 @@ export const UI_TEXT = {
         LEAVE_CONFIRMATION: "Leave room and return to main menu?",
     },
 
+    WARNINGS: {
+        WARNING: "WARNING",
+        CONNECTION_REFUSED: "❌CONNECTION❌\n❌ REFUSED   ❌",
+        SESSION_REFUSED_MESSAGE_A: `You already have an active PokeMatch session open in another tab or window.        `,
+        SESSION_REFUSED_MESSAGE_B: `You can only have one active session at a time.`,
+        SESSION_REFUSED_MESSAGE_C: `Please close other tabs or windows and try again.`,
+    },
+
     ALT_TEXT: {
         YOUR_POKEMON: "Your Pokemon",
         OPPONENT_POKEMON: "Opponent's Pokémon",

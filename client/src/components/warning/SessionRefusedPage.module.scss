@@ -1,0 +1,71 @@
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
+
+.outerContainer {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+}
+
+.warningBanner {
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        #e8b92e,
+        #e8b92e 20px,
+        #d4a017 20px,
+        #d4a017 40px
+    );
+    padding: 1.5rem 1rem;
+    @include m.flex-center;
+    box-shadow: 0 4px 12px v.$shadow-lg;
+    margin: 2rem 0 2rem 0;
+}
+
+.warningText {
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-3xl;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: white;
+    text-shadow: 
+        2px 2px 5px v.$shadow-xl,
+        -1.5px -1.5px 0 v.$color-black,
+        1.5px -1.5px 0 v.$color-black,
+        -1.5px 1.5px 0 v.$color-black,
+        1.5px 1.5px 0 v.$color-black;
+}
+
+.mainContent {
+    width: 100%;
+    padding: 2rem;
+    @include m.flex-column-center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.heading {
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-2xl;
+    font-weight: 700;
+    color: v.$color-white;
+    text-align: center;
+    letter-spacing: 0.1em;
+    @include m.text-shadow-label;
+}
+
+.messageList{
+    @include m.flex-column-center;
+    margin-left: 3rem;
+}
+
+.message {
+    font-family: v.$font-family-primary;
+    font-size: 1.6rem;
+    line-height: 1.8;
+    color: v.$color-text-light;
+    white-space: pre-wrap;
+
+}
