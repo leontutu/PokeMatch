@@ -19,6 +19,7 @@ export type SocketContextType = {
     nameErrorSignal: boolean;
     selectStatErrorSignal: boolean;
     badRoomIdSignal: boolean;
+    isConnectionRefused: boolean;
     setHasPassedValidNameCheck: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectStatErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
     setNameErrorSignal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,6 +56,8 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     const [badRoomIdSignal, setBadRoomIdSignal] = useState(false);
     const [hasPassedValidNameCheck, setHasPassedValidNameCheck] = useState(false);
     const [selectStatErrorSignal, setSelectStatErrorSignal] = useState(false);
+
+    const [isConnectionRefused, setIsConnectionRefused] = useState(false);
     useEffect(() => {
         const socket = import.meta.env.DEV
             ? io("http://localhost:3001", {
@@ -101,6 +104,14 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
 
         socket.on(Events.BAD_ROOM_ID, () => {
             setBadRoomIdSignal(true);
+        });
+
+        socket.on(Events.DUPLICATE_UUID, () => {
+            // alert(
+            //     "WARNING: It appears you already have PokeMatch running in another tab. You can only have one active connection at a time."
+            // );
+            socket.disconnect();
+            setIsConnectionRefused(true);
         });
 
         return () => {
@@ -171,6 +182,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
         selectStatErrorSignal,
         badRoomIdSignal,
         hasPassedValidNameCheck,
+        isConnectionRefused,
         setBadRoomIdSignal,
         setHasPassedValidNameCheck,
         setSelectStatErrorSignal,

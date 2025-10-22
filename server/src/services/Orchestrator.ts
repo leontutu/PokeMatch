@@ -72,6 +72,13 @@ export default class Orchestrator {
         let client = this.clientManager.getClientByUuid(uuid);
 
         if (client) {
+            if (client.socket) {
+                logger.log(
+                    `[Orchestrator] Duplicate connection attempt for client UUID: ${client.uuid}`
+                );
+                this.socketService.emitDuplicateUUID(socket);
+                return;
+            }
             this.clientManager.updateClientSocket(client, socket);
             logger.log(`[Orchestrator] Client reconnected: ${client.uuid}`);
             // If the client was in a room, send them the latest state.

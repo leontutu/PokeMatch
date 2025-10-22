@@ -130,4 +130,9 @@ export default class SocketService {
     emitActionError(socket: Socket, reason = null) {
         socket.emit(Events.SELECT_STAT_ERROR, { reason });
     }
+
+    // Notifies a client of a duplicate UUID connection attempt.
+    emitDuplicateUUID(socket: Socket) {
+        socket.emit(Events.DUPLICATE_UUID);
+    }
 }
