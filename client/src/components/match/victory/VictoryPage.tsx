@@ -1,5 +1,5 @@
 import styles from "./VictoryPage.module.scss";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 import { UI_TEXT } from "../../../constants/uiText";
@@ -15,7 +15,7 @@ import { UI_TEXT } from "../../../constants/uiText";
  * <VictoryPage />
  */
 export default function VictoryPage() {
-    const { viewRoom, sendLeaveRoom } = useSocket();
+    const { viewRoom, sendLeaveRoom } = useSocketContext();
     const { handleNavigate } = useNavigationContext();
     const handleMenuButtonClick = () => {
         handleNavigate(Pages.HOME, true);

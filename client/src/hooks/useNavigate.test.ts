@@ -17,7 +17,7 @@ vi.mock("../contexts/UIInfoContext", () => ({
 }));
 
 vi.mock("../contexts/SocketContext", () => ({
-    useSocket: () => mockSocketContext,
+    useSocketContext: () => mockSocketContext,
 }));
 
 vi.mock("use-sound", () => ({

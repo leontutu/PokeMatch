@@ -1,6 +1,6 @@
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./RoomOptionsPage.module.scss";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
@@ -17,7 +17,7 @@ import { UI_TEXT } from "../../../constants/uiText";
  * @returns {JSX.Element} The rendered room options page.
  */
 export default function RoomOptionsPage() {
-    const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocket();
+    const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocketContext();
     const { handleNavigate } = useNavigationContext();
 
     const handleCreateRoomClick = () => {

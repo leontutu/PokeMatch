@@ -1,4 +1,4 @@
-import { useSocket } from "../contexts/SocketContext";
+import { useSocketContext } from "../contexts/SocketContext";
 import { useEffect, useState, useCallback } from "react";
 import { GamePhases, Timings } from "../../../shared/constants/constants";
 import { Pages } from "../constants/constants";
@@ -16,7 +16,7 @@ import pageTurn2 from "../assets/audio/sounds/page-turn2.mp3";
  */
 
 export function useNavigate() {
-    const { viewRoom, roomCrashSignal } = useSocket();
+    const { viewRoom, roomCrashSignal } = useSocketContext();
     const phase = viewRoom?.viewGame?.phase;
 
     const [currentPage, setCurrentPage] = useState(Pages.HOME);
