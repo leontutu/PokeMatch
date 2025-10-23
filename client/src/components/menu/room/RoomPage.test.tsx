@@ -1,12 +1,11 @@
 import "@testing-library/jest-dom";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMockSocketContext } from "../../../__tests__/mocks/mockContexts";
 import { createMockViewRoom } from "../../../__tests__/mocks/mockViewRoom";
-import { StatNames } from "../../../../../shared/constants/constants";
-import { Pages, StatToDisplay } from "../../../constants/constants";
-import { Pokemon, ViewGame, ViewRoom } from "../../../../../shared/types/types";
+import { Pages } from "../../../constants/constants";
+import { ViewRoom } from "../../../../../shared/types/types";
 import { UI_TEXT } from "../../../constants/uiText";
 
 let mockSocketContext = createMockSocketContext();
