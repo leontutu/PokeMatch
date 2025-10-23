@@ -10,6 +10,7 @@ import ClientManager from "./managers/ClientManager.js";
 import logger from "./utils/Logger.js";
 import startBotClient from "./bot-client/botClient.js";
 import { isValidRoomId } from "../../shared/utils/validation.js";
+import { PORT } from "./constants/constants.js";
 
 const app = express();
 const server = createServer(app);
@@ -20,8 +21,6 @@ const clientManager = new ClientManager();
 const orchestrator = new Orchestrator(roomManager, clientManager);
 const socketService = new SocketService(server, orchestrator);
 orchestrator.setSocketService(socketService);
-
-const PORT = process.env.PORT || `3001`;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
