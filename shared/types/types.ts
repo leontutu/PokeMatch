@@ -5,7 +5,7 @@ export type Pokemon = {
     name: string;
     types: PokemonTypes[];
     stats: PokemonStats;
-    sprites: Sprites;
+    sprites: PokemonSprites;
 };
 
 export type Stat = {
@@ -17,7 +17,7 @@ export type PokemonStats = {
     [key in StatNames]: number;
 };
 
-export type Sprites = {
+export type PokemonSprites = {
     officialArtwork: string;
     back_default: string;
 };

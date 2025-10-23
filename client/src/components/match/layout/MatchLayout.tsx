@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import ScoreBoard from "./ScoreBoard";
 import styles from "./MatchLayout.module.scss";
@@ -26,7 +26,7 @@ type MatchLayoutProps = {
  * </MatchLayout>
  */
 export default function MatchLayout({ children }: MatchLayoutProps) {
-    const { viewRoom, sendLeaveRoom } = useSocket();
+    const { viewRoom, sendLeaveRoom } = useSocketContext();
     const { handleNavigate } = useNavigationContext();
     const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 

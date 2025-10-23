@@ -17,7 +17,7 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 
 **Core Patterns:**
 - **Custom Hooks for Business Logic**: Separation of concerns via hooks like `useBattleLogic` and `useBattleSequence`, keeping components purely presentational
-- **Context-Based State Management**: Centralized WebSocket state via custom `useSocket` hook, eliminating prop drilling
+- **Context-Based State Management**: Centralized WebSocket state via custom `useSocketContext` hook, eliminating prop drilling
 - **SCSS Modules**: Scoped styling prevents collisions in a component-heavy UI
 
 **Key Features:**

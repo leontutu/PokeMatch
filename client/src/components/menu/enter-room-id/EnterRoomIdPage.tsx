@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { isValidRoomId } from "../../../../../shared/utils/validation";
 import HomeLayout from "../layout/HomeLayout";
@@ -21,7 +21,7 @@ import { UI_TEXT } from "../../../constants/uiText";
  * <EnterRoomIdPage />
  */
 export default function EnterRoomIdPage() {
-    const { sendJoinRoom, viewRoom, badRoomIdSignal, setBadRoomIdSignal } = useSocket();
+    const { sendJoinRoom, viewRoom, badRoomIdSignal, setBadRoomIdSignal } = useSocketContext();
     const { handleNavigate } = useNavigationContext();
     const [roomId, setRoomId] = useState("");
     const [isRoomIdValid, setIsRoomIdValid] = useState(false);

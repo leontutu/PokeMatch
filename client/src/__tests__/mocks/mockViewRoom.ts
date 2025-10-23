@@ -5,8 +5,8 @@ export function createMockViewRoom() {
     return {
         id: 1,
         viewClientRecords: [
-            { clientName: "Alice", isReady: false },
-            { clientName: "Bob", isReady: false },
+            { clientName: "Jessie", isReady: false },
+            { clientName: "James", isReady: false },
         ],
         viewGame: createMockViewGame(),
     } as ViewRoom;
@@ -19,8 +19,8 @@ export function createMockViewGame() {
         firstMove: 1 as PlayerInGameId,
         currentRound: 1,
         lockedStats: [StatNames.WEIGHT, StatNames.HEIGHT],
-        you: createMockViewPlayer("Alice", 1),
-        opponent: createMockViewPlayer("Bob", 2),
+        you: createMockViewPlayer("Jessie", 1),
+        opponent: createMockViewPlayer("James", 2),
     } as ViewGame;
     mockviewGame.opponent.pokemon.name = "charmander";
     mockviewGame.opponent.pokemon.stats.attack = 999;
@@ -29,7 +29,7 @@ export function createMockViewGame() {
     return mockviewGame;
 }
 
-export function createMockViewPlayer(name: string = "Alice", inGameId: PlayerInGameId = 1) {
+export function createMockViewPlayer(name: string = "Jessie", inGameId: PlayerInGameId = 1) {
     return {
         inGameId,
         name,

@@ -1,6 +1,6 @@
 import styles from "./BattlePage.module.scss";
 import MatchLayout from "../layout/MatchLayout";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { useBattleLogic } from "../../../hooks/useBattleLogic";
 import PokemonDisplay from "./PokemonDisplay";
 import BattleField from "./BattleField";
@@ -37,7 +37,7 @@ import { UI_TEXT } from "../../../constants/uiText";
  */
 
 export default function BattlePage() {
-    const { viewRoom, sendBattleEnd } = useSocket();
+    const { viewRoom, sendBattleEnd } = useSocketContext();
 
     // hack: Making sure page can still render properly during page out transition
     const currentBattleStats = useBattleLogic(viewRoom?.viewGame);

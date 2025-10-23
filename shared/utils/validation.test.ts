@@ -4,8 +4,8 @@ import { isValidName, isValidRoomId } from "./validation.js";
 describe("validation", () => {
     describe("isValidName", () => {
         test("accepts valid names", () => {
-            expect(isValidName("Alice")).toBe(true);
-            expect(isValidName("Bob123")).toBe(true);
+            expect(isValidName("Jessie")).toBe(true);
+            expect(isValidName("James123")).toBe(true);
             expect(isValidName("user_42")).toBe(true);
             expect(isValidName("ABC")).toBe(true);
             expect(isValidName("TenCharMax")).toBe(true);
@@ -23,15 +23,15 @@ describe("validation", () => {
         });
 
         test("rejects names with invalid characters", () => {
-            expect(isValidName("alice-bob")).toBe(false);
-            expect(isValidName("alice bob")).toBe(false);
-            expect(isValidName("alice.bob")).toBe(false);
-            expect(isValidName("alice@bob")).toBe(false);
-            expect(isValidName("alice!")).toBe(false);
+            expect(isValidName("jessie-james")).toBe(false);
+            expect(isValidName("jessie james")).toBe(false);
+            expect(isValidName("jessie.james")).toBe(false);
+            expect(isValidName("jessie@james")).toBe(false);
+            expect(isValidName("jessie!")).toBe(false);
         });
 
         test("checks length after trimming but pattern on original", () => {
-            expect(isValidName("  Alice  ")).toBe(false);
+            expect(isValidName("  Jessie  ")).toBe(false);
             expect(isValidName("  ab  ")).toBe(false);
             expect(isValidName("abc   ")).toBe(false);
         });

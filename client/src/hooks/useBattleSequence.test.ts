@@ -30,7 +30,7 @@ let { mockPlay } = vi.hoisted(() => {
 });
 
 vi.mock("../contexts/SocketContext", () => ({
-    useSocket: () => createMockSocketContext(),
+    useSocketContext: () => createMockSocketContext(),
 }));
 
 vi.mock("use-sound", () => ({

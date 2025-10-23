@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { useUIInfoContext } from "../../../contexts/UIInfoContext";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.scss";
@@ -24,7 +24,7 @@ import { UI_TEXT } from "../../../constants/uiText";
  */
 
 export default function PokemonRevealPage() {
-    const { viewRoom } = useSocket();
+    const { viewRoom } = useSocketContext();
     const { isWipingIn } = useUIInfoContext();
 
     const pokemon: Pokemon | undefined = viewRoom?.viewGame?.you.pokemon;

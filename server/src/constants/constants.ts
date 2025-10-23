@@ -8,5 +8,11 @@ export enum GameEvents {
     ALL_SELECTED = "allSelected",
 }
 
+export enum RoomEvents {
+    NEW_ROOM = "newRoom",
+}
+
+export const PORT = process.env.PORT || `3001`;
+
 export const ROOM_SHUTDOWN_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
 export const POINTS_NEEDED_FOR_WIN = 20; // Points required to win a game

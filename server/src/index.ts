@@ -7,10 +7,10 @@ import SocketService from "./services/SocketService.js";
 import Orchestrator from "./services/Orchestrator.js";
 import RoomManager from "./managers/RoomManager.js";
 import ClientManager from "./managers/ClientManager.js";
-import PokeApiClient from "./clients/PokeAPIClient.js";
 import logger from "./utils/Logger.js";
 import startBotClient from "./bot-client/botClient.js";
 import { isValidRoomId } from "../../shared/utils/validation.js";
+import { PORT } from "./constants/constants.js";
 
 const app = express();
 const server = createServer(app);
@@ -18,12 +18,9 @@ const server = createServer(app);
 // Instantiate Classes
 const roomManager = new RoomManager();
 const clientManager = new ClientManager();
-const pokeAPIClient = new PokeApiClient();
-const orchestrator = new Orchestrator(roomManager, clientManager, pokeAPIClient);
+const orchestrator = new Orchestrator(roomManager, clientManager);
 const socketService = new SocketService(server, orchestrator);
 orchestrator.setSocketService(socketService);
-
-const PORT = process.env.PORT || `3001`;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

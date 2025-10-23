@@ -15,7 +15,7 @@ export default function CardBody({
                 ${isLocked ? styles.lockedCard : ""}
                 ${isSelected ? styles.highlight : ""}
                 `}
-            style={{ "--animation-delay": animationDelay } as React.scssProperties}
+            style={{ "--animation-delay": animationDelay } as React.CSSProperties}
             onClick={() => {
                 onCardClick(index);
             }}

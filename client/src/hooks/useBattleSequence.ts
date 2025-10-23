@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSound } from "use-sound";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
-import { useSocket } from "../contexts/SocketContext";
+import { useSocketContext } from "../contexts/SocketContext";
 import normalEffective from "../assets/audio/sounds/normal-effective.mp3";
 
 /**
@@ -50,7 +50,7 @@ export const useBattleSequence = (
         opponent: "",
     });
     const [isFading, setIsFading] = useState(false);
-    const { viewRoom } = useSocket();
+    const { viewRoom } = useSocketContext();
 
     const [playYouCry] = useSound(
         `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats?.yourPokemon.id}.ogg`
