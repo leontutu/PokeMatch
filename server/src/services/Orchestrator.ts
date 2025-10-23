@@ -1,4 +1,4 @@
-import { GameEvents } from "../constants/constants.js";
+import { GameEvents, RoomEvents } from "../constants/constants.js";
 import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
@@ -29,7 +29,7 @@ export default class Orchestrator {
     constructor(public roomManager: RoomManager, public clientManager: ClientManager) {
         // Listen for events emitted by the RoomManager. This allows the Orchestrator
         // to attach a game event listener to each newly created room.
-        roomManager.on("newRoom", (room) => {
+        roomManager.on(RoomEvents.NEW_ROOM, (room) => {
             room.on("gameEvent", (event: GameToOrchestratorCommand) => {
                 this.handleGameEvent(event);
             });

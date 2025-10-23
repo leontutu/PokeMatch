@@ -1,5 +1,5 @@
 import { test, expect, describe, vi, beforeEach } from "vitest";
-import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
+import { ROOM_SHUTDOWN_TIMEOUT_MS, RoomEvents } from "../constants/constants.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import RoomManager from "../../src/managers/RoomManager.js";
 import Client from "../models/Client.js";
@@ -12,7 +12,7 @@ describe("RoomManager", () => {
 
     beforeEach(() => {
         roomManager = new RoomManager();
-        roomManager.on("newRoom", (event) => {
+        roomManager.on(RoomEvents.NEW_ROOM, (event) => {
             emittedEvent = event;
         });
         client = createMockClient();
