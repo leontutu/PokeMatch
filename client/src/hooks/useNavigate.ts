@@ -81,11 +81,5 @@ export function useNavigate() {
         }
     }, [phase, handleNavigate]);
 
-    useEffect(() => {
-        if (import.meta.env.VITE_USE_MOCKS) {
-            handleNavigate(Pages.BATTLE, false);
-        }
-    }, [handleNavigate]);
-
     return { currentPage, handleNavigate };
 }
