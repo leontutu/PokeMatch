@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import { Pages } from "../../../constants/constants";
 import { isValidName } from "../../../../../shared/utils/validation";
 import HomeLayout from "../layout/HomeLayout";
@@ -27,7 +27,7 @@ export default function EnterNamePage() {
         setHasPassedValidNameCheck,
         nameErrorSignal,
         setNameErrorSignal,
-    } = useSocket();
+    } = useSocketContext();
     const { handleNavigate } = useNavigationContext();
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState(false);
