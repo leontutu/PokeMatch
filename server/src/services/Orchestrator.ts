@@ -1,13 +1,12 @@
-import { GameEvents } from "../constants/constants.js";
+import { PORT, GameEvents, RoomEvents } from "../constants/constants.js";
 import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import PokeAPIClient from "../clients/PokeAPIClient.js";
 import RoomManager from "../managers/RoomManager.js";
 import ClientManager from "../managers/ClientManager.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
-import { assertIsDefined, delay } from "../utils/utils.js";
+import { delay } from "../utils/utils.js";
 import { isValidName, isValidRoomId } from "../../../shared/utils/validation.js";
 import SocketService from "./SocketService.js";
 import { Socket } from "socket.io";
@@ -15,8 +14,7 @@ import Client from "../models/Client.js";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import { mapRoomToViewRoom } from "../mappers/mappers.js";
 import startBotClient from "../bot-client/botClient.js";
-
-const PORT = process.env.PORT || `3001`;
+import { getRandomPokemon } from "../clients/pokeAPIClient.js";
 
 /**
  * The central controller of the application.
@@ -26,14 +24,10 @@ const PORT = process.env.PORT || `3001`;
 export default class Orchestrator {
     private _socketService: SocketService | null = null;
 
-    constructor(
-        public roomManager: RoomManager,
-        public clientManager: ClientManager,
-        public pokeAPIClient: PokeAPIClient
-    ) {
+    constructor(public roomManager: RoomManager, public clientManager: ClientManager) {
         // Listen for events emitted by the RoomManager. This allows the Orchestrator
         // to attach a game event listener to each newly created room.
-        roomManager.on("newRoom", (room) => {
+        roomManager.on(RoomEvents.NEW_ROOM, (room) => {
             room.on("gameEvent", (event: GameToOrchestratorCommand) => {
                 this.handleGameEvent(event);
             });
@@ -142,10 +136,12 @@ export default class Orchestrator {
      */
     onCreateRoom(socket: Socket) {
         const client = this.clientManager.getClient(socket);
-        assertIsDefined(
-            client,
-            `[Orchestrator] onCreateRoom called for socket ${socket.id} which is not associated with a client.`
-        );
+        if (!client) {
+            logger.error(
+                `[Orchestrator] onCreateRoom called for socket ${socket.id} which is not associated with a client.`
+            );
+            return;
+        }
 
         const roomId = this.#assignClientToNewRoom(client);
 
@@ -160,10 +156,13 @@ export default class Orchestrator {
      */
     onPlayVsBot(socket: Socket) {
         const client = this.clientManager.getClient(socket);
-        assertIsDefined(
-            client,
-            `[Orchestrator] onPlayVsAI called for socket ${socket.id} which is not associated with a client.`
-        );
+        if (!client) {
+            logger.error(
+                `[Orchestrator] onPlayVsBot called for socket ${socket.id} which is not associated with a client.`
+            );
+            return;
+        }
+
         const roomId = this.#assignClientToNewRoomWithBot(client);
 
         this.#handleRoomErrors(() => {
@@ -178,10 +177,12 @@ export default class Orchestrator {
      */
     onJoinRoom(socket: Socket, roomIdAsString: string) {
         const client = this.clientManager.getClient(socket);
-        assertIsDefined(
-            client,
-            `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
-        );
+        if (!client) {
+            logger.error(
+                `[Orchestrator] onJoinRoom called for socket ${socket.id} which is not associated with a client.`
+            );
+            return;
+        }
 
         const roomId = parseInt(roomIdAsString, 10);
         if (
@@ -211,10 +212,12 @@ export default class Orchestrator {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
 
-        assertIsDefined(
-            roomId,
-            `[Orchestrator] onToggleReady called for client ${client.uuid} who is not in a room.`
-        );
+        if (!roomId) {
+            logger.error(
+                `[Orchestrator] onToggleReady called for client ${client.uuid} who is not in a room.`
+            );
+            return;
+        }
 
         this.#handleRoomErrors(() => {
             this.roomManager.toggleClientOfRoomReady(roomId, client.uuid);
@@ -234,10 +237,12 @@ export default class Orchestrator {
     onLeaveRoom(socket: Socket) {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
-        assertIsDefined(
-            roomId,
-            `[Orchestrator] onLeaveRoom called for client ${client.uuid} who is not in a room.`
-        );
+        if (!roomId) {
+            logger.error(
+                `[Orchestrator] onLeaveRoom called for client ${client.uuid} who is not in a room.`
+            );
+            return;
+        }
 
         this.#handleRoomErrors(() => {
             this.roomManager.removeClientFromRoom(roomId, client);
@@ -253,10 +258,12 @@ export default class Orchestrator {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
 
-        assertIsDefined(
-            roomId,
-            `[Orchestrator] onBattlePhaseFinished called for client ${client.uuid} who is not in a room.`
-        );
+        if (!roomId) {
+            logger.error(
+                `[Orchestrator] onBattlePhaseFinished called for client ${client.uuid} who is not in a room.`
+            );
+            return;
+        }
 
         this.#handleRoomErrors(() => {
             // line below has an effect the first time it's called in a battle phase
@@ -274,10 +281,12 @@ export default class Orchestrator {
         const client = this.clientManager.getClient(socket);
         const roomId = client.roomId;
 
-        assertIsDefined(
-            roomId,
-            `[Orchestrator] onGameCommand called for client ${client.uuid} who is not in a room.`
-        );
+        if (!roomId) {
+            logger.error(
+                `[Orchestrator] onGameCommand called for client ${client.uuid} who is not in a room.`
+            );
+            return;
+        }
 
         logger.debug(`[Orchestrator] Game action from ${client.name}: ${data.actionType}`);
 
@@ -303,7 +312,10 @@ export default class Orchestrator {
      * @param event The event emitted by the game.
      */
     async handleGameEvent(event: GameToOrchestratorCommand) {
-        assertIsDefined(event.roomId, "[Orchestrator] Received game event without roomId.");
+        if (!event.roomId) {
+            logger.error("[Orchestrator] Received game event without roomId.");
+            return;
+        }
         const roomId = event.roomId;
 
         logger.debug(`[Orchestrator] Game event: ${event.eventType} from room ${event.roomId}`);
@@ -359,8 +371,8 @@ export default class Orchestrator {
      * @param roomId The ID of the room.
      */
     async #assignNewPokemon(roomId: number) {
-        const pokemon1 = await this.pokeAPIClient.getRandomPokemon();
-        const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
+        const pokemon1 = await getRandomPokemon();
+        const pokemon2 = await getRandomPokemon();
 
         const gameCommand = OrchestratorToGameCommand.fromSystem(GameCommands.ASSIGN_NEW_POKEMON, [
             createPokemonFromApiData(pokemon1),

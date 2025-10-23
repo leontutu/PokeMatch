@@ -12,8 +12,8 @@ describe("mappers", () => {
     beforeEach(() => {
         room = new Room(1);
         room.clientRecords = [
-            { client: { uuid: "uuid1", name: "Alice" }, isReady: false },
-            { client: { uuid: "uuid2", name: "Bob" }, isReady: true },
+            { client: { uuid: "uuid1", name: "Jessie" }, isReady: false },
+            { client: { uuid: "uuid2", name: "James" }, isReady: true },
         ];
     });
 
@@ -22,7 +22,7 @@ describe("mappers", () => {
             const viewRoom = mapRoomToViewRoom(room, "uuid1");
             expect(viewRoom.id).toBe(1);
             expect(viewRoom.viewClientRecords.length).toBe(2);
-            expect(viewRoom.viewClientRecords[0].clientName).toBe("Alice");
+            expect(viewRoom.viewClientRecords[0].clientName).toBe("Jessie");
             expect(viewRoom.viewClientRecords[1].isReady).toBe(true);
             expect(viewRoom.viewGame).toBeNull();
         });
@@ -34,13 +34,13 @@ describe("mappers", () => {
 
             expect(viewRoom.viewGame).not.toBeNull();
             expect(viewRoom.viewGame!.phase).toBe(room.game.phase);
-            expect(viewRoom.viewGame!.you.name).toBe("Alice");
-            expect(viewRoom.viewGame!.opponent.name).toBe("Bob");
+            expect(viewRoom.viewGame!.you.name).toBe("Jessie");
+            expect(viewRoom.viewGame!.opponent.name).toBe("James");
         });
 
         test("throws MappingError on invalid game", () => {
             // game with no pokemon assigned to players
-            room.game = new Game([new Player("uuid1", "Alice", 1), new Player("uuid2", "Bob", 2)]);
+            room.game = new Game([new Player("uuid1", "Jessie", 1), new Player("uuid2", "James", 2)]);
             expect(() => mapRoomToViewRoom(room, "uuid1")).toThrow(MappingError);
         });
     });
@@ -51,20 +51,20 @@ describe("mappers", () => {
         });
 
         test("maps Player to ViewPlayer correctly", () => {
-            const secondPlayer = createMockPlayer("Bob", "uuid2");
+            const secondPlayer = createMockPlayer("James", "uuid2");
             secondPlayer.inGameId = 2;
             room.game!.players[1] = secondPlayer;
             const viewRoom = mapRoomToViewRoom(room, "uuid1");
             const viewPlayerYou = viewRoom.viewGame!.you;
             const viewPlayerOpponent = viewRoom.viewGame!.opponent;
 
-            expect(viewPlayerYou.name).toBe("Alice");
+            expect(viewPlayerYou.name).toBe("Jessie");
             expect(viewPlayerYou.inGameId).toBe(1);
             expect(viewPlayerYou.points).toBe(10);
             expect(viewPlayerYou.pokemon.id).toBe(1);
             expect(viewPlayerYou.challengeStat).toBeNull();
 
-            expect(viewPlayerOpponent.name).toBe("Bob");
+            expect(viewPlayerOpponent.name).toBe("James");
             expect(viewPlayerOpponent.inGameId).toBe(2);
             expect(viewPlayerOpponent.points).toBe(10);
             expect(viewPlayerOpponent.pokemon.id).toBe(1);
@@ -98,8 +98,8 @@ describe("mappers", () => {
             expect(viewGame.winner).toBe(room.game.winner);
             expect(viewGame.firstMove).toBe(room.game.firstMove);
             expect(viewGame.currentRound).toBe(room.game.currentRound);
-            expect(viewGame.you.name).toBe("Bob");
-            expect(viewGame.opponent.name).toBe("Alice");
+            expect(viewGame.you.name).toBe("James");
+            expect(viewGame.opponent.name).toBe("Jessie");
         });
     });
 });

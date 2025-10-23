@@ -36,10 +36,10 @@ export type SocketContextType = {
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
-export const useSocket = () => {
+export const useSocketContext = () => {
     const context = useContext(SocketContext);
     if (context === null) {
-        throw new Error("useSocket must be used within a SocketProvider");
+        throw new Error("useSocketContext must be used within a SocketProvider");
     }
     return context;
 };

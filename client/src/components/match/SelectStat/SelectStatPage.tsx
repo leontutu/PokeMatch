@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSocket } from "../../../contexts/SocketContext";
+import { useSocketContext } from "../../../contexts/SocketContext";
 import styles from "./SelectStatPage.module.scss";
 import MatchLayout from "../layout/MatchLayout";
 import TypeCard from "./TypeCard";
@@ -24,7 +24,8 @@ import { UI_TEXT } from "../../../constants/uiText";
  * <SelectStatPage onNavigate={handleNavigation} />
  */
 export default function SelectStatPage() {
-    const { viewRoom, sendSelectStat, selectStatErrorSignal, setSelectStatErrorSignal } = useSocket();
+    const { viewRoom, sendSelectStat, selectStatErrorSignal, setSelectStatErrorSignal } =
+        useSocketContext();
 
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [buttonState, setButtonState] = useState(false);

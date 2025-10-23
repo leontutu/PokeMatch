@@ -11,7 +11,7 @@ let { mockPlay, mockStop } = vi.hoisted(() => {
 let mockSocketContext = createMockSocketContext();
 const mockNavigate = vi.fn();
 vi.mock("../../../contexts/SocketContext", () => ({
-    useSocket: () => mockSocketContext,
+    useSocketContext: () => mockSocketContext,
 }));
 
 vi.mock("../../../contexts/NavigationContext", () => ({

@@ -1,7 +1,7 @@
 import Player from "../models/Player.js";
 import { createMockPokemon } from "./mockPokemon.js";
 
-export function createMockPlayer(name: string = "Alice", uuid: string = "uuid1"): Player {
+export function createMockPlayer(name: string = "Jessie", uuid: string = "uuid1"): Player {
     return {
         name,
         uuid,

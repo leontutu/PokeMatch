@@ -1,11 +1,12 @@
 import { vi } from "vitest";
-import { SocketContextType } from "../../contexts/SocketContext.real";
+import { SocketContextType } from "../../contexts/SocketContext";
 
 export const createMockSocketContext = () =>
     ({
         socket: null,
         viewRoom: null,
         hasPassedValidNameCheck: false,
+        isConnectionRefused: false,
         roomCrashSignal: false,
         nameErrorSignal: false,
         selectStatErrorSignal: false,
