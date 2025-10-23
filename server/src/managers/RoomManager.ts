@@ -3,7 +3,7 @@ import Client from "../models/Client.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import { EventEmitter } from "events";
-import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
+import { ROOM_SHUTDOWN_TIMEOUT_MS, RoomEvents } from "../constants/constants.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
 import { GamePhases } from "../../../shared/constants/constants.js";
 
@@ -237,7 +237,7 @@ export default class RoomManager extends EventEmitter {
         const newRoom = new Room(newRoomId);
         this.rooms.set(newRoomId, newRoom);
         logger.log(`[RoomManager] New room created with ID: ${newRoomId}`);
-        this.emit("newRoom", newRoom);
+        this.emit(RoomEvents.NEW_ROOM, newRoom);
         return newRoomId;
     }
 

@@ -5,6 +5,8 @@ import { ViewRoom } from "../../../shared/types/types.js";
 import logger from "../utils/Logger.js";
 
 const MAX_IDLE_TIME = 1200000; // 20 minutes
+const NAME_ENTER_DELAY_MS = 500;
+const JOIN_ROOM_DELAY_MS = 1000;
 
 /**
  * Launches a bot client that connects to a specified game room.
@@ -25,9 +27,9 @@ export default async function startBotClient(PORT: string, roomId: number) {
 
     socket.on("connect", async () => {
         socket.emit(Events.NAME_ENTER, "MrRobot");
-        await delay(500);
+        await delay(NAME_ENTER_DELAY_MS);
         socket.emit(Events.JOIN_ROOM, roomId);
-        await delay(1000);
+        await delay(JOIN_ROOM_DELAY_MS);
         socket.emit(Events.TOGGLE_READY);
     });
 
