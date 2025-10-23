@@ -1,5 +1,5 @@
 import { StatNames } from "../../../shared/constants/constants.js";
-import { Pokemon, PokemonStats, Sprites } from "../../../shared/types/types.js";
+import { Pokemon, PokemonStats, PokemonSprites } from "../../../shared/types/types.js";
 /**
  * Factory function that creates a Pokemon instance from a raw PokeAPI response.
  * @param apiPokemonData - The raw Pokémon data from the API.
@@ -9,7 +9,7 @@ export function createPokemonFromApiData(pokemonApiData: any): Pokemon {
     const id = pokemonApiData.id;
     const name = pokemonApiData.name;
     const types = pokemonApiData.types.map((type: { type: { name: string } }) => type.type.name);
-    const sprites: Sprites = {
+    const sprites: PokemonSprites = {
         officialArtwork: pokemonApiData.sprites.other["official-artwork"].front_default,
         back_default: pokemonApiData.sprites.back_default,
     };
