@@ -9,8 +9,8 @@ describe("Game", () => {
     let game: Game;
     let emittedEvent = undefined as any;
     const participants = [
-        { name: "Alice", uuid: "uuid1" },
-        { name: "Bob", uuid: "uuid2" },
+        { name: "Jessie", uuid: "uuid1" },
+        { name: "James", uuid: "uuid2" },
     ];
 
     beforeEach(() => {

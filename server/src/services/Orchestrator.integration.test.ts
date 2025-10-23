@@ -44,7 +44,7 @@ describe("Orchestrator", () => {
         test("creates room, adds players, reacts to ready toggle, and starts game", async () => {
             // player 1 connects and creates room
             orchestrator.onConnection(mockSocket1);
-            orchestrator.onNameEnter(mockSocket1, "Alice");
+            orchestrator.onNameEnter(mockSocket1, "Jessie");
             orchestrator.onCreateRoom(mockSocket1);
 
             const client1 = clientManager.getClient(mockSocket1);
@@ -52,7 +52,7 @@ describe("Orchestrator", () => {
 
             // player 2 connects and joins
             orchestrator.onConnection(mockSocket2);
-            orchestrator.onNameEnter(mockSocket2, "Bob");
+            orchestrator.onNameEnter(mockSocket2, "James");
             orchestrator.onJoinRoom(mockSocket2, roomId.toString());
 
             const room = roomManager.getRoom(roomId);
@@ -82,7 +82,7 @@ describe("Orchestrator", () => {
             vi.useFakeTimers();
 
             orchestrator.onConnection(mockSocket1);
-            orchestrator.onNameEnter(mockSocket1, "Alice");
+            orchestrator.onNameEnter(mockSocket1, "Jessie");
             orchestrator.onCreateRoom(mockSocket1);
 
             const roomId = clientManager.getClient(mockSocket1)!.roomId!;
@@ -104,14 +104,14 @@ describe("Orchestrator", () => {
         test("completes a full battle round", async () => {
             // setup: two players in game with pokemon assigned
             orchestrator.onConnection(mockSocket1);
-            orchestrator.onNameEnter(mockSocket1, "Alice");
+            orchestrator.onNameEnter(mockSocket1, "Jessie");
             orchestrator.onCreateRoom(mockSocket1);
 
             const roomId = clientManager.getClient(mockSocket1)!.roomId!;
             const room = roomManager.getRoom(roomId);
 
             orchestrator.onConnection(mockSocket2);
-            orchestrator.onNameEnter(mockSocket2, "Bob");
+            orchestrator.onNameEnter(mockSocket2, "James");
             orchestrator.onJoinRoom(mockSocket2, roomId.toString());
 
             orchestrator.onToggleReady(mockSocket1);
