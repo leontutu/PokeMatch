@@ -7,7 +7,6 @@ import SocketService from "./services/SocketService.js";
 import Orchestrator from "./services/Orchestrator.js";
 import RoomManager from "./managers/RoomManager.js";
 import ClientManager from "./managers/ClientManager.js";
-import PokeApiClient from "./clients/PokeAPIClient.js";
 import logger from "./utils/Logger.js";
 import startBotClient from "./bot-client/botClient.js";
 import { isValidRoomId } from "../../shared/utils/validation.js";
@@ -18,8 +17,7 @@ const server = createServer(app);
 // Instantiate Classes
 const roomManager = new RoomManager();
 const clientManager = new ClientManager();
-const pokeAPIClient = new PokeApiClient();
-const orchestrator = new Orchestrator(roomManager, clientManager, pokeAPIClient);
+const orchestrator = new Orchestrator(roomManager, clientManager);
 const socketService = new SocketService(server, orchestrator);
 orchestrator.setSocketService(socketService);
 

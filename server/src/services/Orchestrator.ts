@@ -3,7 +3,6 @@ import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
 import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js";
-import PokeAPIClient from "../clients/PokeAPIClient.js";
 import RoomManager from "../managers/RoomManager.js";
 import ClientManager from "../managers/ClientManager.js";
 import { createPokemonFromApiData } from "../factories/pokemonFactory.js";
@@ -15,6 +14,7 @@ import Client from "../models/Client.js";
 import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js";
 import { mapRoomToViewRoom } from "../mappers/mappers.js";
 import startBotClient from "../bot-client/botClient.js";
+import { getRandomPokemon } from "../clients/pokeAPIClient.js";
 
 const PORT = process.env.PORT || `3001`;
 
@@ -26,11 +26,7 @@ const PORT = process.env.PORT || `3001`;
 export default class Orchestrator {
     private _socketService: SocketService | null = null;
 
-    constructor(
-        public roomManager: RoomManager,
-        public clientManager: ClientManager,
-        public pokeAPIClient: PokeAPIClient
-    ) {
+    constructor(public roomManager: RoomManager, public clientManager: ClientManager) {
         // Listen for events emitted by the RoomManager. This allows the Orchestrator
         // to attach a game event listener to each newly created room.
         roomManager.on("newRoom", (room) => {
@@ -359,8 +355,8 @@ export default class Orchestrator {
      * @param roomId The ID of the room.
      */
     async #assignNewPokemon(roomId: number) {
-        const pokemon1 = await this.pokeAPIClient.getRandomPokemon();
-        const pokemon2 = await this.pokeAPIClient.getRandomPokemon();
+        const pokemon1 = await getRandomPokemon();
+        const pokemon2 = await getRandomPokemon();
 
         const gameCommand = OrchestratorToGameCommand.fromSystem(GameCommands.ASSIGN_NEW_POKEMON, [
             createPokemonFromApiData(pokemon1),

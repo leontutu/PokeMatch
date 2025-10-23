@@ -1,10 +1,10 @@
 import { vi, describe, test, expect } from "vitest";
-import PokeApiClient from "./PokeAPIClient.js";
+import { getRandomPokemon } from "./pokeAPIClient.js";
 import NoAPIResponseError from "../errors/NoAPIResponseError.js";
 
 const fetchSpy = vi.spyOn(global, "fetch");
 
-describe("PokeApiClient", () => {
+describe("pokeApiClient", () => {
     describe("getRandomPokemon", () => {
         test("fetches a pokemon and return its data on success", async () => {
             const mockPokemonData = { name: "pikachu", id: 25 };
@@ -15,8 +15,7 @@ describe("PokeApiClient", () => {
 
             fetchSpy.mockResolvedValue(mockResponse);
 
-            const client = new PokeApiClient();
-            const pokemon = await client.getRandomPokemon();
+            const pokemon = await getRandomPokemon();
 
             expect(fetchSpy).toHaveBeenCalledOnce();
             expect(fetchSpy).toHaveBeenCalledWith(
@@ -29,9 +28,7 @@ describe("PokeApiClient", () => {
             const networkError = new Error("Network request failed");
             fetchSpy.mockRejectedValue(networkError);
 
-            const client = new PokeApiClient();
-
-            await expect(client.getRandomPokemon()).rejects.toThrow(NoAPIResponseError);
+            await expect(getRandomPokemon()).rejects.toThrow(NoAPIResponseError);
         });
     });
 });
