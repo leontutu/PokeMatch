@@ -1,4 +1,4 @@
-import { GameEvents, RoomEvents } from "../constants/constants.js";
+import { PORT, GameEvents, RoomEvents } from "../constants/constants.js";
 import { Timings, GameCommands } from "../../../shared/constants/constants.js";
 import logger from "../utils/Logger.js";
 import RoomNotFoundError from "../errors/RoomNotFoundError.js";
@@ -15,8 +15,6 @@ import GameToOrchestratorCommand from "../commands/GameToOrchestratorCommand.js"
 import { mapRoomToViewRoom } from "../mappers/mappers.js";
 import startBotClient from "../bot-client/botClient.js";
 import { getRandomPokemon } from "../clients/pokeAPIClient.js";
-
-const PORT = process.env.PORT || `3001`;
 
 /**
  * The central controller of the application.
