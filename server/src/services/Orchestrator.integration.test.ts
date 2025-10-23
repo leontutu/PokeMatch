@@ -4,9 +4,7 @@ import OrchestratorToGameCommand from "../commands/OrchestratorToGameCommand.js"
 import { ROOM_SHUTDOWN_TIMEOUT_MS } from "../constants/constants.js";
 import ClientManager from "../managers/ClientManager.js";
 import RoomManager from "../managers/RoomManager.js";
-import { delay } from "../utils/utils.js";
 import Orchestrator from "./Orchestrator.js";
-import PokeApiClient from "../clients/PokeAPIClient.js";
 import SocketService from "./SocketService.js";
 
 vi.mock("./SocketService.js");
@@ -23,7 +21,6 @@ describe("Orchestrator", () => {
         let orchestrator: Orchestrator;
         let roomManager: RoomManager;
         let clientManager: ClientManager;
-        let pokeApiClient: PokeApiClient;
         let socketService: SocketService;
         let mockSocket1: any;
         let mockSocket2: any;
@@ -31,9 +28,7 @@ describe("Orchestrator", () => {
         beforeEach(() => {
             roomManager = new RoomManager();
             clientManager = new ClientManager();
-            // real pokeAPIClient for integration test
-            pokeApiClient = new PokeApiClient();
-            orchestrator = new Orchestrator(roomManager, clientManager, pokeApiClient);
+            orchestrator = new Orchestrator(roomManager, clientManager);
             socketService = new SocketService({} as any, orchestrator);
             orchestrator.setSocketService(socketService);
 
