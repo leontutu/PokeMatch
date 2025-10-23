@@ -1,6 +1,6 @@
 import HomeLayout from "../layout/HomeLayout";
 import styles from "./RoomOptionsPage.module.scss";
-import { useSocket } from "../../../contexts/SocketContext.real";
+import { useSocket } from "../../../contexts/SocketContext";
 import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
