@@ -26,10 +26,10 @@ export const useBattleLogic = (viewGame: ViewGame | null | undefined): BattleSta
         const yourPokemon = viewGame.you.pokemon;
         const opponentPokemon = viewGame.opponent.pokemon;
 
-        const yourChallengeStat = viewGame.you.challengeStat;
-        const yourChallengedStat = viewGame.you.challengedStat;
-        const opponentChallengeStat = viewGame.opponent.challengeStat;
-        const opponentChallengedStat = viewGame.opponent.challengedStat;
+        const yourChallengeStat = { ...viewGame.you.challengeStat };
+        const yourChallengedStat = { ...viewGame.you.challengedStat };
+        const opponentChallengeStat = { ...viewGame.opponent.challengeStat };
+        const opponentChallengedStat = { ...viewGame.opponent.challengedStat };
 
         // Determine outcomes
         const isYourChallengeTie = yourChallengeStat.value === opponentChallengedStat.value;

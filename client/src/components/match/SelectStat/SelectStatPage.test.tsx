@@ -55,9 +55,7 @@ describe("SelectStatPage", () => {
         expect(
             screen.getAllByText(viewGame.you.pokemon.stats.weight / 10 + " kg").length
         ).toBeGreaterThan(0);
-        expect(
-            screen.getAllByText(viewGame.you.pokemon.stats.height / 10 + " m").length
-        ).toBeGreaterThan(0);
+        expect(screen.getAllByText(viewGame.you.pokemon.stats.height + " dm").length).toBeGreaterThan(0);
     });
 
     test("renders pokemon name and types", () => {
