@@ -1,20 +1,3 @@
-/**
- * RoomPage Component
- *
- * Renders the UI for a game room where players can see each other, ready up, and wait for the game to start.
- * Handles local state for the ready button, interacts with the socket context to signal readiness,
- * and navigates to the next page when the game starts.
- *
- * Behavior:
- * - Displays the room ID and a list of participants with their ready status.
- * - Allows the current player to press a "Ready" button to signal readiness.
- * - Shows status text based on readiness and game state.
- * - Navigates to the stat selection page when the game starts.
- *
- * Usage:
- * <RoomPage onNavigate={yourNavigateFunction} />
- */
-
 import { useState } from "react";
 import { useSocketContext } from "../../../contexts/SocketContext";
 import HomeLayout from "../layout/HomeLayout";
