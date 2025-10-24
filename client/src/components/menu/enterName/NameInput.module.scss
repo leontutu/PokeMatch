@@ -1,5 +1,5 @@
-@use '../../../styles/_variables' as v;
-@use '../../../styles/_mixins' as m;
+@use "../../../styles/_variables" as v;
+@use "../../../styles/_mixins" as m;
 
 .nameLabel {
     color: v.$color-text-light;
@@ -12,8 +12,7 @@
 }
 
 .inputWrapper {
-    width: 90%;
-    max-width: 400px;
+    width: 80%;
     @include m.flex-column;
     align-items: center;
     gap: 0.75rem;
@@ -22,10 +21,10 @@
 .inputFieldContainer {
     width: 90%;
     @include m.flex-center;
-    max-width: 400px;
 }
 
 .nameInput {
+    height: 4rem;
     @include m.input-field;
     text-align: center;
 
