@@ -40,7 +40,7 @@ export default function cardScaffold(
         },
         {
             statName: "📏 HEIGHT",
-            baseStat: pokemon.stats.height / 10 + " m",
+            baseStat: pokemon.stats.height + " dm",
         },
     ];
 }
