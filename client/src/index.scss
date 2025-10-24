@@ -1,5 +1,5 @@
-@use './styles/_mixins' as m;
-@use './styles/_variables' as v;
+@use "./styles/_mixins" as m;
+@use "./styles/_variables" as v;
 
 * {
     margin: 0;
@@ -11,7 +11,28 @@ html {
     font-size: v.$font-size-base-mobile;
 
     @include m.desktop {
-        font-size: v.$font-size-base-desktop;
+        // font-size: v.$font-size-base-desktop;
+        font-size: 15px;
+    }
+
+    @include m.desktop-large {
+        font-size: calc(v.$font-size-base-desktop + 0.5vh);
+    }
+
+    @include m.four-k {
+        font-size: 22px;
+    }
+
+    @include m.tablet-portrait {
+        font-size: 18px;
+    }
+
+    @include m.mobile-small {
+        font-size: 10px;
+    }
+
+    @include m.mobile-super-small {
+        font-size: 9px;
     }
 }
 
@@ -20,4 +41,25 @@ body {
     height: 100vh;
     font-family: v.$font-family-primary;
     overflow: hidden;
+}
+
+.desktop-only-message {
+    display: none; // hidden by default on mobile
+    color: v.$color-text-muted;
+    font-family: v.$font-family-primary;
+    font-size: v.$font-size-xl;
+    line-height: 1.6;
+    max-width: 30vh;
+
+    @include m.desktop {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        transform: translateY(-50%);
+    }
+
+    @include m.tablet-portrait {
+        display: none;
+    }
 }
