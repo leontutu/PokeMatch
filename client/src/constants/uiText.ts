@@ -56,6 +56,7 @@ export const UI_TEXT = {
         LOADING: "Loading...",
         LOADING_ROOM: "Loading room...",
         LEAVE_CONFIRMATION: "Leave room and return to main menu?",
+        ROTATE_DEVICE: "Please rotate your device to portrait mode.",
     },
 
     WARNINGS: {
