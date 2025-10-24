@@ -1,4 +1,4 @@
-@use '../../../styles/_variables' as v;
+@use "../../../styles/_variables" as v;
 
 .outerContainer {
     display: flex;
@@ -39,7 +39,7 @@
 }
 
 .fadeOut {
-    animation: fadeOut 1.2s ease-in-out forwards;
+    animation: fadeOut 1.4s ease-in-out forwards;
 }
 
 @keyframes slideInAndOut {
