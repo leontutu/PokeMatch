@@ -15,18 +15,17 @@
 <p align="center">
   <a href="https://pokematch-guii.onrender.com/" target="_blank">
     <img src="https://img.shields.io/badge/🎮-PLAY_NOW-FF4757?style=for-the-badge&labelColor=FF6B6B&logoColor=white" 
-         height="70" 
          alt="Play Now"
-         style="border-radius: 12px; box-shadow: 0 4px 14px 0 rgba(255, 71, 87, 0.4); transition: transform 0.2s;">
+         style="height: 70px; border-radius: 12px; box-shadow: 0 4px 14px 0 rgba(255, 71, 87, 0.4); transition: transform 0.2s;">
   </a>
   <br/>
   <sub><i>⚠️ First load may take 30-60s as free-tier server wakes up</i></sub>
 </p>
 
 <p align="center">
-  <img src="./docs/screenshots/screenshot-1.png" height="300px" style="border-radius: 10px; margin: 20px;">
-  <img src="./docs/screenshots/screenshot-2.png" height="300px" style="border-radius: 10px; margin: 20px;">
-  <img src="./docs/screenshots/screenshot-3.png" height="300px" style="border-radius: 10px; margin: 20px;">
+  <img src="./docs/screenshots/screenshot-1.png" height="300" hspace="30">
+  <img src="./docs/screenshots/screenshot-2.png" height="300" hspace="30">
+  <img src="./docs/screenshots/screenshot-3.png" height="300" hspace="30">
 </p>
 
 <p align="center">
@@ -178,10 +177,10 @@ npm install
 npm run test
 
 # Start server (terminal 1)
-cd server && npm run dev
+npm run dev:server
 
 # Start client (terminal 2)  
-cd client && npm run dev
+npm run dev:client
 
 # In your browser
 Open: http://localhost:5173
