@@ -8,6 +8,12 @@
 </p>
 
 <p align="center">
+  <a href="#️-architecture">🏗️ Architecture</a> •
+  <a href="#-tech-stack">💻 Tech Stack</a> •
+  <a href="#️-running-locally">⚙️ Setup</a>
+</p>
+
+<p align="center">
   <b>A real-time multiplayer game where players challenge each other using Pokémon in a "Top Trumps" showdown.</b>
   <br/>
   <sub>Full-stack TypeScript • Stateful sessions • 100+ unit tests • CI/CD pipeline</sub>
@@ -29,13 +35,6 @@
 </p>
 
 <p align="center">
-  <a href="#-what-it-does">📖 About</a> •
-  <a href="#️-architecture">🏗️ Architecture</a> •
-  <a href="#-tech-stack">💻 Tech Stack</a> •
-  <a href="#️-running-locally">⚙️ Setup</a>
-</p>
-
-<p align="center">
 This is a portfolio project designed to showcase my abilites as a full stack developer.
 </p>
 
@@ -51,9 +50,12 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 
 ## 🏗️ Architecture
 
-### Server Archtitecture Overview (simplified)
+### Server Archtitecture
 <!-- ![Server Architecture diagram](./diagrams/server-architecture-diagram.svg) -->
-<img src="./docs/diagrams/server-architecture-diagram.png" alt="Server Architecture diagram" width="100%">
+<details>
+  <summary>Architecture Diagram (simplified)</summary>
+  <img src="./docs/diagrams/server-architecture-diagram.png" alt="Server Architecture diagram" width="100%">
+</details>
 
 **Design Patterns:**
 - **Mediator Pattern**: Central `Orchestrator` class coordinates between services
@@ -92,16 +94,18 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 
 
 ---
-### Example Gameflow Sequence Diagram 
+<details>
+<summary><h3>Example Gameflow Sequence Diagram</h3></summary>
+  <img src="./docs/diagrams/sequence-diagram.png" alt="Sequence diagram" width="100%">
+  #### Notes
 
-<img src="./docs/diagrams/sequence-diagram.png" alt="Sequence diagram" width="100%">
+  - **Error Handling**: The above diagram shows the Happy Path only. At multiple points (client validation, room validation, game logic), errors can occur. The system follows a consistent pattern: log the error, emit an error event to the client, and halt processing. The client displays the error to the user.
+
+  - **State Synchronization**: After any state change, all clients in the room receive personalized updated `ViewRoom` data via the `UPDATE` event, ensuring UI consistency.
+</details>
 
 
-#### Notes
 
-- **Error Handling**: The above diagram shows the Happy Path only. At multiple points (client validation, room validation, game logic), errors can occur. The system follows a consistent pattern: log the error, emit an error event to the client, and halt processing. The client displays the error to the user.
-
-- **State Synchronization**: After any state change, all clients in the room receive personalized updated `ViewRoom` data via the `UPDATE` event, ensuring UI consistency.
 
 ---
 
@@ -114,7 +118,7 @@ This project was built over 2 months with 250+ commits and 30+ feature branches,
 - Continuous refactoring based on learnings
 - JavaScript to TypeScript, CSS to SCSS migrations
 
-What started as sandbox weekend project evolved into a production-ready multiplayer game with comprehensive testing, CI/CD, and scalable architecture.
+What started as a sandbox weekend project evolved into a production-ready multiplayer game with comprehensive testing, CI/CD, and scalable architecture.
 
 [Link to commit history](https://github.com/leontutu/pokematch/commits)
 
