@@ -30,5 +30,8 @@
         "build:server": "npm run build --workspace=server",
         "dev:client": "npm run dev --workspace=client",
         "dev:server": "npm run dev --workspace=server"
+    },
+    "devDependencies": {
+        "@types/howler": "^2.2.12"
     }
 }
