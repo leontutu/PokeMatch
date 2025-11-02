@@ -39,6 +39,7 @@ export default function HomePage() {
                     </button>
                 </div>
             </div>
+            <p className={styles.legalNotice}>{UI_TEXT.MESSAGES.LEGAL_NOTICE}</p>
         </HomeLayout>
     );
 }
