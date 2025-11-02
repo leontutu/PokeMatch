@@ -57,6 +57,8 @@ export const UI_TEXT = {
         LOADING_ROOM: "Loading room...",
         LEAVE_CONFIRMATION: "Leave room and return to main menu?",
         ROTATE_DEVICE: "Please rotate your device to portrait mode.",
+        LEGAL_NOTICE:
+            "This is a personal, non-commercial portfolio project. All Pokémon names, images, music and sounds are trademarks and copyrights of Nintendo, Creatures Inc., and GAME FREAK Inc.",
     },
 
     WARNINGS: {

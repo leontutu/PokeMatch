@@ -1,5 +1,5 @@
-@use '../../../styles/_variables' as v;
-@use '../../../styles/_mixins' as m;
+@use "../../../styles/_variables" as v;
+@use "../../../styles/_mixins" as m;
 
 .buttonColumn {
     width: 100%;
@@ -40,4 +40,17 @@
 
 .howToPlayBtn {
     background: linear-gradient(135deg, #a777e3, #6643ae);
+}
+
+.legalNotice {
+    // display: flex;
+    // margin-top: auto;
+    // margin-bottom: 1rem;
+    position: absolute;
+    bottom: 1rem;
+    margin: 0 1rem 0 1rem;
+
+    color: grey;
+    font-size: 0.9rem;
+    text-align: justify;
 }
