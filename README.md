@@ -19,7 +19,7 @@
   <sub>Full-stack TypeScript • Stateful sessions • 100+ unit tests • CI/CD pipeline</sub>
 </p>
 <p align="center">
-  <a href="https://pokematch-guii.onrender.com/" target="_blank">
+  <a href="https://pokematch-v1.onrender.com" target="_blank">
     <img src="https://img.shields.io/badge/🎮-PLAY_NOW-FF4757?style=for-the-badge&labelColor=FF6B6B&logoColor=white" 
          alt="Play Now"
          style="height: 70px; border-radius: 12px; box-shadow: 0 4px 14px 0 rgba(255, 71, 87, 0.4); transition: transform 0.2s;">
