@@ -2,22 +2,27 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { GamePhases, Timings } from "../../../shared/constants/constants";
 import { Pages } from "../constants/constants";
-import { createMockUIInfoContext, createMockSocketContext } from "../__tests__/mocks/mockContexts";
+import { createMockSocketContext } from "../__tests__/mocks/mockContexts";
 
-let { mockUIInfoContext, mockSocketContext, mockPlay } = vi.hoisted(() => {
+let { mockSocketContext, mockPlay } = vi.hoisted(() => {
     return {
-        mockUIInfoContext: null as any,
         mockSocketContext: null as any,
         mockPlay: vi.fn(),
     };
 });
 
-vi.mock("../contexts/UIInfoContext", () => ({
-    useUIInfoContext: () => mockUIInfoContext,
-}));
+let mockSetIsWipingIn: any;
+let mockSetIsWipingOut: any;
 
 vi.mock("../contexts/SocketContext", () => ({
     useSocketContext: () => mockSocketContext,
+}));
+
+vi.mock("../stores/useUIStore", () => ({
+    useUIStore: (selector: (state: any) => any) => selector({
+        setIsWipingIn: mockSetIsWipingIn,
+        setIsWipingOut: mockSetIsWipingOut,
+    }),
 }));
 
 vi.mock("use-sound", () => ({
@@ -30,8 +35,9 @@ describe("useNavigate", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.useFakeTimers();
-        mockUIInfoContext = createMockUIInfoContext();
         mockSocketContext = createMockSocketContext();
+        mockSetIsWipingIn = vi.fn();
+        mockSetIsWipingOut = vi.fn();
     });
 
     afterEach(() => {
@@ -53,7 +59,7 @@ describe("useNavigate", () => {
         });
 
         expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
-        expect(mockUIInfoContext.setIsWipingOut).not.toHaveBeenCalled();
+        expect(mockSetIsWipingOut).not.toHaveBeenCalled();
     });
 
     test("handleNavigate with transition triggers wipe animations, plays sound", async () => {
@@ -63,14 +69,14 @@ describe("useNavigate", () => {
             result.current.handleNavigate(Pages.ENTER_NAME, true);
         });
 
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalledWith(true);
+        expect(mockSetIsWipingOut).toHaveBeenCalledWith(true);
 
         act(() => {
             vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
         });
 
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalledWith(false);
-        expect(mockUIInfoContext.setIsWipingIn).toHaveBeenCalledWith(true);
+        expect(mockSetIsWipingOut).toHaveBeenCalledWith(false);
+        expect(mockSetIsWipingIn).toHaveBeenCalledWith(true);
 
         expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
 
@@ -78,7 +84,7 @@ describe("useNavigate", () => {
             vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
         });
 
-        expect(mockUIInfoContext.setIsWipingIn).toHaveBeenCalledWith(false);
+        expect(mockSetIsWipingIn).toHaveBeenCalledWith(false);
 
         expect(mockPlay).toHaveBeenCalledTimes(2); // once for wipe out, once for wipe in
     });
@@ -93,7 +99,7 @@ describe("useNavigate", () => {
         });
 
         expect(result.current.currentPage).toBe(initialPage);
-        expect(mockUIInfoContext.setIsWipingOut).not.toHaveBeenCalled();
+        expect(mockSetIsWipingOut).not.toHaveBeenCalled();
     });
 
     test("navigates to BATTLE page when game phase changes to BATTLE", () => {
@@ -114,7 +120,7 @@ describe("useNavigate", () => {
             rerender();
         });
 
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalled();
+        expect(mockSetIsWipingOut).toHaveBeenCalled();
 
         act(() => {
             vi.advanceTimersByTime(2000);
