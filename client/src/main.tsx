@@ -4,8 +4,6 @@ import "./index.scss";
 import App from "./App.jsx";
 import { SocketProvider } from "./contexts/SocketContext.jsx";
 import { NavigationProvider } from "./contexts/NavigationContext.js";
-import { Howler } from "howler";
-Howler.mute(true);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

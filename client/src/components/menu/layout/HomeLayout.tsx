@@ -2,9 +2,10 @@ import styles from "./HomeLayout.module.scss";
 import React, { useState } from "react";
 import { useAssetPreload } from "../../../hooks/useAssetPreload";
 import { UI_TEXT } from "../../../constants/uiText";
+import MuteButton from "../../other/MuteButton";
 
 type HomeLayoutProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const PATH_TO_LOGO = "logo-home.png"; // note: can't be imported due to preloading strategy
@@ -20,19 +21,20 @@ const PATH_TO_LOGO = "logo-home.png"; // note: can't be imported due to preloadi
  * </HomeLayout>
  */
 export default function HomeLayout({ children }: HomeLayoutProps) {
-    const [isLogoLoaded, setIsLogoLoaded] = useState(false);
+  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
 
-    useAssetPreload(isLogoLoaded);
+  useAssetPreload(isLogoLoaded);
 
-    return (
-        <div className={styles.homeLayout}>
-            <img
-                src={PATH_TO_LOGO}
-                alt={UI_TEXT.ALT_TEXT.LOGO}
-                className={styles.logo}
-                onLoad={() => setIsLogoLoaded(true)}
-            />
-            <div className={styles.contentArea}>{children}</div>
-        </div>
-    );
+  return (
+    <div className={styles.homeLayout}>
+      <MuteButton />
+      <img
+        src={PATH_TO_LOGO}
+        alt={UI_TEXT.ALT_TEXT.LOGO}
+        className={styles.logo}
+        onLoad={() => setIsLogoLoaded(true)}
+      />
+      <div className={styles.contentArea}>{children}</div>
+    </div>
+  );
 }

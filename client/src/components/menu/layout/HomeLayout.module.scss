@@ -6,6 +6,7 @@
     width: 100%;
     margin: 0 auto;
     padding: 0;
+    position: relative;
     @include m.flex-column-center;
     background: v.$color-bg-gradient;
     font-family: v.$font-family-primary;

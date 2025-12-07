@@ -4,69 +4,81 @@ import { createMockViewRoom } from "../../../__tests__/mocks/mockViewRoom";
 import { render, screen } from "@testing-library/react";
 import { Pages } from "../../../constants/constants";
 
-let { mockPlay, mockStop } = vi.hoisted(() => {
-    return { mockPlay: vi.fn(), mockStop: vi.fn() };
-});
+let { mockPlayPokeballWiggle, mockStopPokeballWiggle, mockPlayPokeballPoof, mockPlayPokemonCry } =
+  vi.hoisted(() => {
+    return {
+      mockPlayPokeballWiggle: vi.fn(),
+      mockStopPokeballWiggle: vi.fn(),
+      mockPlayPokeballPoof: vi.fn(),
+      mockPlayPokemonCry: vi.fn(),
+    };
+  });
 
 let mockSocketContext = createMockSocketContext();
 const mockNavigate = vi.fn();
 vi.mock("../../../contexts/SocketContext", () => ({
-    useSocketContext: () => mockSocketContext,
+  useSocketContext: () => mockSocketContext,
 }));
 
 vi.mock("../../../contexts/NavigationContext", () => ({
-    useNavigationContext: () => ({
-        handleNavigate: mockNavigate,
-        currentPage: Pages.SELECT_STAT,
-    }),
+  useNavigationContext: () => ({
+    handleNavigate: mockNavigate,
+    currentPage: Pages.SELECT_STAT,
+  }),
 }));
 
 vi.mock("../../../contexts/UIInfoContext", () => ({
-    useUIInfoContext: () => ({
-        useUIInfoContext: vi.fn(),
-    }),
+  useUIInfoContext: () => ({
+    useUIInfoContext: vi.fn(),
+  }),
 }));
 
-vi.mock("use-sound", () => ({
-    useSound: () => [mockPlay, { sound: null, stop: mockStop }, mockStop],
+vi.mock("../../../stores/useAudioStore", () => ({
+  useAudioStore: (selector: (state: any) => any) =>
+    selector({
+      playPokeballWiggle: mockPlayPokeballWiggle,
+      stopPokeballWiggle: mockStopPokeballWiggle,
+      playPokeballPoof: mockPlayPokeballPoof,
+      playPokemonCry: mockPlayPokemonCry,
+    }),
 }));
 
 import PokemonRevealPage from "./PokemonRevealPage";
 
 describe("PokemonRevealPage", () => {
-    beforeEach(() => {
-        vi.restoreAllMocks();
+  beforeEach(() => {
+    vi.restoreAllMocks();
 
-        mockSocketContext = createMockSocketContext();
-        mockSocketContext.viewRoom = createMockViewRoom();
-    });
+    mockSocketContext = createMockSocketContext();
+    mockSocketContext.viewRoom = createMockViewRoom();
+  });
 
-    test("renders pokemon name and image when data is available", () => {
-        render(<PokemonRevealPage />);
-        const pokemon = mockSocketContext.viewRoom!.viewGame!.you.pokemon;
-        expect(screen.getByAltText(pokemon.name)).toBeInTheDocument();
-        expect(screen.getByText(pokemon.name, { exact: false })).toBeInTheDocument();
-    });
+  test("renders pokemon name and image when data is available", () => {
+    render(<PokemonRevealPage />);
+    const pokemon = mockSocketContext.viewRoom!.viewGame!.you.pokemon;
+    expect(screen.getByAltText(pokemon.name)).toBeInTheDocument();
+    expect(screen.getByText(pokemon.name, { exact: false })).toBeInTheDocument();
+  });
 
-    test("returns null when pokemon data is missing", () => {
-        mockSocketContext.viewRoom = null;
+  test("returns null when pokemon data is missing", () => {
+    mockSocketContext.viewRoom = null;
 
-        const { container } = render(<PokemonRevealPage />);
+    const { container } = render(<PokemonRevealPage />);
 
-        expect(container.firstChild).toBeNull();
-    });
+    expect(container.firstChild).toBeNull();
+  });
 
-    test("plays wiggle sound on mount when not wiping in", () => {
-        render(<PokemonRevealPage />);
+  test("plays wiggle sound on mount when not wiping in", () => {
+    render(<PokemonRevealPage />);
 
-        expect(mockPlay).toHaveBeenCalled();
-    });
+    expect(mockPlayPokeballWiggle).toHaveBeenCalled();
+  });
 
-    test("stops sounds on unmount", () => {
-        const { unmount } = render(<PokemonRevealPage />);
+  test("stops sounds on unmount", () => {
+    const { unmount } = render(<PokemonRevealPage />);
 
-        unmount();
+    unmount();
 
-        expect(mockStop).toHaveBeenCalled();
-    });
+    expect(mockStopPokeballWiggle).toHaveBeenCalled();
+  });
 });

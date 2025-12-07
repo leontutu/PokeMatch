@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
 import { useSocketContext } from "../../../contexts/SocketContext";
 import { useUIStore } from "../../../stores/useUIStore";
+import { useAudioStore } from "../../../stores/useAudioStore";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.scss";
-import { useSound } from "use-sound";
-import pokeballWiggle from "../../../assets/audio/sounds/pokeball-wiggle.mp3";
-import pokeballPoof from "../../../assets/audio/sounds/pokeball-poof.mp3";
 import pokeballImage from "../../../assets/graphics/game/pokeball.png";
 import { UI_TEXT } from "../../../constants/uiText";
 
@@ -33,19 +31,14 @@ export default function PokemonRevealPage() {
   const [flashActive, setFlashActive] = useState(false);
   const [cryReady, setCryReady] = useState(false);
 
+  const playPokeballWiggle = useAudioStore((state) => state.playPokeballWiggle);
+  const stopPokeballWiggle = useAudioStore((state) => state.stopPokeballWiggle);
+  const playPokeballPoof = useAudioStore((state) => state.playPokeballPoof);
+  const playPokemonCry = useAudioStore((state) => state.playPokemonCry);
+
   const soundUrl = pokemon
     ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`
     : "silence.ogg";
-  const [playCry] = useSound(soundUrl || "", { volume: 1 });
-
-  const [playWiggle, { stop: stopWiggle }] = useSound(pokeballWiggle, {
-    volume: 0.5,
-    loop: true,
-  });
-
-  const [playPoof] = useSound(pokeballPoof, {
-    volume: 1,
-  });
 
   useEffect(() => {
     if (isWipingIn) return;
@@ -69,22 +62,31 @@ export default function PokemonRevealPage() {
 
   useEffect(() => {
     if (!countDownFinished && !isWipingIn) {
-      playWiggle();
+      playPokeballWiggle();
     }
 
     if (countDownFinished && !cryReady) {
-      stopWiggle();
-      playPoof();
+      stopPokeballWiggle();
+      playPokeballPoof();
     }
 
     if (cryReady) {
-      playCry();
+      playPokemonCry(soundUrl);
     }
 
     return () => {
-      stopWiggle();
+      stopPokeballWiggle();
     };
-  }, [isWipingIn, countDownFinished, cryReady, playWiggle, playCry, stopWiggle]);
+  }, [
+    isWipingIn,
+    countDownFinished,
+    cryReady,
+    soundUrl,
+    playPokeballWiggle,
+    playPokeballPoof,
+    playPokemonCry,
+    stopPokeballWiggle,
+  ]);
 
   const getPokemonNameFontSize = (name: string) => {
     const length = name.length;

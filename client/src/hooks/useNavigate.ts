@@ -4,9 +4,7 @@ import { GamePhases, Timings } from "../../../shared/constants/constants";
 import { Pages } from "../constants/constants";
 import { NavigationHandler } from "../types";
 import { useUIStore } from "../stores/useUIStore";
-import { useSound } from "use-sound";
-import pageTurn1 from "../assets/audio/sounds/page-turn1.mp3";
-import pageTurn2 from "../assets/audio/sounds/page-turn2.mp3";
+import { useAudioStore } from "../stores/useAudioStore";
 
 /**
  * @file Navigation hook for the app.
@@ -24,12 +22,8 @@ export function useNavigate() {
   const setIsWipingIn = useUIStore((state) => state.setIsWipingIn);
   const setIsWipingOut = useUIStore((state) => state.setIsWipingOut);
 
-  const [playPageTurn1] = useSound(pageTurn1, {
-    volume: 0.6,
-  });
-  const [playPageTurn2] = useSound(pageTurn2, {
-    volume: 0.3,
-  });
+  const playPageTurn1 = useAudioStore((state) => state.playPageTurn1);
+  const playPageTurn2 = useAudioStore((state) => state.playPageTurn2);
 
   useEffect(() => {
     if (roomCrashSignal) {
