@@ -1,9 +1,9 @@
 name: Vite CI/CD Pipeline (Vitest, Render)
 on:
   push:
-    branches: [ main ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main, develop]
 
 jobs:
   build-and-deploy:
@@ -15,14 +15,14 @@ jobs:
       - name: Setup Node.js and Cache Dependencies
         uses: actions/setup-node@v4
         with:
-          node-version: '22.18.0' 
-          cache: 'npm'
+          node-version: "22.18.0"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
 
       - name: Run Tests
-        run: npm test 
+        run: npm test
 
       - name: Build Project
         run: npm run build
