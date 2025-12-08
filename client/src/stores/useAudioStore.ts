@@ -1,13 +1,53 @@
 import { create } from "zustand";
 import { Howl } from "howler";
 
-const bgm = new Howl({
-  src: ["/audio/music/ancient-ruins.mp3"],
+Howler.mute(true); // Start muted
+
+const bgmMenu = new Howl({
+  src: ["/audio/music/welcome-to-the-world-of-pokemon.mp3"],
   loop: true,
   volume: 0.5,
   html5: true,
   preload: true,
 });
+
+const bgmAncientRuins = new Howl({
+  src: ["/audio/music/ancient-ruins.mp3"],
+  loop: true,
+  html5: true,
+});
+
+const bgmBarrenValley = new Howl({
+  src: ["/audio/music/barren-valley.mp3"],
+  volume: 0.5,
+  html5: true,
+});
+
+const bgmCraggyCoast = new Howl({
+  src: ["/audio/music/craggy-coast.mp3"],
+  volume: 0.5,
+  html5: true,
+});
+
+const bgmDrenchedBluff = new Howl({
+  src: ["/audio/music/drenched-bluff.mp3"],
+  volume: 0.5,
+  html5: true,
+});
+
+const bgmSkyPeakCave = new Howl({
+  src: ["/audio/music/sky-peak-cave.mp3"],
+  volume: 0.5,
+  html5: true,
+});
+
+const gameBgm = [
+  bgmAncientRuins,
+  bgmBarrenValley,
+  bgmCraggyCoast,
+  bgmDrenchedBluff,
+  bgmSkyPeakCave,
+];
 
 const sfxConfirm = new Howl({
   src: ["/audio/sounds/confirm.mp3"],
@@ -50,8 +90,15 @@ let pokemonCry: Howl | null = null;
 type AudioState = {
   isMuted: boolean;
   volume: number;
-  playBgm: () => void;
-  pauseBgm: () => void;
+  currentBgm: Howl | null;
+
+  stopAllBgm: () => void;
+  setBgmVolume: (val: number) => void;
+
+  playMenuBgm: () => void;
+  pauseMenuBgm: () => void;
+  playGameBgm: () => void;
+  pauseGameBgm: () => void;
   playConfirm: () => void;
   playSelect: () => void;
   playPokeballWiggle: () => void;
@@ -67,14 +114,48 @@ type AudioState = {
 
 export const useAudioStore = create<AudioState>((set, get) => ({
   isMuted: true,
-  volume: 0.5,
+  volume: 1.0,
+  currentBgm: null,
 
-  playBgm: () => {
-    if (!bgm.playing()) bgm.play();
+  stopAllBgm: () => {
+    const currentBgm = get().currentBgm;
+    if (currentBgm && currentBgm.playing()) {
+      currentBgm.stop();
+    }
+    bgmMenu.stop();
+    set({ currentBgm: null });
   },
 
-  pauseBgm: () => {
-    bgm.pause();
+  setBgmVolume: (val) => {
+    const currentBgm = get().currentBgm;
+    if (currentBgm) {
+      currentBgm.volume(val);
+    }
+  },
+
+  playGameBgm: () => {
+    bgmMenu.stop();
+    if (gameBgm.some((bgm) => bgm.playing())) return;
+
+    const randomBgm = gameBgm[Math.floor(Math.random() * gameBgm.length)];
+    randomBgm.play();
+    set({ currentBgm: randomBgm });
+  },
+
+  pauseGameBgm: () => {
+    const currentBgm = get().currentBgm;
+    if (currentBgm && currentBgm.playing()) {
+      currentBgm.pause();
+    }
+    set({ currentBgm: null });
+  },
+
+  playMenuBgm: () => {
+    if (!bgmMenu.playing()) bgmMenu.play();
+  },
+
+  pauseMenuBgm: () => {
+    bgmMenu.pause();
   },
 
   playConfirm: () => {
@@ -124,11 +205,11 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     set({ isMuted: !get().isMuted });
     Howler.mute(get().isMuted);
 
-    if (!bgm.playing()) bgm.play();
+    // if (!bgmMenu.playing()) bgmMenu.play();
   },
 
   setVolume: (val) => {
     set({ volume: val });
-    bgm.volume(val);
+    bgmMenu.volume(val);
   },
 }));
