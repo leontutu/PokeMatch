@@ -3,8 +3,23 @@ import { Howl } from "howler";
 
 Howler.mute(true); // Start muted
 
+// Temporary solution for audio files
+const urls = {
+  menuBgm:
+    "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/vryqittp/003%20-%20Welcome%20to%20the%20World%20of%20Pok%C3%A9mon%21.mp3",
+  ancientRuins: "/audio/music/ancient-ruins.mp3",
+  barrenValley:
+    "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/rewvlsfa/127%20-%20Barren%20Valley.mp3",
+  craggyCoast:
+    "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/jnklavzn/030%20-%20Craggy%20Coast.mp3",
+  drenchedBluff:
+    "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/ibhirjwd/012%20-%20Drenched%20Bluff.mp3",
+  skyPeakCave:
+    "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/abfyzexa/082%20-%20Sky%20Peak%20Cave.mp3",
+};
+
 const bgmMenu = new Howl({
-  src: ["/audio/music/welcome-to-the-world-of-pokemon.mp3"],
+  src: urls.menuBgm,
   loop: true,
   volume: 0.5,
   html5: true,
@@ -12,31 +27,31 @@ const bgmMenu = new Howl({
 });
 
 const bgmAncientRuins = new Howl({
-  src: ["/audio/music/ancient-ruins.mp3"],
+  src: [urls.ancientRuins],
   loop: true,
   html5: true,
 });
 
 const bgmBarrenValley = new Howl({
-  src: ["/audio/music/barren-valley.mp3"],
+  src: [urls.barrenValley],
   volume: 0.5,
   html5: true,
 });
 
 const bgmCraggyCoast = new Howl({
-  src: ["/audio/music/craggy-coast.mp3"],
+  src: [urls.craggyCoast],
   volume: 0.5,
   html5: true,
 });
 
 const bgmDrenchedBluff = new Howl({
-  src: ["/audio/music/drenched-bluff.mp3"],
+  src: [urls.drenchedBluff],
   volume: 0.5,
   html5: true,
 });
 
 const bgmSkyPeakCave = new Howl({
-  src: ["/audio/music/sky-peak-cave.mp3"],
+  src: [urls.skyPeakCave],
   volume: 0.5,
   html5: true,
 });
@@ -184,7 +199,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     }
     pokemonCry = new Howl({
       src: [url],
-      volume: 1,
+      volume: 0.3,
     });
     pokemonCry.play();
   },
