@@ -1,10 +1,10 @@
 import { vi, describe, expect, test, beforeEach, afterEach } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import {
-    BattlePhase,
-    ATTACK_ANIMATION_DURATION,
-    FADE_OUT_DURATION,
-    SHOW_CURRENT_ROUND_DURATION,
+  BattlePhase,
+  ATTACK_ANIMATION_DURATION,
+  FADE_OUT_DURATION,
+  SHOW_CURRENT_ROUND_DURATION,
 } from "./useBattleSequence";
 import { BattleStats } from "../types";
 import { createMockPokemon, createMockViewRoom } from "../__tests__/mocks/mockViewRoom";
@@ -23,130 +23,137 @@ import { ViewRoom } from "../../../shared/types/types";
  * The juice isn't worth the squeeze here.
  */
 
-let { mockPlay } = vi.hoisted(() => {
-    return {
-        mockPlay: vi.fn(),
-    };
+let { mockPlayPokemonCry, mockPlayNormalEffective } = vi.hoisted(() => {
+  return {
+    mockPlayPokemonCry: vi.fn(),
+    mockPlayNormalEffective: vi.fn(),
+  };
 });
 
 vi.mock("../contexts/SocketContext", () => ({
-    useSocketContext: () => createMockSocketContext(),
+  useSocketContext: () => createMockSocketContext(),
 }));
 
-vi.mock("use-sound", () => ({
-    useSound: () => [mockPlay, { sound: null }],
+vi.mock("../stores/useAudioStore", () => ({
+  useAudioStore: (selector: (state: any) => any) =>
+    selector({
+      playPokemonCry: mockPlayPokemonCry,
+      playNormalEffective: mockPlayNormalEffective,
+    }),
 }));
 
 import { useBattleSequence } from "./useBattleSequence";
 import { useBattleLogic } from "./useBattleLogic";
 
 describe("useBattleSequence", () => {
-    let mockViewRoom: ViewRoom;
-    let mockBattleStats: BattleStats;
-    let onBattleEnd: any;
-    beforeEach(() => {
-        vi.useFakeTimers();
-        vi.clearAllMocks();
-        mockViewRoom = createMockViewRoom();
-        mockBattleStats = createMockBattleStats();
-        onBattleEnd = vi.fn();
+  let mockViewRoom: ViewRoom;
+  let mockBattleStats: BattleStats;
+  let onBattleEnd: any;
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.clearAllMocks();
+    mockViewRoom = createMockViewRoom();
+    mockBattleStats = createMockBattleStats();
+    onBattleEnd = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  test(`transitions through phases correctly`, () => {
+    let isWipingIn = true;
+
+    const { result, rerender } = renderHook(() =>
+      useBattleSequence(mockBattleStats, onBattleEnd, isWipingIn)
+    );
+
+    expect(result.current.phase).toBe(BattlePhase.WAITING);
+    act(() => (isWipingIn = false));
+    rerender();
+    expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
+
+    act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
+    rerender();
+    expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
+
+    act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
+    act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+    rerender();
+
+    expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
+    act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
+    act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+    rerender();
+    expect(result.current.phase).toBe(BattlePhase.FINISHED);
+
+    expect(onBattleEnd).toHaveBeenCalled();
+    expect(mockPlayPokemonCry).toHaveBeenCalledTimes(2); // 2 cries
+    expect(mockPlayNormalEffective).toHaveBeenCalledTimes(2); // 2 hits
+  });
+
+  describe("integration test", () => {
+    test("transitions through phases correctly with real BattleStats", () => {
+      mockViewRoom.viewGame!.you.challengeStat = { name: StatNames.ATTACK, value: 100 };
+      mockViewRoom.viewGame!.you.challengedStat = { name: StatNames.DEFENSE, value: 50 };
+      mockViewRoom.viewGame!.opponent.challengeStat = { name: StatNames.DEFENSE, value: 100 };
+      mockViewRoom.viewGame!.opponent.challengedStat = { name: StatNames.ATTACK, value: 50 };
+
+      let isWipingIn = true;
+      const battleStats = renderHook(() => useBattleLogic(mockViewRoom.viewGame)).result.current!;
+      const { result, rerender } = renderHook(() =>
+        useBattleSequence(battleStats, onBattleEnd, isWipingIn)
+      );
+
+      expect(result.current.phase).toBe(BattlePhase.WAITING);
+      expect(result.current.phase).toBe(BattlePhase.WAITING);
+      act(() => (isWipingIn = false));
+      rerender();
+      expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
+
+      act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
+      rerender();
+      expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
+
+      act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
+      act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+      rerender();
+
+      expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
+      act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
+      act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
+      rerender();
+      expect(result.current.phase).toBe(BattlePhase.FINISHED);
+
+      expect(onBattleEnd).toHaveBeenCalled();
+      expect(mockPlayPokemonCry).toHaveBeenCalledTimes(2); // 2 cries
+      expect(mockPlayNormalEffective).toHaveBeenCalledTimes(2); // 2 hits
     });
-
-    afterEach(() => {
-        vi.useRealTimers();
-    });
-
-    test(`transitions through phases correctly`, () => {
-        let isWipingIn = true;
-
-        const { result, rerender } = renderHook(() =>
-            useBattleSequence(mockBattleStats, onBattleEnd, isWipingIn)
-        );
-
-        expect(result.current.phase).toBe(BattlePhase.WAITING);
-        act(() => (isWipingIn = false));
-        rerender();
-        expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
-
-        act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
-        rerender();
-        expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
-
-        act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
-        act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
-        rerender();
-
-        expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
-        act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
-        act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
-        rerender();
-        expect(result.current.phase).toBe(BattlePhase.FINISHED);
-
-        expect(onBattleEnd).toHaveBeenCalled();
-        expect(mockPlay).toHaveBeenCalledTimes(4); // 2 cries + 2 hits
-    });
-
-    describe("integration test", () => {
-        test("transitions through phases correctly with real BattleStats", () => {
-            mockViewRoom.viewGame!.you.challengeStat = { name: StatNames.ATTACK, value: 100 };
-            mockViewRoom.viewGame!.you.challengedStat = { name: StatNames.DEFENSE, value: 50 };
-            mockViewRoom.viewGame!.opponent.challengeStat = { name: StatNames.DEFENSE, value: 100 };
-            mockViewRoom.viewGame!.opponent.challengedStat = { name: StatNames.ATTACK, value: 50 };
-
-            let isWipingIn = true;
-            const battleStats = renderHook(() => useBattleLogic(mockViewRoom.viewGame)).result.current!;
-            const { result, rerender } = renderHook(() =>
-                useBattleSequence(battleStats, onBattleEnd, isWipingIn)
-            );
-
-            expect(result.current.phase).toBe(BattlePhase.WAITING);
-            expect(result.current.phase).toBe(BattlePhase.WAITING);
-            act(() => (isWipingIn = false));
-            rerender();
-            expect(result.current.phase).toBe(BattlePhase.SHOW_CURRENT_ROUND);
-
-            act(() => vi.advanceTimersByTime(SHOW_CURRENT_ROUND_DURATION));
-            rerender();
-            expect(result.current.phase).toBe(BattlePhase.COLUMNS_1_START);
-
-            act(() => result.current.setPhase(BattlePhase.COLUMNS_1_END));
-            act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
-            rerender();
-
-            expect(result.current.phase).toBe(BattlePhase.COLUMNS_2_START);
-            act(() => result.current.setPhase(BattlePhase.COLUMNS_2_END));
-            act(() => vi.advanceTimersByTime(FADE_OUT_DURATION + ATTACK_ANIMATION_DURATION));
-            rerender();
-            expect(result.current.phase).toBe(BattlePhase.FINISHED);
-
-            expect(onBattleEnd).toHaveBeenCalled();
-            expect(mockPlay).toHaveBeenCalledTimes(4); // 2 cries + 2 hits
-        });
-    });
+  });
 });
 
 function createMockBattleStats() {
-    return {
-        yourPokemon: createMockPokemon(),
-        opponentPokemon: createMockPokemon(),
-        yourPokemonImgUrl: "",
-        opponentPokemonImgUrl: "",
-        yourChallengeStat: { name: StatNames.ATTACK, value: 50 },
-        yourChallengedStat: { name: StatNames.DEFENSE, value: 20 },
-        opponentChallengeStat: { name: StatNames.DEFENSE, value: 80 },
-        opponentChallengedStat: { name: StatNames.ATTACK, value: 40 },
-        yourChallengeStatDisplay: undefined,
-        yourChallengedStatDisplay: undefined,
-        opponentChallengeStatDisplay: undefined,
-        opponentChallengedStatDisplay: undefined,
-        yourChallengeOutcome: false,
-        isYourChallengeTie: false,
-        opponentChallengeOutcome: false,
-        isOpponentChallengeTie: false,
-        isYouFirst: false,
-        isChallenge1Win: false,
-        isChallenge2Win: false,
-        isChallenge1Tie: false,
-        isChallenge2Tie: false,
-    } as BattleStats;
+  return {
+    yourPokemon: createMockPokemon(),
+    opponentPokemon: createMockPokemon(),
+    yourPokemonImgUrl: "",
+    opponentPokemonImgUrl: "",
+    yourChallengeStat: { name: StatNames.ATTACK, value: 50 },
+    yourChallengedStat: { name: StatNames.DEFENSE, value: 20 },
+    opponentChallengeStat: { name: StatNames.DEFENSE, value: 80 },
+    opponentChallengedStat: { name: StatNames.ATTACK, value: 40 },
+    yourChallengeStatDisplay: undefined,
+    yourChallengedStatDisplay: undefined,
+    opponentChallengeStatDisplay: undefined,
+    opponentChallengedStatDisplay: undefined,
+    yourChallengeOutcome: false,
+    isYourChallengeTie: false,
+    opponentChallengeOutcome: false,
+    isOpponentChallengeTie: false,
+    isYouFirst: false,
+    isChallenge1Win: false,
+    isChallenge2Win: false,
+    isChallenge1Tie: false,
+    isChallenge2Tie: false,
+  } as BattleStats;
 }

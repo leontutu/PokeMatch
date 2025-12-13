@@ -2,141 +2,156 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { GamePhases, Timings } from "../../../shared/constants/constants";
 import { Pages } from "../constants/constants";
-import { createMockUIInfoContext, createMockSocketContext } from "../__tests__/mocks/mockContexts";
+import { createMockSocketContext } from "../__tests__/mocks/mockContexts";
 
-let { mockUIInfoContext, mockSocketContext, mockPlay } = vi.hoisted(() => {
-    return {
-        mockUIInfoContext: null as any,
-        mockSocketContext: null as any,
-        mockPlay: vi.fn(),
-    };
+let { mockSocketContext } = vi.hoisted(() => {
+  return {
+    mockSocketContext: null as any,
+  };
 });
 
-vi.mock("../contexts/UIInfoContext", () => ({
-    useUIInfoContext: () => mockUIInfoContext,
-}));
+let mockSetIsWipingIn: any;
+let mockSetIsWipingOut: any;
+let mockPlayPageTurn1: any;
+let mockPlayPageTurn2: any;
 
 vi.mock("../contexts/SocketContext", () => ({
-    useSocketContext: () => mockSocketContext,
+  useSocketContext: () => mockSocketContext,
 }));
 
-vi.mock("use-sound", () => ({
-    useSound: () => [mockPlay, { sound: null }],
+vi.mock("../stores/useUIStore", () => ({
+  useUIStore: (selector: (state: any) => any) =>
+    selector({
+      setIsWipingIn: mockSetIsWipingIn,
+      setIsWipingOut: mockSetIsWipingOut,
+    }),
+}));
+
+vi.mock("../stores/useAudioStore", () => ({
+  useAudioStore: (selector: (state: any) => any) =>
+    selector({
+      playPageTurn1: mockPlayPageTurn1,
+      playPageTurn2: mockPlayPageTurn2,
+    }),
 }));
 
 import { useNavigate } from "./useNavigate";
 
 describe("useNavigate", () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-        vi.useFakeTimers();
-        mockUIInfoContext = createMockUIInfoContext();
-        mockSocketContext = createMockSocketContext();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    mockSocketContext = createMockSocketContext();
+    mockSetIsWipingIn = vi.fn();
+    mockSetIsWipingOut = vi.fn();
+    mockPlayPageTurn1 = vi.fn();
+    mockPlayPageTurn2 = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  test("initializes with HOME page", () => {
+    const { result } = renderHook(() => useNavigate());
+
+    expect(result.current.currentPage).toBe(Pages.HOME);
+    expect(typeof result.current.handleNavigate).toBe("function");
+  });
+
+  test("handleNavigate changes page without transition", () => {
+    const { result } = renderHook(() => useNavigate());
+
+    act(() => {
+      result.current.handleNavigate(Pages.ENTER_NAME, false);
     });
 
-    afterEach(() => {
-        vi.useRealTimers();
+    expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
+    expect(mockSetIsWipingOut).not.toHaveBeenCalled();
+  });
+
+  test("handleNavigate with transition triggers wipe animations, plays sound", async () => {
+    const { result } = renderHook(() => useNavigate());
+
+    act(() => {
+      result.current.handleNavigate(Pages.ENTER_NAME, true);
     });
 
-    test("initializes with HOME page", () => {
-        const { result } = renderHook(() => useNavigate());
+    expect(mockSetIsWipingOut).toHaveBeenCalledWith(true);
 
-        expect(result.current.currentPage).toBe(Pages.HOME);
-        expect(typeof result.current.handleNavigate).toBe("function");
+    act(() => {
+      vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
     });
 
-    test("handleNavigate changes page without transition", () => {
-        const { result } = renderHook(() => useNavigate());
+    expect(mockSetIsWipingOut).toHaveBeenCalledWith(false);
+    expect(mockSetIsWipingIn).toHaveBeenCalledWith(true);
 
-        act(() => {
-            result.current.handleNavigate(Pages.ENTER_NAME, false);
-        });
+    expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
 
-        expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
-        expect(mockUIInfoContext.setIsWipingOut).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
     });
 
-    test("handleNavigate with transition triggers wipe animations, plays sound", async () => {
-        const { result } = renderHook(() => useNavigate());
+    expect(mockSetIsWipingIn).toHaveBeenCalledWith(false);
 
-        act(() => {
-            result.current.handleNavigate(Pages.ENTER_NAME, true);
-        });
+    expect(mockPlayPageTurn1).toHaveBeenCalledTimes(1);
+    expect(mockPlayPageTurn2).toHaveBeenCalledTimes(1);
+  });
 
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalledWith(true);
+  test("does not navigate to same page", () => {
+    const { result } = renderHook(() => useNavigate());
 
-        act(() => {
-            vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
-        });
+    const initialPage = result.current.currentPage;
 
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalledWith(false);
-        expect(mockUIInfoContext.setIsWipingIn).toHaveBeenCalledWith(true);
-
-        expect(result.current.currentPage).toBe(Pages.ENTER_NAME);
-
-        act(() => {
-            vi.advanceTimersByTime(Timings.PAGE_TRANSITION);
-        });
-
-        expect(mockUIInfoContext.setIsWipingIn).toHaveBeenCalledWith(false);
-
-        expect(mockPlay).toHaveBeenCalledTimes(2); // once for wipe out, once for wipe in
+    act(() => {
+      result.current.handleNavigate(Pages.HOME, true);
     });
 
-    test("does not navigate to same page", () => {
-        const { result } = renderHook(() => useNavigate());
+    expect(result.current.currentPage).toBe(initialPage);
+    expect(mockSetIsWipingOut).not.toHaveBeenCalled();
+  });
 
-        const initialPage = result.current.currentPage;
+  test("navigates to BATTLE page when game phase changes to BATTLE", () => {
+    mockSocketContext.viewRoom = {
+      viewGame: {
+        phase: GamePhases.SELECT_STAT,
+      },
+    } as any;
 
-        act(() => {
-            result.current.handleNavigate(Pages.HOME, true);
-        });
+    const { result, rerender } = renderHook(() => useNavigate());
 
-        expect(result.current.currentPage).toBe(initialPage);
-        expect(mockUIInfoContext.setIsWipingOut).not.toHaveBeenCalled();
+    act(() => {
+      mockSocketContext.viewRoom = {
+        viewGame: {
+          phase: GamePhases.BATTLE,
+        },
+      } as any;
+      rerender();
     });
 
-    test("navigates to BATTLE page when game phase changes to BATTLE", () => {
-        mockSocketContext.viewRoom = {
-            viewGame: {
-                phase: GamePhases.SELECT_STAT,
-            },
-        } as any;
+    expect(mockSetIsWipingOut).toHaveBeenCalled();
 
-        const { result, rerender } = renderHook(() => useNavigate());
-
-        act(() => {
-            mockSocketContext.viewRoom = {
-                viewGame: {
-                    phase: GamePhases.BATTLE,
-                },
-            } as any;
-            rerender();
-        });
-
-        expect(mockUIInfoContext.setIsWipingOut).toHaveBeenCalled();
-
-        act(() => {
-            vi.advanceTimersByTime(2000);
-        });
-
-        expect(result.current.currentPage).toBe(Pages.BATTLE);
+    act(() => {
+      vi.advanceTimersByTime(2000);
     });
 
-    test("shows alert and returns to HOME on room crash", () => {
-        const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    expect(result.current.currentPage).toBe(Pages.BATTLE);
+  });
 
-        const { result, rerender } = renderHook(() => useNavigate());
+  test("shows alert and returns to HOME on room crash", () => {
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
 
-        // Simulate room crash
-        act(() => {
-            mockSocketContext.roomCrashSignal = true;
-            rerender();
-        });
+    const { result, rerender } = renderHook(() => useNavigate());
 
-        expect(result.current.currentPage).toBe(Pages.HOME);
-        expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining("oopsie"));
-
-        alertSpy.mockRestore();
+    // Simulate room crash
+    act(() => {
+      mockSocketContext.roomCrashSignal = true;
+      rerender();
     });
+
+    expect(result.current.currentPage).toBe(Pages.HOME);
+    expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining("oopsie"));
+
+    alertSpy.mockRestore();
+  });
 });
