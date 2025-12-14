@@ -18,6 +18,24 @@ const urls = {
     "https://jetta.vgmtreasurechest.com/soundtracks/pokemon-mystery-dungeon-explorers-of-sky/abfyzexa/082%20-%20Sky%20Peak%20Cave.mp3",
 };
 
+const gameBgm: Howl[] = [];
+for (const url in urls) {
+  if (url === "menuBgm") continue;
+  const bgm = new Howl({
+    src: urls[url as keyof typeof urls],
+    preload: true,
+    html5: true,
+    loop: false,
+  });
+
+  bgm.on("end", () => {
+    bgm.stop();
+    useAudioStore.getState().nextBgm();
+  });
+
+  gameBgm.push(bgm);
+}
+
 const bgmMenu = new Howl({
   src: urls.menuBgm,
   loop: true,
@@ -25,44 +43,6 @@ const bgmMenu = new Howl({
   html5: true,
   preload: true,
 });
-
-const bgmAncientRuins = new Howl({
-  src: [urls.ancientRuins],
-  loop: true,
-  html5: true,
-});
-
-const bgmBarrenValley = new Howl({
-  src: [urls.barrenValley],
-  volume: 0.5,
-  html5: true,
-});
-
-const bgmCraggyCoast = new Howl({
-  src: [urls.craggyCoast],
-  volume: 0.5,
-  html5: true,
-});
-
-const bgmDrenchedBluff = new Howl({
-  src: [urls.drenchedBluff],
-  volume: 0.5,
-  html5: true,
-});
-
-const bgmSkyPeakCave = new Howl({
-  src: [urls.skyPeakCave],
-  volume: 0.5,
-  html5: true,
-});
-
-const gameBgm = [
-  bgmAncientRuins,
-  bgmBarrenValley,
-  bgmCraggyCoast,
-  bgmDrenchedBluff,
-  bgmSkyPeakCave,
-];
 
 const sfxConfirm = new Howl({
   src: ["/audio/sounds/confirm.mp3"],
@@ -109,6 +89,7 @@ type AudioState = {
 
   stopAllBgm: () => void;
   setBgmVolume: (val: number) => void;
+  nextBgm: () => void;
 
   playMenuBgm: () => void;
   pauseMenuBgm: () => void;
@@ -153,8 +134,18 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     if (gameBgm.some((bgm) => bgm.playing())) return;
 
     const randomBgm = gameBgm[Math.floor(Math.random() * gameBgm.length)];
-    randomBgm.play();
     set({ currentBgm: randomBgm });
+    randomBgm.play();
+  },
+
+  nextBgm: () => {
+    const randomBgm = gameBgm[Math.floor(Math.random() * gameBgm.length)];
+    if (randomBgm === get().currentBgm) {
+      return get().nextBgm();
+    } else {
+      set({ currentBgm: randomBgm });
+      randomBgm.play();
+    }
   },
 
   pauseGameBgm: () => {
@@ -219,8 +210,6 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   toggleMute: () => {
     set({ isMuted: !get().isMuted });
     Howler.mute(get().isMuted);
-
-    // if (!bgmMenu.playing()) bgmMenu.play();
   },
 
   setVolume: (val) => {
