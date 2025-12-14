@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BattleStats, BattlePokemonAnimationState } from "../types";
 import { useSocketContext } from "../contexts/SocketContext";
-import { useAudioStore } from "../stores/useAudioStore";
+import { SFX_IDS, useAudioStore } from "../stores/useAudioStore";
 
 /**
  * Manages the state and timing for the entire battle sequence.
@@ -52,7 +52,7 @@ export const useBattleSequence = (
   const { viewRoom } = useSocketContext();
 
   const playPokemonCry = useAudioStore((state) => state.playPokemonCry);
-  const playNormalEffective = useAudioStore((state) => state.playNormalEffective);
+  const playSfx = useAudioStore((state) => state.playSfx);
 
   const yourPokemonCryUrl = battleStats
     ? `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${battleStats.yourPokemon.id}.ogg`
@@ -70,7 +70,7 @@ export const useBattleSequence = (
       setPokemonAnimation({ you: "stumble", opponent: "attack" });
     }
     setTimeout(() => {
-      playNormalEffective();
+      playSfx(SFX_IDS.NORMAL_EFFECTIVE);
       awardTemporaryPoints();
     }, ATTACK_START_TO_IMPACT);
   };

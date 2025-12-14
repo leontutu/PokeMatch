@@ -23,23 +23,23 @@ import { ViewRoom } from "../../../shared/types/types";
  * The juice isn't worth the squeeze here.
  */
 
-let { mockPlayPokemonCry, mockPlayNormalEffective } = vi.hoisted(() => {
+const mockPlaySfx = vi.fn();
+const mockPlayPokemonCry = vi.fn();
+
+vi.mock("../stores/useAudioStore", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../stores/useAudioStore")>();
   return {
-    mockPlayPokemonCry: vi.fn(),
-    mockPlayNormalEffective: vi.fn(),
+    ...actual,
+    useAudioStore: (selector: (state: any) => any) =>
+      selector({
+        playSfx: mockPlaySfx,
+        playPokemonCry: mockPlayPokemonCry,
+      }),
   };
 });
 
 vi.mock("../contexts/SocketContext", () => ({
   useSocketContext: () => createMockSocketContext(),
-}));
-
-vi.mock("../stores/useAudioStore", () => ({
-  useAudioStore: (selector: (state: any) => any) =>
-    selector({
-      playPokemonCry: mockPlayPokemonCry,
-      playNormalEffective: mockPlayNormalEffective,
-    }),
 }));
 
 import { useBattleSequence } from "./useBattleSequence";
@@ -89,7 +89,7 @@ describe("useBattleSequence", () => {
 
     expect(onBattleEnd).toHaveBeenCalled();
     expect(mockPlayPokemonCry).toHaveBeenCalledTimes(2); // 2 cries
-    expect(mockPlayNormalEffective).toHaveBeenCalledTimes(2); // 2 hits
+    expect(mockPlaySfx).toHaveBeenCalledTimes(2); // 2 hits
   });
 
   describe("integration test", () => {
@@ -127,7 +127,7 @@ describe("useBattleSequence", () => {
 
       expect(onBattleEnd).toHaveBeenCalled();
       expect(mockPlayPokemonCry).toHaveBeenCalledTimes(2); // 2 cries
-      expect(mockPlayNormalEffective).toHaveBeenCalledTimes(2); // 2 hits
+      expect(mockPlaySfx).toHaveBeenCalledTimes(2); // 2 hits
     });
   });
 });

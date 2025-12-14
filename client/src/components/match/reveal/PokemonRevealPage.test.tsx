@@ -4,15 +4,22 @@ import { createMockViewRoom } from "../../../__tests__/mocks/mockViewRoom";
 import { render, screen } from "@testing-library/react";
 import { Pages } from "../../../constants/constants";
 
-let { mockPlayPokeballWiggle, mockStopPokeballWiggle, mockPlayPokeballPoof, mockPlayPokemonCry } =
-  vi.hoisted(() => {
-    return {
-      mockPlayPokeballWiggle: vi.fn(),
-      mockStopPokeballWiggle: vi.fn(),
-      mockPlayPokeballPoof: vi.fn(),
-      mockPlayPokemonCry: vi.fn(),
-    };
-  });
+const mockPlaySfx = vi.fn();
+const mockStopSfx = vi.fn();
+const mockPlayPokemonCry = vi.fn();
+
+vi.mock("../../../stores/useAudioStore", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../../stores/useAudioStore")>();
+  return {
+    ...actual,
+    useAudioStore: (selector: (state: any) => any) =>
+      selector({
+        playSfx: mockPlaySfx,
+        stopSfx: mockStopSfx,
+        playPokemonCry: mockPlayPokemonCry,
+      }),
+  };
+});
 
 let mockSocketContext = createMockSocketContext();
 const mockNavigate = vi.fn();
@@ -31,16 +38,6 @@ vi.mock("../../../contexts/UIInfoContext", () => ({
   useUIInfoContext: () => ({
     useUIInfoContext: vi.fn(),
   }),
-}));
-
-vi.mock("../../../stores/useAudioStore", () => ({
-  useAudioStore: (selector: (state: any) => any) =>
-    selector({
-      playPokeballWiggle: mockPlayPokeballWiggle,
-      stopPokeballWiggle: mockStopPokeballWiggle,
-      playPokeballPoof: mockPlayPokeballPoof,
-      playPokemonCry: mockPlayPokemonCry,
-    }),
 }));
 
 import PokemonRevealPage from "./PokemonRevealPage";
@@ -71,7 +68,7 @@ describe("PokemonRevealPage", () => {
   test("plays wiggle sound on mount when not wiping in", () => {
     render(<PokemonRevealPage />);
 
-    expect(mockPlayPokeballWiggle).toHaveBeenCalled();
+    expect(mockPlaySfx).toHaveBeenCalled();
   });
 
   test("stops sounds on unmount", () => {
@@ -79,6 +76,6 @@ describe("PokemonRevealPage", () => {
 
     unmount();
 
-    expect(mockStopPokeballWiggle).toHaveBeenCalled();
+    expect(mockStopSfx).toHaveBeenCalled();
   });
 });

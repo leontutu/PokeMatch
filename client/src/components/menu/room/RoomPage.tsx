@@ -7,6 +7,7 @@ import ReadyButton from "./ReadyButton";
 import StatusText from "./StatusText";
 import { addBotToRoom } from "../../../services/apiService";
 import { UI_TEXT } from "../../../constants/uiText";
+import { SFX_IDS, useAudioStore } from "../../../stores/useAudioStore";
 
 /**
  * Renders the UI for a game room where players wait before a match starts.
@@ -17,47 +18,52 @@ import { UI_TEXT } from "../../../constants/uiText";
  * it automatically navigates the user to the next page.
  */
 export default function RoomPage() {
-    const { viewRoom, toggleReady: sendReady } = useSocketContext();
-    const [amIReady, setAmIReady] = useState(false);
-    const [vsBotClicked, setVsBotClicked] = useState(false);
+  const { viewRoom, toggleReady: sendReady } = useSocketContext();
+  const [amIReady, setAmIReady] = useState(false);
+  const [vsBotClicked, setVsBotClicked] = useState(false);
+  const playSfx = useAudioStore((state) => state.playSfx);
 
-    const handleReadyClick = () => {
-        setAmIReady(!amIReady);
-        sendReady();
-    };
+  const handleReadyClick = () => {
+    setAmIReady(!amIReady);
+    sendReady();
+    playSfx(amIReady ? SFX_IDS.UNREADY : SFX_IDS.READY);
+  };
 
-    const handleVsBotClick = () => {
-        if (!viewRoom || vsBotClicked || viewRoom.viewClientRecords.length > 1) return;
-        setVsBotClicked(true);
-        addBotToRoom(viewRoom.id);
-    };
+  const handleVsBotClick = () => {
+    if (!viewRoom || vsBotClicked || viewRoom.viewClientRecords.length > 1) return;
+    setVsBotClicked(true);
+    addBotToRoom(viewRoom.id);
+    playSfx(SFX_IDS.MENU_BLIP_2);
+  };
 
-    if (!viewRoom) {
-        return <p>{UI_TEXT.MESSAGES.LOADING_ROOM}</p>;
-    }
+  if (!viewRoom) {
+    return <p>{UI_TEXT.MESSAGES.LOADING_ROOM}</p>;
+  }
 
-    return (
-        <HomeLayout>
-            <div className={styles.roomPage}>
-                <div className={styles.mainContent}>
-                    <h1 className={styles.roomTitle}>{UI_TEXT.LABELS.ROOM_ID(viewRoom.id)}</h1>
-                    <ParticipantList participants={viewRoom.viewClientRecords} />
-                    <button
-                        className={`
+  return (
+    <HomeLayout>
+      <div className={styles.roomPage}>
+        <div className={styles.mainContent}>
+          <h1 className={styles.roomTitle}>{UI_TEXT.LABELS.ROOM_ID(viewRoom.id)}</h1>
+          <ParticipantList participants={viewRoom.viewClientRecords} />
+          <button
+            className={`
                         ${styles.addBotButton}
-                        ${viewRoom.viewClientRecords.length > 1 || vsBotClicked ? styles.hidden : ""}
+                        ${
+                          viewRoom.viewClientRecords.length > 1 || vsBotClicked ? styles.hidden : ""
+                        }
                         `}
-                        onClick={handleVsBotClick}
-                    >
-                        {UI_TEXT.BUTTONS.ADD_BOT}
-                    </button>
-                </div>
+            onClick={handleVsBotClick}
+          >
+            {UI_TEXT.BUTTONS.ADD_BOT}
+          </button>
+        </div>
 
-                <div className={styles.footer}>
-                    <ReadyButton amIReady={amIReady} handleReadyClick={handleReadyClick} />
-                    <StatusText amIReady={amIReady} isGameStarted={viewRoom.viewGame !== null} />
-                </div>
-            </div>
-        </HomeLayout>
-    );
+        <div className={styles.footer}>
+          <ReadyButton amIReady={amIReady} handleReadyClick={handleReadyClick} />
+          <StatusText amIReady={amIReady} isGameStarted={viewRoom.viewGame !== null} />
+        </div>
+      </div>
+    </HomeLayout>
+  );
 }

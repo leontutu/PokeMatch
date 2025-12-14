@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { Pages } from "../../../constants/constants";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 import { UI_TEXT } from "../../../constants/uiText";
+import { SFX_IDS, useAudioStore } from "../../../stores/useAudioStore";
 
 /**
  * Renders the room options page where users can choose to create a room,
@@ -17,46 +18,50 @@ import { UI_TEXT } from "../../../constants/uiText";
  * @returns {JSX.Element} The rendered room options page.
  */
 export default function RoomOptionsPage() {
-    const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocketContext();
-    const { handleNavigate } = useNavigationContext();
+  const { sendCreateRoom, sendPlayVsBot, viewRoom } = useSocketContext();
+  const { handleNavigate } = useNavigationContext();
+  const playSfx = useAudioStore((state) => state.playSfx);
 
-    const handleCreateRoomClick = () => {
-        sendCreateRoom();
-    };
+  const handleCreateRoomClick = () => {
+    sendCreateRoom();
+    playSfx(SFX_IDS.MENU_BLIP_1);
+  };
 
-    const handleJoinRoomClick = () => {
-        handleNavigate(Pages.ENTER_ROOM_ID, false);
-    };
+  const handleJoinRoomClick = () => {
+    handleNavigate(Pages.ENTER_ROOM_ID, false);
+    playSfx(SFX_IDS.MENU_BLIP_1);
+  };
 
-    const handlePlayVsBotClick = () => {
-        sendPlayVsBot();
-    };
+  const handlePlayVsBotClick = () => {
+    sendPlayVsBot();
+    playSfx(SFX_IDS.MENU_BLIP_1);
+  };
 
-    useEffect(() => {
-        if (viewRoom) {
-            handleNavigate(Pages.ROOM, false);
-        }
-    }, [viewRoom, handleNavigate]);
+  useEffect(() => {
+    if (viewRoom) {
+      handleNavigate(Pages.ROOM, false);
+    }
+  }, [viewRoom, handleNavigate]);
 
-    return (
-        <HomeLayout>
-            <div className={styles.buttonColumn}>
-                <div className={styles.buttonContainer}>
-                    <button className={styles.createRoomBtn} onClick={handleCreateRoomClick}>
-                        <span>{UI_TEXT.BUTTONS.CREATE_ROOM}</span>
-                    </button>
-                </div>
-                <div className={styles.buttonContainer}>
-                    <button className={styles.joinRoomBtn} onClick={handleJoinRoomClick}>
-                        <span>{UI_TEXT.BUTTONS.JOIN_ROOM}</span>
-                    </button>
-                </div>
-                <div className={styles.buttonContainer}>
-                    <button className={styles.playVsBotBtn} onClick={handlePlayVsBotClick}>
-                        <span>{UI_TEXT.BUTTONS.PLAY_VS_BOT}</span>
-                    </button>
-                </div>
-            </div>
-        </HomeLayout>
-    );
+  return (
+    <HomeLayout>
+      <div className={styles.buttonColumn}>
+        <div className={styles.buttonContainer}>
+          <button className={styles.createRoomBtn} onClick={handleCreateRoomClick}>
+            <span>{UI_TEXT.BUTTONS.CREATE_ROOM}</span>
+          </button>
+        </div>
+        <div className={styles.buttonContainer}>
+          <button className={styles.joinRoomBtn} onClick={handleJoinRoomClick}>
+            <span>{UI_TEXT.BUTTONS.JOIN_ROOM}</span>
+          </button>
+        </div>
+        <div className={styles.buttonContainer}>
+          <button className={styles.playVsBotBtn} onClick={handlePlayVsBotClick}>
+            <span>{UI_TEXT.BUTTONS.PLAY_VS_BOT}</span>
+          </button>
+        </div>
+      </div>
+    </HomeLayout>
+  );
 }

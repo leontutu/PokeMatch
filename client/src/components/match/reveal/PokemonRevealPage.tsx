@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Pokemon } from "../../../../../shared/types/types";
 import { useSocketContext } from "../../../contexts/SocketContext";
 import { useUIStore } from "../../../stores/useUIStore";
-import { useAudioStore } from "../../../stores/useAudioStore";
+import { SFX_IDS, useAudioStore } from "../../../stores/useAudioStore";
 import MatchLayout from "../layout/MatchLayout";
 import styles from "./PokemonRevealPage.module.scss";
 import pokeballImage from "../../../assets/graphics/game/pokeball.png";
@@ -31,9 +31,13 @@ export default function PokemonRevealPage() {
   const [flashActive, setFlashActive] = useState(false);
   const [cryReady, setCryReady] = useState(false);
 
-  const playPokeballWiggle = useAudioStore((state) => state.playPokeballWiggle);
-  const stopPokeballWiggle = useAudioStore((state) => state.stopPokeballWiggle);
-  const playPokeballPoof = useAudioStore((state) => state.playPokeballPoof);
+  // const playPokeballWiggle = useAudioStore((state) => state.playPokeballWiggle);
+  // const stopPokeballWiggle = useAudioStore((state) => state.stopPokeballWiggle);
+  // const playPokeballPoof = useAudioStore((state) => state.playPokeballPoof);
+
+  const playSfx = useAudioStore((state) => state.playSfx);
+  const stopSfx = useAudioStore((state) => state.stopSfx);
+
   const playPokemonCry = useAudioStore((state) => state.playPokemonCry);
 
   const soundUrl = pokemon
@@ -62,12 +66,12 @@ export default function PokemonRevealPage() {
 
   useEffect(() => {
     if (!countDownFinished && !isWipingIn) {
-      playPokeballWiggle();
+      playSfx(SFX_IDS.POKEBALL_WIGGLE);
     }
 
     if (countDownFinished && !cryReady) {
-      stopPokeballWiggle();
-      playPokeballPoof();
+      stopSfx(SFX_IDS.POKEBALL_WIGGLE);
+      playSfx(SFX_IDS.POKEBALL_POOF);
     }
 
     if (cryReady) {
@@ -75,18 +79,9 @@ export default function PokemonRevealPage() {
     }
 
     return () => {
-      stopPokeballWiggle();
+      stopSfx(SFX_IDS.POKEBALL_WIGGLE);
     };
-  }, [
-    isWipingIn,
-    countDownFinished,
-    cryReady,
-    soundUrl,
-    playPokeballWiggle,
-    playPokeballPoof,
-    playPokemonCry,
-    stopPokeballWiggle,
-  ]);
+  }, [isWipingIn, countDownFinished, cryReady, soundUrl, playPokemonCry, playSfx, stopSfx]);
 
   const getPokemonNameFontSize = (name: string) => {
     const length = name.length;

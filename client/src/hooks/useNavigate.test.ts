@@ -12,8 +12,6 @@ let { mockSocketContext } = vi.hoisted(() => {
 
 let mockSetIsWipingIn: any;
 let mockSetIsWipingOut: any;
-let mockPlayPageTurn1: any;
-let mockPlayPageTurn2: any;
 
 vi.mock("../contexts/SocketContext", () => ({
   useSocketContext: () => mockSocketContext,
@@ -27,13 +25,18 @@ vi.mock("../stores/useUIStore", () => ({
     }),
 }));
 
-vi.mock("../stores/useAudioStore", () => ({
-  useAudioStore: (selector: (state: any) => any) =>
-    selector({
-      playPageTurn1: mockPlayPageTurn1,
-      playPageTurn2: mockPlayPageTurn2,
-    }),
-}));
+const mockPlaySfx = vi.fn();
+
+vi.mock("../stores/useAudioStore", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../stores/useAudioStore")>();
+  return {
+    ...actual,
+    useAudioStore: (selector: (state: any) => any) =>
+      selector({
+        playSfx: mockPlaySfx,
+      }),
+  };
+});
 
 import { useNavigate } from "./useNavigate";
 
@@ -44,8 +47,6 @@ describe("useNavigate", () => {
     mockSocketContext = createMockSocketContext();
     mockSetIsWipingIn = vi.fn();
     mockSetIsWipingOut = vi.fn();
-    mockPlayPageTurn1 = vi.fn();
-    mockPlayPageTurn2 = vi.fn();
   });
 
   afterEach(() => {
@@ -94,8 +95,7 @@ describe("useNavigate", () => {
 
     expect(mockSetIsWipingIn).toHaveBeenCalledWith(false);
 
-    expect(mockPlayPageTurn1).toHaveBeenCalledTimes(1);
-    expect(mockPlayPageTurn2).toHaveBeenCalledTimes(1);
+    expect(mockPlaySfx).toHaveBeenCalledTimes(2);
   });
 
   test("does not navigate to same page", () => {

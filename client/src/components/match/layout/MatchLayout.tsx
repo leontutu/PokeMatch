@@ -7,9 +7,10 @@ import LeaveConfirmationDialog from "./LeaveConfirmationDialog";
 import React from "react";
 import { useNavigationContext } from "../../../contexts/NavigationContext";
 import { UI_TEXT } from "../../../constants/uiText";
+import { SFX_IDS, useAudioStore } from "../../../stores/useAudioStore";
 
 type MatchLayoutProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 /**
@@ -26,39 +27,42 @@ type MatchLayoutProps = {
  * </MatchLayout>
  */
 export default function MatchLayout({ children }: MatchLayoutProps) {
-    const { viewRoom, sendLeaveRoom } = useSocketContext();
-    const { handleNavigate } = useNavigationContext();
-    const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const { viewRoom, sendLeaveRoom } = useSocketContext();
+  const { handleNavigate } = useNavigationContext();
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const playSfx = useAudioStore((state) => state.playSfx);
 
-    if (!viewRoom) return null;
+  if (!viewRoom) return null;
 
-    const handleLeaveConfirm = () => {
-        sendLeaveRoom();
-        handleNavigate(Pages.HOME, true);
-        setIsLeaveDialogOpen(false);
-    };
+  const handleLeaveConfirm = () => {
+    sendLeaveRoom();
+    handleNavigate(Pages.HOME, true);
+    setIsLeaveDialogOpen(false);
+  };
 
-    const handleLeaveCancel = () => {
-        setIsLeaveDialogOpen(false);
-    };
+  const handleLeaveCancel = () => {
+    setIsLeaveDialogOpen(false);
+    playSfx(SFX_IDS.UNREADY);
+  };
 
-    const handleOpenDialog = () => {
-        setIsLeaveDialogOpen(true);
-    };
+  const handleOpenDialog = () => {
+    setIsLeaveDialogOpen(true);
+    playSfx(SFX_IDS.LEAVE_ROOM);
+  };
 
-    if (!viewRoom.viewGame) {
-        return <p>{UI_TEXT.MESSAGES.LOADING}</p>;
-    }
+  if (!viewRoom.viewGame) {
+    return <p>{UI_TEXT.MESSAGES.LOADING}</p>;
+  }
 
-    return (
-        <div className={styles.matchLayout}>
-            <div className={styles.contentArea}>{children}</div>
-            <ScoreBoard viewGame={viewRoom.viewGame} onHomeClick={handleOpenDialog} />
-            <LeaveConfirmationDialog
-                isOpen={isLeaveDialogOpen}
-                onConfirm={handleLeaveConfirm}
-                onCancel={handleLeaveCancel}
-            />
-        </div>
-    );
+  return (
+    <div className={styles.matchLayout}>
+      <div className={styles.contentArea}>{children}</div>
+      <ScoreBoard viewGame={viewRoom.viewGame} onHomeClick={handleOpenDialog} />
+      <LeaveConfirmationDialog
+        isOpen={isLeaveDialogOpen}
+        onConfirm={handleLeaveConfirm}
+        onCancel={handleLeaveCancel}
+      />
+    </div>
+  );
 }

@@ -7,7 +7,7 @@ import cardScaffold from "../../../scaffolds/cardScaffold";
 import CardWrapper from "./CardWrapper";
 import { DisplayToStat } from "../../../constants/constants";
 import { StatNames } from "../../../../../shared/constants/constants";
-import { useAudioStore } from "../../../stores/useAudioStore";
+import { SFX_IDS, useAudioStore } from "../../../stores/useAudioStore";
 import { UI_TEXT } from "../../../constants/uiText";
 
 /**
@@ -29,8 +29,7 @@ export default function SelectStatPage() {
   const [buttonState, setButtonState] = useState(false);
   const [lockedIn, setLockedIn] = useState(false);
 
-  const playSelect = useAudioStore((state) => state.playSelect);
-  const playConfirm = useAudioStore((state) => state.playConfirm);
+  const playSfx = useAudioStore((state) => state.playSfx);
 
   useEffect(() => {
     setButtonState(!lockedIn && selectedCardIndex !== null);
@@ -60,7 +59,7 @@ export default function SelectStatPage() {
       return;
     }
 
-    playSelect();
+    playSfx(SFX_IDS.SELECT);
 
     // Unselect Card
     if (index === selectedCardIndex) {
@@ -74,7 +73,7 @@ export default function SelectStatPage() {
     if (!buttonState) {
       return;
     }
-    playConfirm();
+    playSfx(SFX_IDS.CONFIRM);
     setLockedIn(true);
     setButtonState(false);
     const selectedStat: StatNames = cards[selectedCardIndex!].statName as StatNames;

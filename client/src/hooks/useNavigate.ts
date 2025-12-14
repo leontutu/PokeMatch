@@ -4,7 +4,7 @@ import { GamePhases, Timings } from "../../../shared/constants/constants";
 import { Pages } from "../constants/constants";
 import { NavigationHandler } from "../types";
 import { useUIStore } from "../stores/useUIStore";
-import { useAudioStore } from "../stores/useAudioStore";
+import { SFX_IDS, useAudioStore } from "../stores/useAudioStore";
 
 /**
  * @file Navigation hook for the app.
@@ -22,8 +22,7 @@ export function useNavigate() {
   const setIsWipingIn = useUIStore((state) => state.setIsWipingIn);
   const setIsWipingOut = useUIStore((state) => state.setIsWipingOut);
 
-  const playPageTurn1 = useAudioStore((state) => state.playPageTurn1);
-  const playPageTurn2 = useAudioStore((state) => state.playPageTurn2);
+  const playSfx = useAudioStore((state) => state.playSfx);
 
   useEffect(() => {
     if (roomCrashSignal) {
@@ -42,10 +41,10 @@ export function useNavigate() {
         return;
       }
 
-      playPageTurn1();
+      playSfx(SFX_IDS.PAGE_TURN_2);
       setIsWipingOut(true);
       setTimeout(() => {
-        playPageTurn2();
+        playSfx(SFX_IDS.PAGE_TURN_2);
         setCurrentPage(page);
         setIsWipingOut(false);
         setIsWipingIn(true);
