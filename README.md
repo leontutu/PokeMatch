@@ -29,9 +29,9 @@
 </p>
 
 <p align="center">
-  <img src="./docs/screenshots/screenshot-1.png" height="300" hspace="30">
-  <img src="./docs/screenshots/screenshot-2.png" height="300" hspace="30">
-  <img src="./docs/screenshots/screenshot-3.png" height="300" hspace="30">
+  <img src="./docs/screenshots/screenshot-1.png" alt="screenshot1" height="300" hspace="30">
+  <img src="./docs/screenshots/screenshot-2.png" alt="screenshot2" height="300" hspace="30">
+  <img src="./docs/screenshots/screenshot-3.png" alt="screenshot3" height="300" hspace="30">
 </p>
 
 <p align="center">
@@ -40,17 +40,19 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 
 ---
 
-## ⚡ Tech Highlights: 
-* **Full-stack TypeScript, WebSocket architecture, stateful sessions, 100+ unit tests with CI/CD pipeline.**
-* **Stateful Session Management**: UUID-based client identification enables automatic reconnection with full state restoration, supporting mid-game disconnections without data loss.
-* **Headless Bot API**: RESTful endpoint spawns autonomous opponents, connecting to the server socket interface as regular clients.
-* **Monorepo Architecture**: npm workspaces manage shared TypeScript type aliases, constants, and validation logic across client/server, eliminating API contract bugs.
+## ⚡ Tech Highlights:
+
+- **Full-stack TypeScript, WebSocket architecture, stateful sessions, 100+ unit tests with CI/CD pipeline.**
+- **Stateful Session Management**: UUID-based client identification enables automatic reconnection with full state restoration, supporting mid-game disconnections without data loss.
+- **Headless Bot API**: RESTful endpoint spawns autonomous opponents, connecting to the server socket interface as regular clients.
+- **Monorepo Architecture**: npm workspaces manage shared TypeScript type aliases, constants, and validation logic across client/server, eliminating API contract bugs.
 
 ---
 
 ## 🏗️ Architecture
 
 ### Server Archtitecture
+
 <!-- ![Server Architecture diagram](./diagrams/server-architecture-diagram.svg) -->
 <details>
   <summary>Architecture Diagram (simplified)</summary>
@@ -58,33 +60,38 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 </details>
 
 **Design Patterns:**
+
 - **Mediator Pattern**: Central `Orchestrator` class coordinates between services
 - **Observer Pattern**: Event-driven state propagation via Node.js EventEmitter
 - **Command Pattern**: Game actions encapsulated as command objects processed by the core `Game` model
 
 **SOLID Principles:**
+
 - **Single Responsibility**: Each class has one clearly defined purpose
 - **Dependency Injection**: Pure DI of services via constructor injection
 - **Interface Segregation**: Clients depend only on methods they use
 
 **Key Features:**
+
 - Stateful room and session lifecycle management
 - RESTful bot API for headless opponents
 - Graceful handling of disconnects/reconnects
-- Robust defensive programming checks and guards 
+- Robust defensive programming checks and guards
 
 **Testing:** 58+ unit and integration tests covering game logic, managers, and full workflows
 
 ---
 
-### Client Architecture 
+### Client Architecture
 
 **Core Patterns:**
+
 - **Custom Hooks for Business Logic**: Separation of concerns via hooks like `useBattleLogic` and `useBattleSequence`, keeping components purely presentational
 - **Context-Based State Management**: Centralized WebSocket state via custom `useSocketContext` hook, eliminating prop drilling
 - **SCSS Modules**: Scoped styling prevents collisions in a component-heavy UI
 
 **Key Features:**
+
 - Persistent sessions via localStorage UUID
 - Real-time state synchronization across all clients via WebSocket events
 - Optimistic UI updates with server-side validation and conflict resolution
@@ -92,20 +99,17 @@ This is a portfolio project designed to showcase my abilites as a full stack dev
 
 **Testing:** 27+ component and hook tests using Vitest + React Testing Library
 
-
 ---
+
 <details>
 <summary><h3>Example Gameflow Sequence Diagram</h3></summary>
   <img src="./docs/diagrams/sequence-diagram.png" alt="Sequence diagram" width="100%">
   #### Notes
 
-  - **Error Handling**: The above diagram shows the Happy Path only. At multiple points (client validation, room validation, game logic), errors can occur. The system follows a consistent pattern: log the error, emit an error event to the client, and halt processing. The client displays the error to the user.
+- **Error Handling**: The above diagram shows the Happy Path only. At multiple points (client validation, room validation, game logic), errors can occur. The system follows a consistent pattern: log the error, emit an error event to the client, and halt processing. The client displays the error to the user.
 
-  - **State Synchronization**: After any state change, all clients in the room receive personalized updated `ViewRoom` data via the `UPDATE` event, ensuring UI consistency.
+- **State Synchronization**: After any state change, all clients in the room receive personalized updated `ViewRoom` data via the `UPDATE` event, ensuring UI consistency.
 </details>
-
-
-
 
 ---
 
@@ -131,29 +135,33 @@ What started as a sandbox weekend project evolved into a production-ready multip
 <td width="50%" valign="top">
 
 #### Frontend
+
 - ![React](https://img.shields.io/badge/-React-61DAFB?style=flat&logo=react&logoColor=black) Component-based UI library
 - ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white) Type-safe JavaScript
 - ![Vite](https://img.shields.io/badge/-Vite-646CFF?style=flat&logo=vite&logoColor=white) Fast build tool and dev server
 - ![SCSS](https://img.shields.io/badge/-SCSS-CC6699?style=flat&logo=sass&logoColor=white) CSS preprocessor
 
 #### Backend
+
 - ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat&logo=node.js&logoColor=white) JavaScript runtime
 - ![Express](https://img.shields.io/badge/-Express-000000?style=flat&logo=express&logoColor=white) Web server framework
 - ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white) Type-safe JavaScript
 
 #### Communication
+
 - ![Socket.IO](https://img.shields.io/badge/-Socket.IO-010101?style=flat&logo=socket.io&logoColor=white) Real-time bidirectional events
 - ![REST API](https://img.shields.io/badge/-REST_API-009688?style=flat&logo=fastapi&logoColor=white) Stateless request-response
 
 </td>
 <td width="50%" valign="top">
 
-
 #### Testing
+
 - ![Vitest](https://img.shields.io/badge/-Vitest-6E9F18?style=flat&logo=vitest&logoColor=white) Fast unit test runner
 - ![React Testing Library](https://img.shields.io/badge/-RTL-E33332?style=flat&logo=testing-library&logoColor=white) Component testing utilities
 
 #### DevOps & Tooling
+
 - ![Git](https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white) Version control
 - ![GitHub Actions](https://img.shields.io/badge/-GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) CI/CD pipeline
 - ![npm](https://img.shields.io/badge/-npm_workspaces-CB3837?style=flat&logo=npm&logoColor=white) Monorepo management
@@ -167,10 +175,12 @@ What started as a sandbox weekend project evolved into a production-ready multip
 ### ⚙️ Running locally
 
 **Prerequisites:**
+
 - Node.js v20+ (or v18+)
 - npm (comes with Node.js)
 
 **Quick Start:**
+
 ```bash
 # Clone and install
 git clone https://github.com/leontutu/PokeMatch
@@ -183,7 +193,7 @@ npm run test
 # Start server (terminal 1)
 npm run dev:server
 
-# Start client (terminal 2)  
+# Start client (terminal 2)
 npm run dev:client
 
 # In your browser
