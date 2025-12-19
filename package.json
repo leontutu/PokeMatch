@@ -29,11 +29,25 @@
     "build:client": "npm run build --workspace=client",
     "build:server": "npm run build --workspace=server",
     "dev:client": "npm run dev --workspace=client",
-    "dev:server": "npm run dev --workspace=server"
+    "dev:server": "npm run dev --workspace=server",
+    "lint": "eslint .",
+    "format": "prettier -c ."
   },
   "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.2",
+    "@eslint/json": "^0.14.0",
+    "@eslint/markdown": "^7.5.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/howler": "^2.2.12",
-    "prettier": "^3.7.4"
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4",
+    "typescript-eslint": "^8.50.0"
+  },
+  "dependencies": {
+    "jiti": "^2.6.1"
   }
 }

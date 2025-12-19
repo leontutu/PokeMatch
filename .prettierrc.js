@@ -1,30 +1,30 @@
 module.exports = {
   semi: true,
-  singleQuote: false,
-  trailingComma: "all",
-  arrowParens: "always",
+  singleQuote: true,
+  trailingComma: 'all',
+  arrowParens: 'always',
   tabWidth: 4,
   printWidth: 100,
-  endOfLine: "auto",
+  endOfLine: 'auto',
   bracketSpacing: true,
   useTabs: false,
 
-  plugins: ["@trivago/prettier-plugin-sort-imports"],
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
 
-  importOrder: ["^react", "<THIRD_PARTY_MODULES>", "^shared$", "^@/", "^[./]"],
+  importOrder: ['^react', '<THIRD_PARTY_MODULES>', '^shared$', '^@/', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 
   overrides: [
     {
-      files: ["*.yaml", "*.yml"],
+      files: ['*.yaml', '*.yml'],
       options: {
-        parser: "yaml",
+        parser: 'yaml',
         tabWidth: 2,
       },
     },
     {
-      files: ["*.md", "*.js", "*.ts", "*.json"],
+      files: ['*.md', '*.js', '*.json'],
       options: {
         tabWidth: 2,
       },
