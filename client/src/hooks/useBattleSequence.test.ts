@@ -1,16 +1,19 @@
-import { vi, describe, expect, test, beforeEach, afterEach } from "vitest";
 import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+
+import { StatNames } from "../../../shared/constants/constants";
+import { ViewRoom } from "../../../shared/types/types";
+import { createMockSocketContext } from "../__tests__/mocks/mockContexts";
+import { createMockPokemon, createMockViewRoom } from "../__tests__/mocks/mockViewRoom";
+import { BattleStats } from "../types";
+import { useBattleLogic } from "./useBattleLogic";
 import {
-  BattlePhase,
   ATTACK_ANIMATION_DURATION,
+  BattlePhase,
   FADE_OUT_DURATION,
   SHOW_CURRENT_ROUND_DURATION,
 } from "./useBattleSequence";
-import { BattleStats } from "../types";
-import { createMockPokemon, createMockViewRoom } from "../__tests__/mocks/mockViewRoom";
-import { StatNames } from "../../../shared/constants/constants";
-import { createMockSocketContext } from "../__tests__/mocks/mockContexts";
-import { ViewRoom } from "../../../shared/types/types";
+import { useBattleSequence } from "./useBattleSequence";
 
 /**
  * TODO: Additional test coverage for useBattleSequence
@@ -23,7 +26,7 @@ import { ViewRoom } from "../../../shared/types/types";
  * The juice isn't worth the squeeze here.
  */
 
-let { mockPlayPokemonCry, mockPlayNormalEffective } = vi.hoisted(() => {
+const { mockPlayPokemonCry, mockPlayNormalEffective } = vi.hoisted(() => {
   return {
     mockPlayPokemonCry: vi.fn(),
     mockPlayNormalEffective: vi.fn(),
@@ -41,9 +44,6 @@ vi.mock("../stores/useAudioStore", () => ({
       playNormalEffective: mockPlayNormalEffective,
     }),
 }));
-
-import { useBattleSequence } from "./useBattleSequence";
-import { useBattleLogic } from "./useBattleLogic";
 
 describe("useBattleSequence", () => {
   let mockViewRoom: ViewRoom;
@@ -65,7 +65,7 @@ describe("useBattleSequence", () => {
     let isWipingIn = true;
 
     const { result, rerender } = renderHook(() =>
-      useBattleSequence(mockBattleStats, onBattleEnd, isWipingIn)
+      useBattleSequence(mockBattleStats, onBattleEnd, isWipingIn),
     );
 
     expect(result.current.phase).toBe(BattlePhase.WAITING);
@@ -102,7 +102,7 @@ describe("useBattleSequence", () => {
       let isWipingIn = true;
       const battleStats = renderHook(() => useBattleLogic(mockViewRoom.viewGame)).result.current!;
       const { result, rerender } = renderHook(() =>
-        useBattleSequence(battleStats, onBattleEnd, isWipingIn)
+        useBattleSequence(battleStats, onBattleEnd, isWipingIn),
       );
 
       expect(result.current.phase).toBe(BattlePhase.WAITING);

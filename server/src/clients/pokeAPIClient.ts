@@ -11,12 +11,12 @@ import NoAPIResponseError from "../errors/NoAPIResponseError.js";
  * @throws If the API request fails.
  */
 export async function getRandomPokemon(): Promise<object> {
-    const randomPokeId: number = Math.floor(Math.random() * 151) + 1;
-    const url: string = `https://pokeapi.co/api/v2/pokemon/${randomPokeId}`;
-    try {
-        const response: Response = await fetch(url);
-        return await response.json();
-    } catch (e: unknown) {
-        throw new NoAPIResponseError(url);
-    }
+  const randomPokeId: number = Math.floor(Math.random() * 151) + 1;
+  const url: string = `https://pokeapi.co/api/v2/pokemon/${randomPokeId}`;
+  try {
+    const response: Response = await fetch(url);
+    return await response.json();
+  } catch {
+    throw new NoAPIResponseError(url);
+  }
 }
